@@ -1,1 +1,76 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>BIOMETRIMSS</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+<h1>BIOMETRIMSS</h1>
+<p>Control de asistencia biométrica</p>
+</header>
+
+
+<section class="card">
+
+<h2>👤 Mi registro</h2>
+
+<label>Nombre:</label>
+<input id="nombre" type="text" placeholder="Nombre completo">
+
+
+<label>Matrícula:</label>
+<input id="matricula" type="text" placeholder="Matrícula">
+
+
+<label>Unidad:</label>
+<input id="unidad" type="text" placeholder="Unidad médica">
+
+
+</section>
+
+
+<section class="card">
+
+<h2>⚙️ Configuración de guardia</h2>
+
+<label>Hora entrada:</label>
+<input id="entrada" type="time" value="20:30">
+
+
+<label>Tolerancia entrada:</label>
+<input id="toleranciaEntrada" type="time" value="21:00">
+
+
+<label>Hora salida:</label>
+<input id="salida" type="time" value="08:10">
+
+
+<label>Tolerancia salida:</label>
+<input id="toleranciaSalida" type="time" value="10:00">
+
+
+</section>
+
+
+<button onclick="guardar()">
+GUARDAR CONFIGURACIÓN
+</button>
+
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
