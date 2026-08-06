@@ -1,76 +1,399 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es-MX">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08745a">
+  <meta name="description" content="Control personal de guardias y registros biométricos.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BiometrIMSS">
+  <title>BiometrIMSS</title>
 
-<title>BIOMETRIMSS</title>
-
-<link rel="stylesheet" href="style.css">
-
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="brand" type="button" data-go="home" aria-label="Ir al inicio">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><path d="M24 7a17 17 0 0 0-17 17c0 6.6 3.8 12.4 9.4 15.2"/><path d="M24 13a11 11 0 0 0-11 11c0 4.5 2.7 8.4 6.6 10.1"/><path d="M24 19a5 5 0 0 0-5 5c0 6.6-2.1 12.1-5.2 16.6"/><path d="M29 24c0 9.1-2.2 15.6-4.4 19"/><path d="M35 24c0 8.4-1.2 13.7-3.2 18"/><path d="M41 24A17 17 0 0 0 24 7"/></svg>
+        </span>
+        <span>
+          <strong>BiometrIMSS</strong>
+          <small>Mi control de guardias</small>
+        </span>
+      </button>
+      <button id="installButton" class="icon-button install-button" type="button" aria-label="Instalar aplicación" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14"/></svg>
+      </button>
+    </header>
 
-<div class="app">
+    <main id="mainContent" tabindex="-1">
+      <section id="view-home" class="view is-active" data-view="home" aria-labelledby="homeTitle">
+        <div class="hero-card">
+          <div class="hero-topline">
+            <div>
+              <p id="todayLabel" class="eyebrow"></p>
+              <h1 id="homeTitle"><span id="greetingText">Hola</span><span id="profileName"></span></h1>
+            </div>
+            <span id="todayShiftBadge" class="shift-badge">Día libre</span>
+          </div>
+          <p id="nextShiftText" class="hero-message">Configura tus datos para comenzar.</p>
+          <div class="quick-actions">
+            <button id="quickEntry" class="button button-light" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 20h14"/></svg>
+              Registrar entrada
+            </button>
+            <button id="quickExit" class="button button-ghost-light" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V9m0 0 4 4m-4-4-4 4M5 4h14"/></svg>
+              Registrar salida
+            </button>
+          </div>
+        </div>
 
-<header>
-<h1>BIOMETRIMSS</h1>
-<p>Control de asistencia biométrica</p>
-</header>
+        <section class="period-card" aria-labelledby="periodTitle">
+          <div class="section-heading compact">
+            <div>
+              <p class="eyebrow">Resumen</p>
+              <h2 id="periodTitle">Periodo seleccionado</h2>
+            </div>
+            <button id="currentMonthButton" class="text-button" type="button">Mes actual</button>
+          </div>
+          <div class="date-range">
+            <label>Desde<input id="periodStart" type="date"></label>
+            <span aria-hidden="true">—</span>
+            <label>Hasta<input id="periodEnd" type="date"></label>
+          </div>
+        </section>
 
+        <section class="stats-grid" aria-label="Resumen del periodo">
+          <article class="stat-card stat-green">
+            <span class="stat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4m8-4v4M3 10h18"/></svg></span>
+            <strong id="statScheduled">0</strong>
+            <span>Guardias</span>
+          </article>
+          <article class="stat-card stat-teal">
+            <span class="stat-icon"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span>
+            <strong id="statEffective">0</strong>
+            <span>Efectivas</span>
+          </article>
+          <article class="stat-card stat-blue">
+            <span class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/><path d="M12 7v5l3 2"/></svg></span>
+            <strong id="statJustified">0</strong>
+            <span>Justificadas</span>
+          </article>
+          <article class="stat-card stat-amber">
+            <span class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.3 3.8 2.2 18a2 2 0 0 0 1.8 3h16a2 2 0 0 0 1.8-3L13.7 3.8a2 2 0 0 0-3.4 0Z"/></svg></span>
+            <strong id="statIncidents">0</strong>
+            <span>Incidencias</span>
+          </article>
+        </section>
 
-<section class="card">
+        <section class="card progress-card">
+          <div class="section-heading compact">
+            <div>
+              <p class="eyebrow">Cumplimiento</p>
+              <h2>Guardias registradas</h2>
+            </div>
+            <strong id="complianceValue" class="progress-value">0%</strong>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <span id="complianceBar"></span>
+          </div>
+          <p id="complianceHelp" class="muted">Agrega tus registros para ver el avance.</p>
+        </section>
 
-<h2>👤 Mi registro</h2>
+        <section class="card upcoming-card">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Próximas</p>
+              <h2>Guardias programadas</h2>
+            </div>
+            <button class="text-button" type="button" data-go="calendar">Ver calendario</button>
+          </div>
+          <div id="upcomingList" class="upcoming-list"></div>
+        </section>
 
-<label>Nombre:</label>
-<input id="nombre" type="text" placeholder="Nombre completo">
+        <section id="iosInstallCard" class="install-card" hidden>
+          <div class="install-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 16V3m0 0 4 4m-4-4L8 7M5 12v8h14v-8"/></svg>
+          </div>
+          <div>
+            <strong>Instala BiometrIMSS en tu iPhone</strong>
+            <p>En Safari toca Compartir y después “Agregar a inicio”.</p>
+          </div>
+          <button id="dismissInstallCard" class="close-button" type="button" aria-label="Ocultar indicación">×</button>
+        </section>
+      </section>
 
+      <section id="view-register" class="view" data-view="register" aria-labelledby="registerTitle">
+        <div class="page-heading">
+          <p class="eyebrow">Captura</p>
+          <h1 id="registerTitle">Registrar guardia</h1>
+          <p>Guarda la información tal como aparece en tu control biométrico.</p>
+        </div>
 
-<label>Matrícula:</label>
-<input id="matricula" type="text" placeholder="Matrícula">
+        <form id="recordForm" class="card form-card" novalidate>
+          <input id="recordId" type="hidden">
+          <div class="form-section">
+            <div class="section-heading compact">
+              <h2>Fecha y horario</h2>
+              <span id="scheduledHint" class="mini-badge">Guardia programada</span>
+            </div>
+            <label class="field full-field">
+              <span>Fecha de la guardia</span>
+              <input id="shiftDate" type="date" required>
+              <small>Usa la fecha en que inicia el turno nocturno.</small>
+            </label>
+            <div class="form-grid">
+              <label class="field">
+                <span>Entrada</span>
+                <input id="entryAt" type="datetime-local">
+              </label>
+              <label class="field">
+                <span>Salida</span>
+                <input id="exitAt" type="datetime-local">
+              </label>
+            </div>
+            <div class="time-shortcuts">
+              <button id="setEntryNow" class="chip-button" type="button">Entrada ahora</button>
+              <button id="setExitNow" class="chip-button" type="button">Salida ahora</button>
+              <button id="useSchedule" class="chip-button" type="button">Usar horario programado</button>
+            </div>
+          </div>
 
+          <div class="form-section">
+            <h2>Clasificación</h2>
+            <label class="field full-field">
+              <span>Estado</span>
+              <select id="statusOverride">
+                <option value="auto">Automático según el horario</option>
+                <option value="efectiva">Efectiva</option>
+                <option value="retardo">Retardo</option>
+                <option value="fuera-horario">Fuera de horario</option>
+                <option value="omision-entrada">Omisión de entrada</option>
+                <option value="omision-salida">Omisión de salida</option>
+                <option value="salida-anticipada">Salida anticipada</option>
+                <option value="justificada">Justificada</option>
+                <option value="falta">Falta</option>
+              </select>
+            </label>
+            <div id="autoStatusPreview" class="status-preview status-pending" aria-live="polite">
+              <span class="status-dot"></span>
+              <div><strong>Pendiente de calcular</strong><small>Agrega una entrada o selecciona un estado.</small></div>
+            </div>
+          </div>
 
-<label>Unidad:</label>
-<input id="unidad" type="text" placeholder="Unidad médica">
+          <div class="form-section">
+            <h2>Detalles</h2>
+            <label class="field full-field">
+              <span>Justificación o notas</span>
+              <textarea id="recordNotes" rows="4" maxlength="700" placeholder="Ej. incapacidad, comisión, aclaración o dato importante…"></textarea>
+              <small><span id="notesCount">0</span>/700 caracteres</small>
+            </label>
+          </div>
 
+          <div class="form-actions">
+            <button id="cancelEdit" class="button button-secondary" type="button" hidden>Cancelar</button>
+            <button class="button button-primary" type="submit">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5 9.2 17 19 7"/></svg>
+              <span id="saveRecordLabel">Guardar registro</span>
+            </button>
+          </div>
+        </form>
+      </section>
 
-</section>
+      <section id="view-calendar" class="view" data-view="calendar" aria-labelledby="calendarTitle">
+        <div class="page-heading page-heading-row">
+          <div>
+            <p class="eyebrow">Vista mensual</p>
+            <h1 id="calendarTitle">Calendario</h1>
+          </div>
+          <button id="calendarToday" class="button button-small button-secondary" type="button">Hoy</button>
+        </div>
 
+        <section class="card calendar-card">
+          <div class="calendar-toolbar">
+            <button id="calendarPrev" class="icon-button" type="button" aria-label="Mes anterior"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+            <h2 id="calendarMonthLabel"></h2>
+            <button id="calendarNext" class="icon-button" type="button" aria-label="Mes siguiente"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+          </div>
+          <div class="calendar-weekdays" aria-hidden="true">
+            <span>Dom</span><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span>
+          </div>
+          <div id="calendarGrid" class="calendar-grid"></div>
+        </section>
 
-<section class="card">
+        <div class="legend" aria-label="Significado de colores">
+          <span><i class="legend-dot effective"></i>Efectiva</span>
+          <span><i class="legend-dot justified"></i>Justificada</span>
+          <span><i class="legend-dot incident"></i>Incidencia</span>
+          <span><i class="legend-dot absence"></i>Falta</span>
+          <span><i class="legend-dot scheduled"></i>Por capturar</span>
+        </div>
 
-<h2>⚙️ Configuración de guardia</h2>
+        <section class="card selected-day-card">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Día seleccionado</p>
+              <h2 id="selectedDayTitle">Selecciona una fecha</h2>
+            </div>
+            <button id="addSelectedDay" class="button button-small button-primary" type="button" hidden>Agregar</button>
+          </div>
+          <div id="selectedDayContent" class="empty-state compact-empty">
+            <p>Toca cualquier día del calendario para ver o agregar su registro.</p>
+          </div>
+        </section>
+      </section>
 
-<label>Hora entrada:</label>
-<input id="entrada" type="time" value="20:30">
+      <section id="view-history" class="view" data-view="history" aria-labelledby="historyTitle">
+        <div class="page-heading">
+          <p class="eyebrow">Archivo personal</p>
+          <h1 id="historyTitle">Historial</h1>
+          <p>Consulta, corrige y exporta tus registros.</p>
+        </div>
 
+        <section class="card filter-card">
+          <div class="filter-grid">
+            <label class="field"><span>Desde</span><input id="historyStart" type="date"></label>
+            <label class="field"><span>Hasta</span><input id="historyEnd" type="date"></label>
+            <label class="field full-field"><span>Estado</span>
+              <select id="historyStatus">
+                <option value="all">Todos los estados</option>
+                <option value="efectiva">Efectivas</option>
+                <option value="justificada">Justificadas</option>
+                <option value="incident">Incidencias</option>
+                <option value="falta">Faltas</option>
+                <option value="pendiente">Pendientes</option>
+              </select>
+            </label>
+          </div>
+        </section>
 
-<label>Tolerancia entrada:</label>
-<input id="toleranciaEntrada" type="time" value="21:00">
+        <div class="history-toolbar">
+          <p id="historyCount">0 registros</p>
+          <button id="exportCsv" class="button button-small button-secondary" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 20h14"/></svg>
+            Exportar CSV
+          </button>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </section>
 
+      <section id="view-settings" class="view" data-view="settings" aria-labelledby="settingsTitle">
+        <div class="page-heading">
+          <p class="eyebrow">Personalización</p>
+          <h1 id="settingsTitle">Ajustes</h1>
+          <p>Define tu identificación y el horario que usará la clasificación automática.</p>
+        </div>
 
-<label>Hora salida:</label>
-<input id="salida" type="time" value="08:10">
+        <form id="settingsForm" novalidate>
+          <section class="card form-card settings-section">
+            <div class="settings-title">
+              <span class="settings-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+              <div><h2>Mi perfil</h2><p>Datos que aparecerán en los reportes.</p></div>
+            </div>
+            <label class="field full-field"><span>Nombre completo</span><input id="settingName" type="text" autocomplete="name" maxlength="100" placeholder="Tu nombre"></label>
+            <div class="form-grid">
+              <label class="field"><span>Matrícula</span><input id="settingEmployeeId" type="text" inputmode="numeric" maxlength="20" placeholder="Matrícula"></label>
+              <label class="field"><span>Unidad médica</span><input id="settingUnit" type="text" maxlength="80" placeholder="Ej. HGZ 42"></label>
+            </div>
+          </section>
 
+          <section class="card form-card settings-section">
+            <div class="settings-title">
+              <span class="settings-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <div><h2>Horario de guardia</h2><p>Turno nocturno y límites de tolerancia.</p></div>
+            </div>
+            <div class="form-grid">
+              <label class="field"><span>Entrada</span><input id="settingStartTime" type="time" required></label>
+              <label class="field"><span>Límite de entrada</span><input id="settingEntryTolerance" type="time" required></label>
+              <label class="field"><span>Salida</span><input id="settingExitTime" type="time" required></label>
+              <label class="field"><span>Límite de salida</span><input id="settingExitTolerance" type="time" required></label>
+            </div>
+            <p class="field-note">La salida corresponde al día siguiente. El límite predeterminado es dos horas después: 10:10.</p>
+          </section>
 
-<label>Tolerancia salida:</label>
-<input id="toleranciaSalida" type="time" value="10:00">
+          <section class="card form-card settings-section">
+            <div class="settings-title">
+              <span class="settings-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4m8-4v4M3 10h18"/></svg></span>
+              <div><h2>Días de guardia</h2><p>Selecciona los días en que inicia tu turno.</p></div>
+            </div>
+            <div class="weekday-picker" role="group" aria-label="Días de guardia">
+              <label><input type="checkbox" name="guardDay" value="0"><span>D</span></label>
+              <label><input type="checkbox" name="guardDay" value="1"><span>L</span></label>
+              <label><input type="checkbox" name="guardDay" value="2"><span>M</span></label>
+              <label><input type="checkbox" name="guardDay" value="3"><span>M</span></label>
+              <label><input type="checkbox" name="guardDay" value="4"><span>J</span></label>
+              <label><input type="checkbox" name="guardDay" value="5"><span>V</span></label>
+              <label><input type="checkbox" name="guardDay" value="6"><span>S</span></label>
+            </div>
+          </section>
 
+          <button class="button button-primary sticky-save" type="submit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5 9.2 17 19 7"/></svg>
+            Guardar ajustes
+          </button>
+        </form>
 
-</section>
+        <section class="card data-card">
+          <div class="settings-title">
+            <span class="settings-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 20h14"/></svg></span>
+            <div><h2>Respaldo de datos</h2><p>Descarga una copia o restaura tus registros.</p></div>
+          </div>
+          <div class="data-actions">
+            <button id="exportBackup" class="button button-secondary" type="button">Descargar respaldo</button>
+            <label class="button button-secondary file-button">Restaurar respaldo<input id="importBackup" type="file" accept="application/json,.json"></label>
+          </div>
+          <p class="privacy-note"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Tus datos permanecen en este dispositivo. La app no los envía a ningún servidor.</p>
+        </section>
 
+        <section class="about-card">
+          <strong>BiometrIMSS <span id="appVersion">v2.0.0</span></strong>
+          <p>Control personal de asistencia. No es una aplicación oficial del IMSS ni sustituye los registros institucionales.</p>
+        </section>
+      </section>
+    </main>
 
-<button onclick="guardar()">
-GUARDAR CONFIGURACIÓN
-</button>
+    <nav class="bottom-nav" aria-label="Navegación principal">
+      <button class="nav-item is-active" type="button" data-go="home" aria-current="page">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/></svg><span>Inicio</span>
+      </button>
+      <button class="nav-item" type="button" data-go="register">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8m-4-4h8"/></svg><span>Registrar</span>
+      </button>
+      <button class="nav-item" type="button" data-go="calendar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4m8-4v4M3 10h18"/></svg><span>Calendario</span>
+      </button>
+      <button class="nav-item" type="button" data-go="history">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Historial</span>
+      </button>
+      <button class="nav-item" type="button" data-go="settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg><span>Ajustes</span>
+      </button>
+    </nav>
+  </div>
 
+  <div id="toastRegion" class="toast-region" aria-live="polite" aria-atomic="true"></div>
 
-</div>
+  <dialog id="confirmDialog" class="dialog">
+    <form method="dialog">
+      <div class="dialog-icon"><svg viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.3 3.8 2.2 18a2 2 0 0 0 1.8 3h16a2 2 0 0 0 1.8-3L13.7 3.8a2 2 0 0 0-3.4 0Z"/></svg></div>
+      <h2 id="confirmTitle">Confirmar acción</h2>
+      <p id="confirmMessage"></p>
+      <div class="dialog-actions">
+        <button class="button button-secondary" value="cancel">Cancelar</button>
+        <button id="confirmAction" class="button button-danger" value="confirm">Eliminar</button>
+      </div>
+    </form>
+  </dialog>
 
-
-<script src="app.js"></script>
-
+  <script src="logic.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
