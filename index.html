@@ -255,7 +255,7 @@
         <div class="page-heading">
           <p class="eyebrow">Archivo personal</p>
           <h1 id="historyTitle">Historial</h1>
-          <p>Consulta, corrige y exporta tus registros.</p>
+          <p>Consulta, corrige y descarga tus informes.</p>
         </div>
 
         <section class="card filter-card">
@@ -277,9 +277,9 @@
 
         <div class="history-toolbar">
           <p id="historyCount">0 registros</p>
-          <button id="exportCsv" class="button button-small button-secondary" type="button">
+          <button id="exportImage" class="button button-small button-secondary" type="button">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 20h14"/></svg>
-            Exportar CSV
+            Descargar informe
           </button>
         </div>
         <div id="historyList" class="history-list"></div>
@@ -394,6 +394,7 @@
   </dialog>
 
   <script src="logic.js"></script>
+  <script src="report-image.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

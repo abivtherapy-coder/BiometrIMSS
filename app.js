@@ -2,7 +2,8 @@
   "use strict";
 
   const L = window.BiometrLogic;
-  const APP_VERSION = "2.1.0";
+  const R = window.BiometrReport;
+  const APP_VERSION = "2.2.0";
   const STORAGE = {
     settings: "biometrimss:v2:settings",
     records: "biometrimss:v2:records",
@@ -176,7 +177,7 @@
   function bindHistory() {
     ["historyStart", "historyEnd", "historyStatus"].forEach((id) => $(id).addEventListener("change", renderHistory));
     $("historyList").addEventListener("click", handleRecordAction);
-    $("exportCsv").addEventListener("click", exportCsv);
+    $("exportImage").addEventListener("click", exportImage);
   }
 
   function bindSettings() {
@@ -546,7 +547,7 @@
     }).sort((a, b) => b.shiftDate.localeCompare(a.shiftDate));
 
     $("historyCount").textContent = `${records.length} ${records.length === 1 ? "registro" : "registros"}`;
-    $("exportCsv").disabled = records.length === 0;
+    $("exportImage").disabled = records.length === 0;
     if (!records.length) {
       $("historyList").innerHTML = `
         <div class="card empty-state">
@@ -657,13 +658,27 @@
     navigate("home");
   }
 
-  function exportCsv() {
+  async function exportImage() {
     const start = $("historyStart").value;
     const end = $("historyEnd").value;
     const records = L.recordsInRange(state.records, start, end);
     if (!records.length) return;
-    downloadFile(`BiometrIMSS_${start}_${end}.csv`, L.recordsToCsv(records, state.settings), "text/csv;charset=utf-8");
-    showToast("Reporte CSV descargado.");
+    const button = $("exportImage");
+    const originalLabel = button.innerHTML;
+    button.disabled = true;
+    button.textContent = "Generando imagen…";
+    try {
+      const canvas = R.renderReport(records, state.settings, start, end, L);
+      const blob = await R.canvasToBlob(canvas);
+      downloadBlob(`BiometrIMSS_${start}_${end}.png`, blob);
+      showToast("Informe descargado como imagen.");
+    } catch (error) {
+      console.error(error);
+      showToast("No se pudo generar la imagen. Inténtalo nuevamente.", "error");
+    } finally {
+      button.innerHTML = originalLabel;
+      button.disabled = records.length === 0;
+    }
   }
 
   function exportBackup() {
@@ -726,6 +741,10 @@
 
   function downloadFile(filename, content, type) {
     const blob = new Blob([content], { type });
+    downloadBlob(filename, blob);
+  }
+
+  function downloadBlob(filename, blob) {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
