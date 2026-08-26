@@ -174,12 +174,15 @@
               <select id="statusOverride">
                 <option value="auto">Automático según el horario</option>
                 <option value="efectiva">Efectiva</option>
-                <option value="retardo">Retardo</option>
+                <option value="retardo">Pase de entrada</option>
+                <option value="pase-salida">Pase de salida</option>
                 <option value="fuera-horario">Fuera de horario</option>
                 <option value="omision-entrada">Omisión de entrada</option>
                 <option value="omision-salida">Omisión de salida</option>
                 <option value="salida-anticipada">Salida anticipada</option>
                 <option value="justificada">Justificada</option>
+                <option value="convenio">Convenio</option>
+                <option value="vacaciones">Vacaciones</option>
                 <option value="falta">Falta</option>
               </select>
             </label>
@@ -231,8 +234,13 @@
 
         <div class="legend" aria-label="Significado de colores">
           <span><i class="legend-dot effective"></i>Efectiva</span>
+          <span><i class="legend-dot omission-entry"></i>Omisión entrada</span>
+          <span><i class="legend-dot omission-exit"></i>Omisión salida</span>
+          <span><i class="legend-dot entry-pass"></i>Pase entrada</span>
+          <span><i class="legend-dot exit-pass"></i>Pase salida</span>
           <span><i class="legend-dot justified"></i>Justificada</span>
-          <span><i class="legend-dot incident"></i>Incidencia</span>
+          <span><i class="legend-dot agreement"></i>Convenio</span>
+          <span><i class="legend-dot vacation"></i>Vacaciones</span>
           <span><i class="legend-dot absence"></i>Falta</span>
           <span><i class="legend-dot scheduled"></i>Por capturar</span>
         </div>
@@ -267,6 +275,8 @@
                 <option value="all">Todos los estados</option>
                 <option value="efectiva">Efectivas</option>
                 <option value="justificada">Justificadas</option>
+                <option value="convenio">Convenios</option>
+                <option value="vacaciones">Vacaciones</option>
                 <option value="incident">Incidencias</option>
                 <option value="falta">Faltas</option>
                 <option value="pendiente">Pendientes</option>

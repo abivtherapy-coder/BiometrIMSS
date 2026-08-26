@@ -18,18 +18,22 @@
 
   const STATUS_META = Object.freeze({
     efectiva: { label: "Efectiva", category: "effective", description: "Entrada y salida dentro del horario configurado." },
-    retardo: { label: "Retardo", category: "incident", description: "La entrada fue posterior al límite configurado." },
+    retardo: { label: "Pase de entrada", category: "incident", description: "La entrada fue posterior al límite configurado." },
+    "pase-salida": { label: "Pase de salida", category: "incident", description: "La salida fue posterior al límite configurado." },
     "fuera-horario": { label: "Fuera de horario", category: "incident", description: "Alguna checada quedó fuera de la ventana configurada." },
     "omision-entrada": { label: "Omisión de entrada", category: "incident", description: "Hay salida, pero no se registró la entrada." },
     "omision-salida": { label: "Omisión de salida", category: "incident", description: "Hay entrada, pero no se registró la salida." },
     "salida-anticipada": { label: "Salida anticipada", category: "incident", description: "La salida fue anterior a la hora configurada." },
     justificada: { label: "Justificada", category: "justified", description: "Registro marcado como justificado." },
+    convenio: { label: "Convenio", category: "agreement", description: "Guardia cubierta mediante convenio." },
+    vacaciones: { label: "Vacaciones", category: "vacation", description: "Día correspondiente a vacaciones." },
     falta: { label: "Falta", category: "absence", description: "No hubo entrada ni salida registradas." },
     pendiente: { label: "Pendiente", category: "pending", description: "La guardia todavía no concluye o faltan datos." }
   });
 
   const INCIDENT_STATUSES = new Set([
     "retardo",
+    "pase-salida",
     "fuera-horario",
     "omision-entrada",
     "omision-salida",
@@ -161,8 +165,12 @@
     }
 
     const earliestReasonableEntry = new Date(window.start.getTime() - 4 * 60 * 60 * 1000);
-    if (exit < entry || entry < earliestReasonableEntry || entry > window.exit || exit > window.exitTolerance) {
+    if (exit < entry || entry < earliestReasonableEntry || entry > window.exit) {
       return { status: "fuera-horario", ...STATUS_META["fuera-horario"], reason: "La entrada o la salida quedó fuera de la ventana de guardia." };
+    }
+
+    if (exit > window.exitTolerance) {
+      return { status: "pase-salida", ...STATUS_META["pase-salida"], reason: "La salida fue posterior al límite permitido." };
     }
 
     if (entry > window.entryTolerance) {
@@ -262,6 +270,8 @@
     const incidents = evaluations.filter(({ evaluation }) => INCIDENT_STATUSES.has(evaluation.status)).length;
     const absences = evaluations.filter(({ evaluation }) => evaluation.status === "falta").length;
     const pending = evaluations.filter(({ evaluation }) => evaluation.status === "pendiente").length;
+    const agreements = evaluations.filter(({ evaluation }) => evaluation.status === "convenio").length;
+    const vacations = evaluations.filter(({ evaluation }) => evaluation.status === "vacaciones").length;
     const scheduledSet = new Set(scheduled);
     const capturedScheduled = new Set(list.filter((record) => scheduledSet.has(record.shiftDate)).map((record) => record.shiftDate)).size;
     const dueSet = new Set(dueScheduled);
@@ -278,6 +288,8 @@
       incidents,
       absences,
       pending,
+      agreements,
+      vacations,
       captureRate: dueScheduled.length ? Math.min(100, Math.round((capturedDue / dueScheduled.length) * 100)) : 0,
       effectiveRate: scheduled.length ? Math.min(100, Math.round((effective / scheduled.length) * 100)) : 0
     };
