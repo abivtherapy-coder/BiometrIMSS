@@ -71,3 +71,30 @@ test("integra registros sin duplicar ni borrar datos existentes", () => {
   assert.equal(result.records.find((record) => record.shiftDate === "2026-08-04").exitAt, "2026-08-05T08:27");
   assert.equal(result.records.find((record) => record.shiftDate === "2026-08-04").notes, "Nota personal");
 });
+
+test("distingue pase de entrada y pase de salida por sus límites", () => {
+  const entryPass = L.evaluateRecord({
+    shiftDate: "2026-08-04",
+    entryAt: "2026-08-04T21:01:00",
+    exitAt: "2026-08-05T08:20:00",
+    statusOverride: "auto"
+  }, settings, "2026-08-06T12:00:00");
+  const exitPass = L.evaluateRecord({
+    shiftDate: "2026-08-04",
+    entryAt: "2026-08-04T20:45:00",
+    exitAt: "2026-08-05T10:11:00",
+    statusOverride: "auto"
+  }, settings, "2026-08-06T12:00:00");
+
+  assert.equal(entryPass.status, "retardo");
+  assert.equal(entryPass.label, "Pase de entrada");
+  assert.equal(exitPass.status, "pase-salida");
+  assert.equal(exitPass.label, "Pase de salida");
+});
+
+test("acepta pase oficial y vacaciones como clasificación manual", () => {
+  const officialPass = L.evaluateRecord({ shiftDate: "2026-08-04", statusOverride: "pase-salida" }, settings);
+  const vacation = L.evaluateRecord({ shiftDate: "2026-08-04", statusOverride: "vacaciones" }, settings);
+  assert.equal(officialPass.status, "pase-salida");
+  assert.equal(vacation.status, "vacaciones");
+});

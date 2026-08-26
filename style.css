@@ -15,6 +15,13 @@
   --red: #c53b46;
   --red-soft: #ffeaec;
   --purple: #7856c8;
+  --omission-entry: #2f80d0;
+  --omission-exit: #7a4fc2;
+  --entry-pass: #d8a000;
+  --exit-pass: #e56f18;
+  --justified-pink: #d84f8b;
+  --agreement: #009fa3;
+  --vacation: #8a5b35;
   --ink: #17332d;
   --muted: #637a74;
   --line: #dce8e4;
@@ -804,6 +811,16 @@ h2 {
 .status-incident { color: #a86908; border-color: #f1ddb3; background: var(--amber-soft); }
 .status-absence { color: var(--red); border-color: #f3cbd0; background: var(--red-soft); }
 .status-pending { color: #687b77; border-color: #dfe9e6; background: #f1f5f4; }
+.status-agreement { color: #00777a; border-color: #a9e6e7; background: #e1f8f8; }
+.status-vacation { color: #704522; border-color: #e4c9ad; background: #f7ecdf; }
+.status-code-omision-entrada { color: var(--omission-entry); border-color: #b9d9f7; background: #e8f3fd; }
+.status-code-omision-salida { color: var(--omission-exit); border-color: #d4c4f1; background: #f0eafa; }
+.status-code-retardo { color: #9b7000; border-color: #efd782; background: #fff7ce; }
+.status-code-pase-salida,
+.status-code-salida-anticipada { color: #b74e08; border-color: #f2c29f; background: #fff0e5; }
+.status-code-justificada { color: #aa2d66; border-color: #efbfd5; background: #fdeaf3; }
+.status-code-convenio { color: #00777a; border-color: #a9e6e7; background: #e1f8f8; }
+.status-code-vacaciones { color: #704522; border-color: #e4c9ad; background: #f7ecdf; }
 
 .form-actions {
   display: flex;
@@ -890,6 +907,14 @@ h2 {
 .calendar-day.has-justified:not(.is-selected) { color: #1e64a8; background: var(--blue-soft); }
 .calendar-day.has-incident:not(.is-selected) { color: #9a6208; background: var(--amber-soft); }
 .calendar-day.has-absence:not(.is-selected) { color: var(--red); background: var(--red-soft); }
+.calendar-day.has-agreement:not(.is-selected) { color: #00777a; background: #e1f8f8; }
+.calendar-day.has-vacation:not(.is-selected) { color: #704522; background: #f7ecdf; }
+.calendar-day.has-status-omision-entrada:not(.is-selected) { color: var(--omission-entry); background: #e8f3fd; }
+.calendar-day.has-status-omision-salida:not(.is-selected) { color: var(--omission-exit); background: #f0eafa; }
+.calendar-day.has-status-retardo:not(.is-selected) { color: #9b7000; background: #fff7ce; }
+.calendar-day.has-status-pase-salida:not(.is-selected),
+.calendar-day.has-status-salida-anticipada:not(.is-selected) { color: #b74e08; background: #fff0e5; }
+.calendar-day.has-status-justificada:not(.is-selected) { color: #aa2d66; background: #fdeaf3; }
 .calendar-day.is-scheduled:not(.is-selected) { background: #eef3f1; }
 
 .calendar-day .guard-dot {
@@ -923,7 +948,13 @@ h2 {
 }
 
 .legend-dot.effective { background: var(--green-600); }
-.legend-dot.justified { background: var(--blue); }
+.legend-dot.omission-entry { background: var(--omission-entry); }
+.legend-dot.omission-exit { background: var(--omission-exit); }
+.legend-dot.entry-pass { background: #e0ad00; }
+.legend-dot.exit-pass { background: var(--exit-pass); }
+.legend-dot.justified { background: var(--justified-pink); }
+.legend-dot.agreement { background: var(--agreement); }
+.legend-dot.vacation { background: var(--vacation); }
 .legend-dot.incident { background: var(--amber); }
 .legend-dot.absence { background: var(--red); }
 .legend-dot.scheduled { background: #a9b8b3; }

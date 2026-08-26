@@ -1,4 +1,4 @@
-const CACHE_NAME = "biometrimss-v2.2.0";
+const CACHE_NAME = "biometrimss-v2.3.0";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -11,7 +11,10 @@ const APP_SHELL = [
   "./icons/icon-180.png",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
-  "./icons/icon-maskable-512.png"
+  "./icons/icon-maskable-512.png",
+  "./assets/abisai-pase-entrada.png",
+  "./assets/abisai-pase-salida.png",
+  "./assets/abisai-vacaciones.png"
 ];
 
 self.addEventListener("install", (event) => {

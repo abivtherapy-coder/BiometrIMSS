@@ -3,7 +3,7 @@
 
   const L = window.BiometrLogic;
   const R = window.BiometrReport;
-  const APP_VERSION = "2.2.0";
+  const APP_VERSION = "2.3.0";
   const STORAGE = {
     settings: "biometrimss:v2:settings",
     records: "biometrimss:v2:records",
@@ -285,7 +285,7 @@
           <div class="date-tile"><strong>${date.getDate()}</strong><small>${shortMonth(date)}</small></div>
           <div class="upcoming-copy"><strong>${capitalize(weekday(date))}</strong><span>${state.settings.startTime} – ${state.settings.exitTime}</span></div>
           ${evaluation
-            ? `<span class="record-status status-${evaluation.category}">${evaluation.label}</span>`
+            ? `<span class="record-status status-${evaluation.category} status-code-${evaluation.status}">${evaluation.label}</span>`
             : '<span class="mini-badge is-free">Por capturar</span>'}
         </div>`;
     }).join("");
@@ -411,7 +411,7 @@
       ? { status: "pendiente", ...L.STATUS_META.pendiente, reason: "Agrega las checadas o selecciona un estado manual." }
       : L.evaluateRecord(draft, state.settings);
     const preview = $("autoStatusPreview");
-    preview.className = `status-preview status-${evaluation.category}`;
+    preview.className = `status-preview status-${evaluation.category} status-code-${evaluation.status}`;
     preview.querySelector("strong").textContent = evaluation.label;
     preview.querySelector("small").textContent = evaluation.reason;
   }
@@ -509,7 +509,7 @@
       if (date.getMonth() !== month.getMonth()) classes.push("is-outside");
       if (key === today) classes.push("is-today");
       if (key === state.selectedDate) classes.push("is-selected");
-      if (evaluation) classes.push(`has-${evaluation.category}`);
+      if (evaluation) classes.push(`has-${evaluation.category}`, `has-status-${evaluation.status}`);
       else if (scheduled) classes.push("is-scheduled");
       const label = `${formatFriendlyDate(key)}${evaluation ? `, ${evaluation.label}` : scheduled ? ", guardia programada" : ""}`;
       cells.push(`<button class="${classes.join(" ")}" type="button" data-date="${key}" aria-label="${escapeHtml(label)}"><span>${date.getDate()}</span>${scheduled ? '<i class="guard-dot"></i>' : ""}</button>`);
@@ -565,7 +565,7 @@
       <article class="day-record">
         <div class="record-main">
           <strong>${showDate ? "Registro de guardia" : escapeHtml(formatFriendlyDate(record.shiftDate))}</strong>
-          <span class="record-status status-${evaluation.category}">${evaluation.label}</span>
+          <span class="record-status status-${evaluation.category} status-code-${evaluation.status}">${evaluation.label}</span>
         </div>
         ${recordTimes(record)}
         ${record.notes ? `<p class="record-note">${escapeHtml(record.notes)}</p>` : ""}
@@ -585,7 +585,7 @@
         <div class="history-record-body">
           <div class="record-main">
             <strong>${capitalize(weekday(date))}</strong>
-            <span class="record-status status-${evaluation.category}">${evaluation.label}</span>
+            <span class="record-status status-${evaluation.category} status-code-${evaluation.status}">${evaluation.label}</span>
           </div>
           ${recordTimes(record)}
           ${record.notes ? `<p class="record-note">${escapeHtml(record.notes)}</p>` : ""}
@@ -668,7 +668,7 @@
     button.disabled = true;
     button.textContent = "Generando imagen…";
     try {
-      const canvas = R.renderReport(records, state.settings, start, end, L);
+      const canvas = await R.renderReport(records, state.settings, start, end, L);
       const blob = await R.canvasToBlob(canvas);
       downloadBlob(`BiometrIMSS_${start}_${end}.png`, blob);
       showToast("Informe descargado como imagen.");

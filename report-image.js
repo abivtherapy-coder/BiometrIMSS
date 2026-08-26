@@ -5,31 +5,65 @@
 }(typeof globalThis !== "undefined" ? globalThis : this, function createBiometrReport() {
   "use strict";
 
-  const COLORS = {
-    green: "#08745a",
-    dark: "#143c34",
-    ink: "#182421",
-    muted: "#667773",
-    line: "#cbd7d3",
-    pale: "#edf6f3",
-    effective: "#12805f",
-    justified: "#2774b7",
-    incident: "#b87509",
-    absence: "#b63543",
-    pending: "#71807c"
-  };
+  const COLORS = Object.freeze({
+    efectiva: "#2f8b35", retardo: "#e0aa00", "pase-salida": "#e56f18",
+    "salida-anticipada": "#e56f18", "omision-entrada": "#2f80d0",
+    "omision-salida": "#7a4fc2", justificada: "#d84f8b", convenio: "#009fa3",
+    vacaciones: "#8a5b35", falta: "#d62828", pendiente: "#75827e",
+    "fuera-horario": "#555f5c", green: "#08745a", dark: "#063d34",
+    ink: "#17201e", muted: "#60706c", line: "#bdc9c5"
+  });
 
-  function dateLabel(value, logic) {
+  const LEGEND = Object.freeze([
+    ["efectiva", "En tolerancia", "Entrada y salida dentro del horario"],
+    ["retardo", "Pase de entrada", "Entrada posterior a las 21:00"],
+    ["pase-salida", "Pase de salida", "Salida posterior a las 10:10"],
+    ["omision-entrada", "Omisión de entrada", "Sin entrada, pero sí con salida"],
+    ["omision-salida", "Omisión de salida", "Con entrada, pero sin salida"],
+    ["justificada", "Justificada", "Incidencia con justificación"],
+    ["convenio", "Convenio", "Guardia cubierta mediante convenio"],
+    ["vacaciones", "Vacaciones", "Día correspondiente a vacaciones"],
+    ["falta", "Falta real", "Sin entrada ni salida"]
+  ]);
+
+  const ILLUSTRATIONS = Object.freeze({
+    retardo: "assets/abisai-pase-entrada.png",
+    "pase-salida": "assets/abisai-pase-salida.png",
+    vacaciones: "assets/abisai-vacaciones.png"
+  });
+
+  function dateLabel(value, logic, includeDay = false) {
     const date = logic.parseDateKey(value);
-    return date ? new Intl.DateTimeFormat("es-MX", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date) : value;
+    if (!date) return value || "—";
+    if (!includeDay) return new Intl.DateTimeFormat("es-MX", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date);
+    const shortDate = new Intl.DateTimeFormat("es-MX", { day: "2-digit", month: "short" }).format(date).replace(".", "");
+    const day = new Intl.DateTimeFormat("es-MX", { weekday: "short" }).format(date).replace(".", "");
+    return `${shortDate} (${day.charAt(0).toUpperCase()}${day.slice(1)})`;
   }
 
   function timeLabel(value) {
     if (!value) return "—";
     const date = new Date(value);
     return Number.isNaN(date.getTime()) ? "—" : new Intl.DateTimeFormat("es-MX", {
-      hour: "2-digit", minute: "2-digit", hour12: false
+      hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false
     }).format(date);
+  }
+
+  function exitDateLabel(record, logic) {
+    if (record.exitAt) {
+      const date = new Date(record.exitAt);
+      if (!Number.isNaN(date.getTime())) return dateLabel(logic.formatDateKey(date), logic, true);
+    }
+    return dateLabel(logic.formatDateKey(logic.addDays(record.shiftDate, 1)), logic, true);
+  }
+
+  function broadStatus(status, hasExit) {
+    if (["efectiva", "retardo", "omision-entrada"].includes(status) && hasExit) return "EN TOLERANCIA";
+    const labels = {
+      falta: "FALTA REAL", "omision-salida": "SIN SALIDA", "pase-salida": "FUERA DE TOLERANCIA",
+      "salida-anticipada": "SALIDA ANTICIPADA", "fuera-horario": "FUERA DE HORARIO"
+    };
+    return labels[status] || status.toUpperCase();
   }
 
   function buildReportModel(records, settings, start, end, logic, nowValue) {
@@ -37,168 +71,165 @@
     const rows = (Array.isArray(records) ? records : []).slice().sort((a, b) => a.shiftDate.localeCompare(b.shiftDate)).map((record) => {
       const evaluation = logic.evaluateRecord(record, config, nowValue);
       return {
-        date: dateLabel(record.shiftDate, logic),
-        entry: timeLabel(record.entryAt),
-        exit: timeLabel(record.exitAt),
-        status: evaluation.label,
-        category: evaluation.category
+        date: dateLabel(record.shiftDate, logic, true), entry: timeLabel(record.entryAt),
+        exitDate: exitDateLabel(record, logic), exit: timeLabel(record.exitAt), status: evaluation.status,
+        statusLabel: broadStatus(evaluation.status, Boolean(record.exitAt)), typeLabel: evaluation.label.toUpperCase()
       };
     });
     const summary = rows.reduce((counts, row) => {
-      counts[row.category] = (counts[row.category] || 0) + 1;
+      counts[row.status] = (counts[row.status] || 0) + 1;
       return counts;
-    }, { effective: 0, justified: 0, incident: 0, absence: 0, pending: 0 });
+    }, {});
     return {
-      profile: {
-        name: config.name || "Sin nombre registrado",
-        employeeId: config.employeeId || "Sin matrícula",
-        unit: config.unit || "Sin unidad registrada"
-      },
-      schedule: `${config.startTime} a ${config.exitTime} · ${config.guardDays.length} guardias por semana`,
-      period: `${dateLabel(start, logic)} al ${dateLabel(end, logic)}`,
-      rows,
-      summary
+      profile: { name: config.name || "Sin nombre registrado", employeeId: config.employeeId || "Sin matrícula", unit: config.unit || "Sin unidad registrada" },
+      schedule: config, period: `${dateLabel(start, logic)} al ${dateLabel(end, logic)}`, rows, summary,
+      attendanceRate: rows.length ? Math.round(((summary.efectiva || 0) / rows.length) * 1000) / 10 : 0
     };
   }
 
   function roundedRect(ctx, x, y, width, height, radius) {
     const r = Math.min(radius, width / 2, height / 2);
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.arcTo(x + width, y, x + width, y + height, r);
-    ctx.arcTo(x + width, y + height, x, y + height, r);
-    ctx.arcTo(x, y + height, x, y, r);
-    ctx.arcTo(x, y, x + width, y, r);
-    ctx.closePath();
+    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + width, y, x + width, y + height, r);
+    ctx.arcTo(x + width, y + height, x, y + height, r); ctx.arcTo(x, y + height, x, y, r);
+    ctx.arcTo(x, y, x + width, y, r); ctx.closePath();
   }
 
   function text(ctx, value, x, y, options = {}) {
     ctx.fillStyle = options.color || COLORS.ink;
-    ctx.font = `${options.weight || 500} ${options.size || 28}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
-    ctx.textAlign = options.align || "left";
-    ctx.textBaseline = options.baseline || "alphabetic";
+    ctx.font = `${options.weight || 500} ${options.size || 24}px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+    ctx.textAlign = options.align || "left"; ctx.textBaseline = options.baseline || "alphabetic";
     ctx.fillText(String(value), x, y, options.maxWidth);
   }
 
   function line(ctx, x1, y1, x2, y2, color = COLORS.line, width = 2) {
-    ctx.strokeStyle = color;
-    ctx.lineWidth = width;
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  }
+
+  function tint(hex, alpha) {
+    const value = hex.replace("#", "");
+    return `rgba(${parseInt(value.slice(0, 2), 16)},${parseInt(value.slice(2, 4), 16)},${parseInt(value.slice(4, 6), 16)},${alpha})`;
+  }
+
+  function drawSymbol(ctx, status, x, y, radius = 16) {
+    const color = COLORS[status] || COLORS.muted;
+    ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.beginPath();
+    if (status === "efectiva") { ctx.moveTo(x - 7, y); ctx.lineTo(x - 1, y + 6); ctx.lineTo(x + 9, y - 7); }
+    else if (status === "falta") { ctx.moveTo(x - 6, y - 6); ctx.lineTo(x + 6, y + 6); ctx.moveTo(x + 6, y - 6); ctx.lineTo(x - 6, y + 6); }
+    else if (["retardo", "pase-salida"].includes(status)) { ctx.moveTo(x, y - 7); ctx.lineTo(x, y + 3); ctx.moveTo(x, y + 9); ctx.lineTo(x, y + 9); }
+    else { ctx.moveTo(x - 7, y); ctx.lineTo(x + 7, y); }
     ctx.stroke();
   }
 
-  function renderReport(records, settings, start, end, logic) {
+  function loadIllustrations() {
+    const entries = Object.entries(ILLUSTRATIONS);
+    return Promise.all(entries.map(([key, src]) => new Promise((resolve) => {
+      const image = new Image(); image.onload = () => resolve([key, image]); image.onerror = () => resolve([key, null]); image.src = src;
+    }))).then((items) => Object.fromEntries(items));
+  }
+
+  function drawContain(ctx, image, x, y, width, height) {
+    if (!image) return;
+    const scale = Math.min(width / image.width, height / image.height);
+    const drawW = image.width * scale; const drawH = image.height * scale;
+    ctx.drawImage(image, x + (width - drawW) / 2, y + (height - drawH) / 2, drawW, drawH);
+  }
+
+  function drawHeader(ctx, model, width, margin, images) {
+    ctx.fillStyle = COLORS.green; roundedRect(ctx, margin, 45, 102, 102, 18); ctx.fill();
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(margin + 51, 96, 31, -1.4, 1.5); ctx.stroke();
+    ctx.beginPath(); ctx.arc(margin + 51, 96, 18, -1.4, 1.5); ctx.stroke();
+    text(ctx, "IMSS", margin + 51, 180, { size: 30, weight: 900, color: COLORS.green, align: "center" });
+    text(ctx, "REPORTE DE GUARDIAS · BIOMÉTRICO", width / 2, 69, { size: 36, weight: 900, align: "center" });
+    text(ctx, model.profile.name.toUpperCase(), width / 2, 116, { size: 37, weight: 900, color: COLORS.green, align: "center", maxWidth: 1040 });
+    text(ctx, `Matrícula: ${model.profile.employeeId}  ·  ${model.profile.unit}`, width / 2, 156, { size: 21, weight: 650, color: COLORS.muted, align: "center", maxWidth: 1050 });
+    drawContain(ctx, images.retardo, width - margin - 150, 35, 145, 150);
+    const y = 200; ctx.fillStyle = "#f5faf8"; roundedRect(ctx, margin, y, width - margin * 2, 116, 12); ctx.fill();
+    text(ctx, "PERIODO", margin + 28, y + 35, { size: 18, weight: 900, color: COLORS.green });
+    text(ctx, model.period, margin + 28, y + 76, { size: 25, weight: 800 });
+    text(ctx, "TURNO 3 · NOCTURNO", margin + 590, y + 35, { size: 19, weight: 900, color: COLORS.green });
+    text(ctx, `${model.schedule.startTime} a ${model.schedule.exitTime}`, margin + 590, y + 76, { size: 25, weight: 800 });
+    text(ctx, `ENTRADA ${model.schedule.startTime} · Límite ${model.schedule.entryTolerance}`, width - margin - 28, y + 35, { size: 19, weight: 750, align: "right" });
+    text(ctx, `SALIDA ${model.schedule.exitTime} · Límite ${model.schedule.exitTolerance}`, width - margin - 28, y + 76, { size: 19, weight: 750, align: "right" });
+  }
+
+  function drawTable(ctx, model, x, y, width, rowHeight) {
+    const columns = [0, 205, 390, 600, 785, 1020, width];
+    const headers = ["GUARDIA", "ENTRADA", "SALIDA", "HORA", "ESTATUS", "TIPO"];
+    ctx.fillStyle = COLORS.dark; ctx.fillRect(x, y, width, 72);
+    headers.forEach((header, i) => text(ctx, header, x + (columns[i] + columns[i + 1]) / 2, y + 37, { size: 19, weight: 900, color: "#fff", align: "center", baseline: "middle" }));
+    const rows = model.rows.length ? model.rows : [{ date: "—", entry: "—", exitDate: "—", exit: "—", status: "pendiente", statusLabel: "SIN REGISTROS", typeLabel: "SIN REGISTROS" }];
+    rows.forEach((row, index) => {
+      const top = y + 72 + index * rowHeight; ctx.fillStyle = index % 2 ? "#fafcfb" : "#fff"; ctx.fillRect(x, top, width, rowHeight);
+      const cell = (from, to, color) => { ctx.fillStyle = tint(color, .14); ctx.fillRect(x + columns[from], top, columns[to] - columns[from], rowHeight); };
+      if (row.status === "omision-entrada") cell(1, 2, COLORS["omision-entrada"]);
+      if (row.status === "omision-salida") cell(3, 4, COLORS["omision-salida"]);
+      if (row.status === "retardo") cell(1, 2, COLORS.retardo);
+      if (["pase-salida", "salida-anticipada"].includes(row.status)) cell(3, 4, COLORS["pase-salida"]);
+      ctx.fillStyle = tint(COLORS[row.status] || COLORS.muted, .11); ctx.fillRect(x + columns[4], top, width - columns[4], rowHeight);
+      [row.date, row.entry, row.exitDate, row.exit].forEach((value, col) => text(ctx, value, x + (columns[col] + columns[col + 1]) / 2, top + rowHeight / 2, { size: 19, weight: 750, color: value === "—" ? "#ba2323" : COLORS.ink, align: "center", baseline: "middle" }));
+      const color = COLORS[row.status] || COLORS.muted;
+      drawSymbol(ctx, row.status, x + columns[4] + 26, top + rowHeight / 2, 14);
+      text(ctx, row.statusLabel, x + columns[4] + 49, top + rowHeight / 2, { size: 15, weight: 900, color, baseline: "middle", maxWidth: columns[5] - columns[4] - 55 });
+      drawSymbol(ctx, row.status, x + columns[5] + 26, top + rowHeight / 2, 14);
+      text(ctx, row.typeLabel, x + columns[5] + 49, top + rowHeight / 2, { size: 15, weight: 900, color, baseline: "middle", maxWidth: columns[6] - columns[5] - 53 });
+      line(ctx, x, top + rowHeight, x + width, top + rowHeight);
+    });
+    columns.forEach((offset) => line(ctx, x + offset, y, x + offset, y + 72 + rows.length * rowHeight));
+    ctx.strokeStyle = COLORS.dark; ctx.lineWidth = 3; ctx.strokeRect(x, y, width, 72 + rows.length * rowHeight);
+    return y + 72 + rows.length * rowHeight;
+  }
+
+  function drawSidebar(ctx, model, images, x, y, width) {
+    ctx.fillStyle = COLORS.dark; ctx.fillRect(x, y, width, 62);
+    text(ctx, "LEYENDA", x + width / 2, y + 32, { size: 24, weight: 900, color: "#fff", align: "center", baseline: "middle" });
+    let cursor = y + 62;
+    LEGEND.forEach(([status, label, detail]) => {
+      const illustrated = Boolean(images[status]); const height = illustrated ? 112 : 74;
+      ctx.fillStyle = tint(COLORS[status], .12); ctx.fillRect(x, cursor, width, height);
+      if (illustrated) drawContain(ctx, images[status], x + 5, cursor + 4, 88, height - 8); else drawSymbol(ctx, status, x + 34, cursor + height / 2, 17);
+      const copyX = illustrated ? x + 99 : x + 65;
+      text(ctx, label.toUpperCase(), copyX, cursor + height / 2 - 8, { size: 18, weight: 900, color: COLORS[status], maxWidth: width - (copyX - x) - 12 });
+      text(ctx, detail, copyX, cursor + height / 2 + 19, { size: 14, weight: 650, maxWidth: width - (copyX - x) - 12 });
+      line(ctx, x, cursor + height, x + width, cursor + height); cursor += height;
+    });
+    ctx.strokeStyle = COLORS.line; ctx.lineWidth = 2; ctx.strokeRect(x, y, width, cursor - y);
+    cursor += 24; ctx.fillStyle = COLORS.dark; ctx.fillRect(x, cursor, width, 60);
+    text(ctx, "RESUMEN DEL PERIODO", x + width / 2, cursor + 31, { size: 20, weight: 900, color: "#fff", align: "center", baseline: "middle" }); cursor += 60;
+    LEGEND.forEach(([status, label]) => {
+      const count = model.summary[status] || 0; if (!count) return;
+      ctx.fillStyle = tint(COLORS[status], .08); ctx.fillRect(x, cursor, width, 52);
+      drawSymbol(ctx, status, x + 27, cursor + 26, 13); text(ctx, label.toUpperCase(), x + 50, cursor + 27, { size: 15, weight: 850, color: COLORS[status], baseline: "middle" });
+      text(ctx, count, x + width - 18, cursor + 27, { size: 22, weight: 900, align: "right", baseline: "middle" }); line(ctx, x, cursor + 52, x + width, cursor + 52); cursor += 52;
+    });
+    ctx.fillStyle = COLORS.dark; ctx.fillRect(x, cursor, width, 62);
+    text(ctx, "% ASISTENCIA REAL", x + 18, cursor + 32, { size: 17, weight: 900, color: "#fff", baseline: "middle" });
+    text(ctx, `${model.attendanceRate}%`, x + width - 18, cursor + 32, { size: 26, weight: 900, color: "#fff", align: "right", baseline: "middle" });
+    return cursor + 62;
+  }
+
+  async function renderReport(records, settings, start, end, logic) {
     if (typeof document === "undefined") throw new Error("Se necesita un navegador para dibujar el informe.");
-    const model = buildReportModel(records, settings, start, end, logic);
-    const width = 1600;
-    const margin = 72;
-    const rowHeight = 76;
-    const height = 680 + Math.max(model.rows.length, 1) * rowHeight + 250;
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d");
-
-    ctx.fillStyle = "#f2f5f4";
-    ctx.fillRect(0, 0, width, height);
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(32, 32, width - 64, height - 64);
-    ctx.strokeStyle = COLORS.dark;
-    ctx.lineWidth = 3;
-    ctx.strokeRect(52, 52, width - 104, height - 104);
-
-    ctx.fillStyle = COLORS.green;
-    roundedRect(ctx, margin, 82, 112, 112, 24);
-    ctx.fill();
-    ctx.strokeStyle = "#ffffff";
-    ctx.lineWidth = 7;
-    ctx.beginPath();
-    ctx.arc(margin + 56, 138, 34, -1.4, 1.5);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(margin + 56, 138, 20, -1.4, 1.5);
-    ctx.stroke();
-
-    text(ctx, "BiometrIMSS", 215, 126, { size: 44, weight: 800, color: COLORS.dark });
-    text(ctx, "MI CONTROL PERSONAL DE GUARDIAS", 215, 170, { size: 23, weight: 700, color: COLORS.green });
-    text(ctx, "INFORME BIOMÉTRICO", width - margin, 126, { size: 31, weight: 800, align: "right", color: COLORS.dark });
-    text(ctx, `Periodo: ${model.period}`, width - margin, 170, { size: 22, align: "right", color: COLORS.muted });
-    line(ctx, margin, 220, width - margin, 220, COLORS.dark, 3);
-
-    text(ctx, "Matrícula:", 95, 278, { size: 22, weight: 800 });
-    text(ctx, model.profile.employeeId, 235, 278, { size: 22 });
-    text(ctx, "Nombre:", 95, 326, { size: 22, weight: 800 });
-    text(ctx, model.profile.name, 235, 326, { size: 22, maxWidth: 650 });
-    text(ctx, "Unidad:", 865, 278, { size: 22, weight: 800 });
-    text(ctx, model.profile.unit, 985, 278, { size: 22, maxWidth: 500 });
-    text(ctx, "Horario:", 865, 326, { size: 22, weight: 800 });
-    text(ctx, model.schedule, 985, 326, { size: 22, maxWidth: 500 });
-
-    const tableX = margin;
-    const tableY = 380;
-    const tableW = width - margin * 2;
-    const columns = [0, 310, 610, 910, tableW];
-    ctx.fillStyle = COLORS.dark;
-    ctx.fillRect(tableX, tableY, tableW, 68);
-    const headers = ["FECHA DE GUARDIA", "ENTRADA", "SALIDA", "CLASIFICACIÓN"];
-    headers.forEach((header, index) => {
-      text(ctx, header, tableX + (columns[index] + columns[index + 1]) / 2, tableY + 35, {
-        size: 21, weight: 800, color: "#ffffff", align: "center", baseline: "middle"
-      });
-    });
-
-    const displayRows = model.rows.length ? model.rows : [{ date: "—", entry: "—", exit: "—", status: "Sin registros", category: "pending" }];
-    displayRows.forEach((row, index) => {
-      const y = tableY + 68 + index * rowHeight;
-      ctx.fillStyle = index % 2 ? "#f6faf8" : "#ffffff";
-      ctx.fillRect(tableX, y, tableW, rowHeight);
-      line(ctx, tableX, y + rowHeight, tableX + tableW, y + rowHeight);
-      const values = [row.date, row.entry, row.exit, row.status];
-      values.forEach((value, column) => {
-        const color = column === 3 ? (COLORS[row.category] || COLORS.ink) : COLORS.ink;
-        text(ctx, value, tableX + (columns[column] + columns[column + 1]) / 2, y + rowHeight / 2, {
-          size: 24, weight: column === 3 ? 800 : 600, color, align: "center", baseline: "middle"
-        });
-      });
-    });
-    columns.forEach((offset) => line(ctx, tableX + offset, tableY, tableX + offset, tableY + 68 + displayRows.length * rowHeight, COLORS.line));
-    ctx.strokeStyle = COLORS.dark;
-    ctx.lineWidth = 3;
-    ctx.strokeRect(tableX, tableY, tableW, 68 + displayRows.length * rowHeight);
-
-    const summaryY = tableY + 68 + displayRows.length * rowHeight + 52;
-    text(ctx, "RESUMEN DEL PERIODO", margin, summaryY, { size: 24, weight: 800, color: COLORS.dark });
-    const cards = [
-      ["Efectivas", model.summary.effective, "effective"],
-      ["Justificadas", model.summary.justified, "justified"],
-      ["Incidencias", model.summary.incident, "incident"],
-      ["Faltas", model.summary.absence, "absence"]
-    ];
-    const cardY = summaryY + 30;
-    const gap = 20;
-    const cardW = (tableW - gap * 3) / 4;
-    cards.forEach(([label, count, category], index) => {
-      const x = margin + index * (cardW + gap);
-      ctx.fillStyle = `${COLORS[category]}18`;
-      roundedRect(ctx, x, cardY, cardW, 92, 18);
-      ctx.fill();
-      text(ctx, count, x + 28, cardY + 57, { size: 42, weight: 900, color: COLORS[category] });
-      text(ctx, label, x + cardW - 24, cardY + 52, { size: 21, weight: 700, align: "right", color: COLORS[category] });
-    });
-
-    text(ctx, "Documento personal de consulta · Generado por BiometrIMSS", width / 2, height - 82, {
-      size: 20, color: COLORS.muted, align: "center"
-    });
+    const [model, images] = [buildReportModel(records, settings, start, end, logic), await loadIllustrations()];
+    const width = 1900; const margin = 42; const tableWidth = 1370; const gap = 24;
+    const sideWidth = width - margin * 2 - tableWidth - gap; const rowHeight = 72; const contentY = 346;
+    const tableBottom = contentY + 72 + Math.max(model.rows.length, 1) * rowHeight;
+    const sidebarBottom = contentY + 1450; const height = Math.max(tableBottom, sidebarBottom) + 155;
+    const canvas = document.createElement("canvas"); canvas.width = width; canvas.height = height;
+    const ctx = canvas.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, width, height);
+    drawHeader(ctx, model, width, margin, images);
+    const bottom = drawTable(ctx, model, margin, contentY, tableWidth, rowHeight);
+    drawSidebar(ctx, model, images, margin + tableWidth + gap, contentY, sideWidth);
+    const noteY = Math.max(bottom + 28, height - 100); ctx.fillStyle = "#f5faf8"; roundedRect(ctx, margin, noteY, tableWidth, 66, 10); ctx.fill();
+    text(ctx, "NOTA:", margin + 22, noteY + 34, { size: 18, weight: 900, color: COLORS.green, baseline: "middle" });
+    text(ctx, `Guardia completa: entrada hasta ${model.schedule.entryTolerance} y salida al día siguiente hasta ${model.schedule.exitTolerance}.`, margin + 100, noteY + 34, { size: 18, weight: 700, baseline: "middle" });
+    text(ctx, "Documento personal de consulta · Generado por BiometrIMSS", width - margin, height - 24, { size: 16, color: COLORS.muted, align: "right" });
     return canvas;
   }
 
   function canvasToBlob(canvas) {
-    return new Promise((resolve, reject) => {
-      canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("No se pudo crear la imagen.")), "image/png", 1);
-    });
+    return new Promise((resolve, reject) => canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("No se pudo crear la imagen.")), "image/png", 1));
   }
 
-  return { buildReportModel, canvasToBlob, renderReport };
+  return { COLORS, LEGEND, buildReportModel, canvasToBlob, renderReport };
 }));

@@ -11,8 +11,8 @@ test("prepara un informe de imagen ordenado y con resumen", () => {
   ];
   const model = R.buildReportModel(records, settings, "2026-08-01", "2026-08-31", L, "2026-09-01T12:00:00");
   assert.equal(model.rows.length, 2);
-  assert.equal(model.rows[0].date, "04/08/2026");
-  assert.equal(model.summary.effective, 1);
-  assert.equal(model.summary.incident, 1);
+  assert.match(model.rows[0].date, /^04[- ]ago/);
+  assert.equal(model.summary.efectiva, 1);
+  assert.equal(model.summary.retardo, 1);
   assert.equal(model.profile.unit, "HGZ 42");
 });
