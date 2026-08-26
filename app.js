@@ -2,7 +2,7 @@
   "use strict";
 
   const L = window.BiometrLogic;
-  const APP_VERSION = "2.0.0";
+  const APP_VERSION = "2.1.0";
   const STORAGE = {
     settings: "biometrimss:v2:settings",
     records: "biometrimss:v2:records",
@@ -686,12 +686,31 @@
       const data = JSON.parse(await file.text());
       if (!data || data.app !== "BiometrIMSS" || !Array.isArray(data.records) || !data.settings) throw new Error("Formato inválido");
       const validRecords = data.records.map(normalizeRecord).filter(Boolean);
+      const mergeMode = data.importMode === "merge";
       const accepted = await askConfirmation(
-        "Restaurar respaldo",
-        `Se reemplazarán los datos actuales por ${validRecords.length} registros del respaldo.`,
-        "Restaurar"
+        mergeMode ? "Importar checadas" : "Restaurar respaldo",
+        mergeMode
+          ? `Se integrarán ${validRecords.length} guardias sin borrar ni duplicar tus registros actuales.`
+          : `Se reemplazarán los datos actuales por ${validRecords.length} registros del respaldo.`,
+        mergeMode ? "Importar" : "Restaurar"
       );
       if (!accepted) return;
+      if (mergeMode) {
+        const result = L.mergeRecordsByShiftDate(state.records, validRecords);
+        state.records = result.records;
+        state.settings = L.normalizeSettings({
+          ...state.settings,
+          name: state.settings.name || data.settings.name || "",
+          employeeId: state.settings.employeeId || data.settings.employeeId || "",
+          unit: state.settings.unit || data.settings.unit || ""
+        });
+        persistSettings();
+        persistRecords();
+        populateSettingsForm();
+        renderAll();
+        showToast(`${result.added} guardias agregadas, ${result.updated} completadas y ${result.skipped} ya existentes.`);
+        return;
+      }
       state.settings = L.normalizeSettings(data.settings);
       state.records = validRecords;
       persistSettings();
@@ -701,7 +720,7 @@
       showToast("Respaldo restaurado correctamente.");
     } catch (error) {
       console.error(error);
-      showToast("Ese archivo no es un respaldo válido de BiometrIMSS.", "error");
+      showToast("Ese archivo no es una importación válida de BiometrIMSS.", "error");
     }
   }
 

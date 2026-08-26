@@ -205,6 +205,49 @@
     return list.filter((record) => record.shiftDate >= start && record.shiftDate <= end);
   }
 
+  function mergeRecordsByShiftDate(currentRecords, incomingRecords) {
+    const current = Array.isArray(currentRecords) ? currentRecords.map((record) => ({ ...record })) : [];
+    const incoming = Array.isArray(incomingRecords) ? incomingRecords : [];
+    const byDate = new Map(current.map((record, index) => [record.shiftDate, index]));
+    let added = 0;
+    let updated = 0;
+    let skipped = 0;
+
+    incoming.forEach((record) => {
+      const index = byDate.get(record.shiftDate);
+      if (index === undefined) {
+        current.push({ ...record });
+        byDate.set(record.shiftDate, current.length - 1);
+        added += 1;
+        return;
+      }
+
+      const existing = current[index];
+      const merged = {
+        ...existing,
+        entryAt: existing.entryAt || record.entryAt || "",
+        exitAt: existing.exitAt || record.exitAt || "",
+        statusOverride: existing.statusOverride && existing.statusOverride !== "auto"
+          ? existing.statusOverride
+          : (record.statusOverride || existing.statusOverride || "auto"),
+        notes: existing.notes || record.notes || "",
+        updatedAt: existing.updatedAt || record.updatedAt || new Date().toISOString()
+      };
+      const changed = ["entryAt", "exitAt", "statusOverride", "notes"]
+        .some((field) => merged[field] !== existing[field]);
+      current[index] = merged;
+      if (changed) updated += 1;
+      else skipped += 1;
+    });
+
+    return {
+      records: current.sort((a, b) => b.shiftDate.localeCompare(a.shiftDate)),
+      added,
+      updated,
+      skipped
+    };
+  }
+
   function calculateStats(records, start, end, settings, nowValue) {
     const list = recordsInRange(records, start, end);
     const scheduled = scheduledDates(start, end, settings);
@@ -307,6 +350,7 @@
     formatDateKey,
     getStatusMeta,
     isScheduledDate,
+    mergeRecordsByShiftDate,
     normalizeSettings,
     parseDateKey,
     recordsInRange,
