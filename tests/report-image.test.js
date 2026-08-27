@@ -4,6 +4,8 @@ const L = require("../logic.js");
 const R = require("../report-image.js");
 
 test("prepara un informe de imagen ordenado y con resumen", () => {
+  assert.deepEqual(R.REPORT_SIZE, { width: 1080, height: 1920, aspectRatio: "9:16" });
+  assert.equal(R.REPORT_SIZE.width / R.REPORT_SIZE.height, 9 / 16);
   const settings = L.normalizeSettings({ name: "Usuario", employeeId: "123", unit: "HGZ 42" });
   const records = [
     { shiftDate: "2026-08-06", entryAt: "2026-08-06T21:05", exitAt: "2026-08-07T08:49", statusOverride: "auto" },
