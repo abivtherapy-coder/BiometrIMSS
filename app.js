@@ -3,7 +3,7 @@
 
   const L = window.BiometrLogic;
   const R = window.BiometrReport;
-  const APP_VERSION = "2.3.1";
+  const APP_VERSION = "2.4.0";
   const STORAGE = {
     settings: "biometrimss:v2:settings",
     records: "biometrimss:v2:records",
@@ -670,7 +670,7 @@
     try {
       const canvas = await R.renderReport(records, state.settings, start, end, L);
       const blob = await R.canvasToBlob(canvas);
-      downloadBlob(`BiometrIMSS_${start}_${end}.png`, blob);
+      downloadBlob(`BiometrIMSS_9x16_${start}_${end}.png`, blob);
       showToast("Informe descargado como imagen.");
     } catch (error) {
       console.error(error);

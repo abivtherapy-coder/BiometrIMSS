@@ -32,6 +32,8 @@
     vacaciones: "assets/abisai-vacaciones.png"
   });
 
+  const REPORT_SIZE = Object.freeze({ width: 1080, height: 1920, aspectRatio: "9:16" });
+
   function dateLabel(value, logic, includeDay = false) {
     const date = logic.parseDateKey(value);
     if (!date) return value || "—";
@@ -208,22 +210,111 @@
     return cursor + 62;
   }
 
+  function drawPortraitHeader(ctx, model, images, width, margin) {
+    ctx.fillStyle = COLORS.green; roundedRect(ctx, margin, 28, 82, 82, 15); ctx.fill();
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 6; ctx.beginPath(); ctx.arc(margin + 41, 69, 25, -1.4, 1.5); ctx.stroke();
+    ctx.beginPath(); ctx.arc(margin + 41, 69, 14, -1.4, 1.5); ctx.stroke();
+    text(ctx, "IMSS", margin + 41, 137, { size: 23, weight: 900, color: COLORS.green, align: "center" });
+    text(ctx, "REPORTE DE GUARDIAS · BIOMÉTRICO", width / 2, 55, { size: 27, weight: 900, align: "center" });
+    text(ctx, model.profile.name.toUpperCase(), width / 2, 94, { size: 29, weight: 900, color: COLORS.green, align: "center", maxWidth: 720 });
+    text(ctx, `Matrícula: ${model.profile.employeeId}`, width / 2, 126, { size: 18, weight: 750, color: COLORS.muted, align: "center" });
+    text(ctx, model.profile.unit, width / 2, 151, { size: 16, weight: 650, color: COLORS.muted, align: "center", maxWidth: 720 });
+    drawContain(ctx, images.retardo, width - margin - 118, 20, 118, 135);
+
+    const y = 174; const cardWidth = width - margin * 2;
+    ctx.fillStyle = "#f5faf8"; roundedRect(ctx, margin, y, cardWidth, 116, 14); ctx.fill();
+    line(ctx, width / 2, y + 14, width / 2, y + 102, "#d7e3df", 2);
+    text(ctx, "PERIODO", margin + 24, y + 31, { size: 15, weight: 900, color: COLORS.green });
+    text(ctx, model.period, margin + 24, y + 63, { size: 21, weight: 850 });
+    text(ctx, "TURNO 3 · NOCTURNO", margin + 24, y + 93, { size: 16, weight: 850, color: COLORS.green });
+    text(ctx, `${model.schedule.startTime} a ${model.schedule.exitTime}`, margin + 255, y + 93, { size: 17, weight: 800 });
+    text(ctx, `ENTRADA ${model.schedule.startTime}`, width / 2 + 24, y + 31, { size: 16, weight: 850, color: COLORS.green });
+    text(ctx, `Límite ${model.schedule.entryTolerance}`, width - margin - 24, y + 31, { size: 16, weight: 750, align: "right" });
+    text(ctx, `SALIDA ${model.schedule.exitTime}`, width / 2 + 24, y + 72, { size: 16, weight: 850, color: COLORS.green });
+    text(ctx, `Límite ${model.schedule.exitTolerance}`, width - margin - 24, y + 72, { size: 16, weight: 750, align: "right" });
+  }
+
+  function drawPortraitTable(ctx, model, x, y, width, rowHeight) {
+    const columns = [0, 145, 275, 425, 555, 755, width];
+    const headers = ["GUARDIA", "ENTRADA", "SALIDA", "HORA", "ESTATUS", "TIPO"];
+    const headerHeight = 58;
+    ctx.fillStyle = COLORS.dark; ctx.fillRect(x, y, width, headerHeight);
+    headers.forEach((header, i) => text(ctx, header, x + (columns[i] + columns[i + 1]) / 2, y + headerHeight / 2, { size: 14, weight: 900, color: "#fff", align: "center", baseline: "middle" }));
+    const rows = model.rows.length ? model.rows : [{ date: "—", entry: "—", exitDate: "—", exit: "—", status: "pendiente", statusLabel: "SIN REGISTROS", typeLabel: "SIN REGISTROS" }];
+    const regularSize = Math.max(12, Math.min(17, rowHeight * .31));
+    const statusSize = Math.max(10, Math.min(13, rowHeight * .24));
+    rows.forEach((row, index) => {
+      const top = y + headerHeight + index * rowHeight;
+      ctx.fillStyle = index % 2 ? "#fafcfb" : "#fff"; ctx.fillRect(x, top, width, rowHeight);
+      const cell = (from, to, color) => { ctx.fillStyle = tint(color, .14); ctx.fillRect(x + columns[from], top, columns[to] - columns[from], rowHeight); };
+      if (row.status === "omision-entrada") cell(1, 2, COLORS["omision-entrada"]);
+      if (row.status === "omision-salida") cell(3, 4, COLORS["omision-salida"]);
+      if (row.status === "retardo") cell(1, 2, COLORS.retardo);
+      if (["pase-salida", "salida-anticipada"].includes(row.status)) cell(3, 4, COLORS["pase-salida"]);
+      ctx.fillStyle = tint(COLORS[row.status] || COLORS.muted, .11); ctx.fillRect(x + columns[4], top, width - columns[4], rowHeight);
+      [row.date, row.entry, row.exitDate, row.exit].forEach((value, col) => text(ctx, value, x + (columns[col] + columns[col + 1]) / 2, top + rowHeight / 2, { size: regularSize, weight: 750, color: value === "—" ? "#ba2323" : COLORS.ink, align: "center", baseline: "middle" }));
+      const color = COLORS[row.status] || COLORS.muted; const radius = Math.max(8, Math.min(11, rowHeight * .2));
+      drawSymbol(ctx, row.status, x + columns[4] + 18, top + rowHeight / 2, radius);
+      text(ctx, row.statusLabel, x + columns[4] + 36, top + rowHeight / 2, { size: statusSize, weight: 900, color, baseline: "middle", maxWidth: columns[5] - columns[4] - 42 });
+      drawSymbol(ctx, row.status, x + columns[5] + 18, top + rowHeight / 2, radius);
+      text(ctx, row.typeLabel, x + columns[5] + 36, top + rowHeight / 2, { size: statusSize, weight: 900, color, baseline: "middle", maxWidth: columns[6] - columns[5] - 42 });
+      line(ctx, x, top + rowHeight, x + width, top + rowHeight);
+    });
+    columns.forEach((offset) => line(ctx, x + offset, y, x + offset, y + headerHeight + rows.length * rowHeight));
+    ctx.strokeStyle = COLORS.dark; ctx.lineWidth = 3; ctx.strokeRect(x, y, width, headerHeight + rows.length * rowHeight);
+    return y + headerHeight + rows.length * rowHeight;
+  }
+
+  function drawPortraitLegend(ctx, model, images, x, y, width, height) {
+    const gap = 10; const columns = 3; const rows = 3;
+    const cardWidth = (width - gap * (columns - 1)) / columns;
+    const cardHeight = (height - gap * (rows - 1)) / rows;
+    LEGEND.forEach(([status, label, detail], index) => {
+      const col = index % columns; const row = Math.floor(index / columns);
+      const left = x + col * (cardWidth + gap); const top = y + row * (cardHeight + gap);
+      ctx.fillStyle = tint(COLORS[status], .1); roundedRect(ctx, left, top, cardWidth, cardHeight, 12); ctx.fill();
+      ctx.strokeStyle = tint(COLORS[status], .35); ctx.lineWidth = 2; ctx.stroke();
+      const illustrated = Boolean(images[status]); const visualWidth = illustrated ? 74 : 48;
+      if (illustrated) drawContain(ctx, images[status], left + 5, top + 5, 69, cardHeight - 10);
+      else drawSymbol(ctx, status, left + 27, top + cardHeight / 2, 14);
+      const copyX = left + visualWidth + 7;
+      text(ctx, label.toUpperCase(), copyX, top + cardHeight / 2 - 10, { size: 14, weight: 900, color: COLORS[status], maxWidth: cardWidth - visualWidth - 44 });
+      text(ctx, detail, copyX, top + cardHeight / 2 + 14, { size: 11, weight: 650, color: COLORS.ink, maxWidth: cardWidth - visualWidth - 14 });
+      ctx.fillStyle = COLORS[status]; ctx.beginPath(); ctx.arc(left + cardWidth - 21, top + 22, 15, 0, Math.PI * 2); ctx.fill();
+      text(ctx, model.summary[status] || 0, left + cardWidth - 21, top + 22, { size: 14, weight: 900, color: "#fff", align: "center", baseline: "middle" });
+    });
+  }
+
+  function drawPortraitSummary(ctx, model, x, y, width) {
+    const total = model.rows.length; const effective = model.summary.efectiva || 0; const incidents = Math.max(0, total - effective);
+    const cards = [["TOTAL GUARDIAS", total], ["EFECTIVAS", effective], ["INCIDENCIAS", incidents], ["ASISTENCIA REAL", `${model.attendanceRate}%`]];
+    const cardWidth = width / cards.length;
+    ctx.fillStyle = COLORS.dark; roundedRect(ctx, x, y, width, 92, 12); ctx.fill();
+    cards.forEach(([label, value], index) => {
+      const center = x + cardWidth * index + cardWidth / 2;
+      if (index) line(ctx, x + cardWidth * index, y + 15, x + cardWidth * index, y + 77, "rgba(255,255,255,.25)", 2);
+      text(ctx, label, center, y + 30, { size: 13, weight: 850, color: "#d8ede7", align: "center" });
+      text(ctx, value, center, y + 68, { size: 29, weight: 900, color: "#fff", align: "center" });
+    });
+  }
+
   async function renderReport(records, settings, start, end, logic) {
     if (typeof document === "undefined") throw new Error("Se necesita un navegador para dibujar el informe.");
     const [model, images] = [buildReportModel(records, settings, start, end, logic), await loadIllustrations()];
-    const width = 1900; const margin = 42; const tableWidth = 1370; const gap = 24;
-    const sideWidth = width - margin * 2 - tableWidth - gap; const rowHeight = 72; const contentY = 346;
-    const tableBottom = contentY + 72 + Math.max(model.rows.length, 1) * rowHeight;
-    const sidebarBottom = contentY + 1450; const height = Math.max(tableBottom, sidebarBottom) + 155;
+    const { width, height } = REPORT_SIZE; const margin = 36; const contentY = 315; const tableWidth = width - margin * 2;
+    const rowCount = Math.max(model.rows.length, 1); const rowHeight = Math.max(22, Math.min(70, Math.floor(920 / rowCount)));
     const canvas = document.createElement("canvas"); canvas.width = width; canvas.height = height;
     const ctx = canvas.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, width, height);
-    drawHeader(ctx, model, width, margin, images);
-    const bottom = drawTable(ctx, model, margin, contentY, tableWidth, rowHeight);
-    drawSidebar(ctx, model, images, margin + tableWidth + gap, contentY, sideWidth);
-    const noteY = Math.max(bottom + 28, height - 100); ctx.fillStyle = "#f5faf8"; roundedRect(ctx, margin, noteY, tableWidth, 66, 10); ctx.fill();
-    text(ctx, "NOTA:", margin + 22, noteY + 34, { size: 18, weight: 900, color: COLORS.green, baseline: "middle" });
-    text(ctx, `Guardia completa: entrada hasta ${model.schedule.entryTolerance} y salida al día siguiente hasta ${model.schedule.exitTolerance}.`, margin + 100, noteY + 34, { size: 18, weight: 700, baseline: "middle" });
-    text(ctx, "Documento personal de consulta · Generado por BiometrIMSS", width - margin, height - 24, { size: 16, color: COLORS.muted, align: "right" });
+    drawPortraitHeader(ctx, model, images, width, margin);
+    const tableBottom = drawPortraitTable(ctx, model, margin, contentY, tableWidth, rowHeight);
+    const legendY = tableBottom + 18; const reservedAfterLegend = 216;
+    const legendHeight = Math.max(288, Math.min(420, height - legendY - reservedAfterLegend));
+    drawPortraitLegend(ctx, model, images, margin, legendY, tableWidth, legendHeight);
+    const summaryY = legendY + legendHeight + 15; drawPortraitSummary(ctx, model, margin, summaryY, tableWidth);
+    const noteY = summaryY + 106; ctx.fillStyle = "#f5faf8"; roundedRect(ctx, margin, noteY, tableWidth, 54, 10); ctx.fill();
+    text(ctx, "NOTA:", margin + 18, noteY + 28, { size: 14, weight: 900, color: COLORS.green, baseline: "middle" });
+    text(ctx, `Guardia completa: entrada hasta ${model.schedule.entryTolerance} y salida al día siguiente hasta ${model.schedule.exitTolerance}.`, margin + 72, noteY + 28, { size: 14, weight: 700, baseline: "middle", maxWidth: tableWidth - 90 });
+    text(ctx, "Documento personal de consulta · Generado por BiometrIMSS · Formato 9:16", width - margin, height - 22, { size: 13, color: COLORS.muted, align: "right" });
     return canvas;
   }
 
@@ -231,5 +322,5 @@
     return new Promise((resolve, reject) => canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("No se pudo crear la imagen.")), "image/png", 1));
   }
 
-  return { COLORS, LEGEND, buildReportModel, canvasToBlob, renderReport };
+  return { COLORS, LEGEND, REPORT_SIZE, buildReportModel, canvasToBlob, renderReport };
 }));
