@@ -1341,13 +1341,17 @@ h2 {
   bottom: -5px;
   width: 108px;
   height: 108px;
-  background-image: url("assets/abit-ai-states-sticker-sheet-v1.png");
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  background-size: 205% 205%;
-  filter: drop-shadow(0 7px 7px rgba(0, 43, 33, .22));
+  display: grid;
+  place-items: center;
+  border: 5px solid rgba(255, 255, 255, .22);
+  border-radius: 22px 22px 4px 22px;
+  color: var(--green-900);
+  background: #fff;
+  box-shadow: 0 8px 16px rgba(0, 43, 33, .22);
   pointer-events: none;
 }
+
+.digital-report-hero-avatar::after { content: "✓"; font-size: 3.2rem; font-weight: 900; }
 
 .digital-report-profile {
   display: grid;
@@ -1396,18 +1400,16 @@ h2 {
   box-shadow: inset 0 0 0 1px rgba(8, 116, 90, .12);
 }
 
-.report-state-avatar.avatar-complete,
-.report-state-avatar.avatar-schedule,
-.report-state-avatar.avatar-vacation,
-.report-state-avatar.avatar-care {
-  background-image: url("assets/abit-ai-states-sticker-sheet-v1.png");
-  background-size: 205% 205%;
-}
-
-.report-state-avatar.avatar-complete { background-position: 0 100%; }
-.report-state-avatar.avatar-schedule { background-position: 100% 100%; }
-.report-state-avatar.avatar-vacation { background-position: 0 0; }
-.report-state-avatar.avatar-care { background-position: 100% 0; }
+.report-state-avatar { display: inline-grid; place-items: center; font-weight: 900; }
+.report-state-avatar::after { font-size: 1rem; line-height: 1; }
+.report-state-avatar.avatar-complete { color: var(--green-800); background: var(--green-100); }
+.report-state-avatar.avatar-complete::after { content: "✓"; }
+.report-state-avatar.avatar-schedule { color: #627873; background: #edf2f0; }
+.report-state-avatar.avatar-schedule::after { content: "•"; font-size: 1.8rem; }
+.report-state-avatar.avatar-vacation { color: #9a5d0b; background: #fff2d9; }
+.report-state-avatar.avatar-vacation::after { content: "☀"; }
+.report-state-avatar.avatar-care { color: #8d3d85; background: #fae8f7; }
+.report-state-avatar.avatar-care::after { content: "+"; font-size: 1.4rem; }
 .report-state-avatar.avatar-alert { background-image: url("assets/abisai-pase-entrada.png"); background-position: center; background-size: 135%; }
 .report-state-avatar.avatar-exit { background-image: url("assets/abisai-pase-salida.png"); background-position: center; background-size: 135%; }
 .digital-report-footer { padding: 13px 18px; border-top: 1px solid var(--line); color: var(--muted); background: #f8fcfa; font-size: .65rem; line-height: 1.45; }
