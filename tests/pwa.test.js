@@ -8,7 +8,10 @@ const root = path.resolve(__dirname, "..");
 test("todos los recursos para uso sin conexión existen", () => {
   const worker = fs.readFileSync(path.join(root, "service-worker.js"), "utf8");
   const assets = [...worker.matchAll(/"\.\/([^"#]+)"/g)].map((match) => match[1]).filter(Boolean);
-  for (const asset of assets) assert.equal(fs.existsSync(path.join(root, asset)), true, asset);
+  for (const asset of assets) {
+    const filePath = asset.split("?")[0];
+    assert.equal(fs.existsSync(path.join(root, filePath)), true, asset);
+  }
 });
 
 test("el manifiesto PWA contiene iconos instalables", () => {
