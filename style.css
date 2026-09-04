@@ -75,12 +75,21 @@ body {
   background: radial-gradient(circle at 50% 43%, #087f68 0, #034c40 34%, #012c27 72%, #001d1a 100%);
 }
 
-.brand-intro.is-ready { animation: brand-intro-exit .55s ease 2.45s forwards; }
+.brand-intro.is-ready { animation: brand-intro-exit .9s cubic-bezier(.4, 0, .2, 1) 5.1s forwards; }
+
+.brand-intro-stage {
+  position: relative;
+  display: grid;
+  width: min(78vw, 360px);
+  aspect-ratio: 1;
+  place-items: center;
+}
 
 .brand-intro-logo {
+  grid-area: 1 / 1;
   position: relative;
   z-index: 2;
-  width: min(64vw, 290px);
+  width: 82%;
   aspect-ratio: 1;
   border-radius: 28%;
   object-fit: cover;
@@ -89,14 +98,15 @@ body {
 }
 
 .brand-intro.is-ready .brand-intro-logo {
-  animation: biometric-lines 1.35s cubic-bezier(.22, .8, .28, 1) .15s forwards,
-    biometric-pulse .55s ease 1.55s 2 alternate;
+  animation: biometric-lines 2.6s cubic-bezier(.22, .8, .28, 1) .7s forwards,
+    biometric-pulse .8s ease 3.45s 2 alternate;
 }
 
 .brand-intro-orbit {
-  position: absolute;
+  grid-area: 1 / 1;
+  position: relative;
   z-index: 1;
-  width: min(76vw, 345px);
+  width: 100%;
   aspect-ratio: 1;
   border: 2px solid rgba(255, 207, 84, .58);
   border-right-color: rgba(33, 255, 216, .9);
@@ -106,13 +116,14 @@ body {
 }
 
 .brand-intro.is-ready .brand-intro-orbit {
-  animation: orbit-on .5s ease .65s forwards, orbit-spin 2s linear .65s infinite;
+  animation: orbit-on 1.4s ease .25s forwards, orbit-spin 4.5s linear .25s forwards;
 }
 
 .brand-intro-scan {
-  position: absolute;
+  grid-area: 1 / 1;
+  position: relative;
   z-index: 3;
-  width: min(60vw, 270px);
+  width: 76%;
   height: 3px;
   border-radius: 50%;
   background: #ffe488;
@@ -120,7 +131,7 @@ body {
   opacity: 0;
 }
 
-.brand-intro.is-ready .brand-intro-scan { animation: scan-line 1.25s ease .25s forwards; }
+.brand-intro.is-ready .brand-intro-scan { animation: scan-line 2.45s ease .65s forwards; }
 
 .brand-intro p {
   z-index: 2;
@@ -132,7 +143,7 @@ body {
   opacity: 0;
 }
 
-.brand-intro.is-ready p { animation: intro-name .45s ease 1.5s forwards; }
+.brand-intro.is-ready p { animation: intro-name .9s ease 3.65s forwards; }
 
 @keyframes biometric-lines {
   0% { clip-path: inset(100% 0 0); opacity: .25; transform: scale(.92); }
@@ -148,16 +159,17 @@ body {
 @keyframes orbit-spin { to { transform: rotate(360deg); } }
 
 @keyframes scan-line {
-  0% { opacity: 0; transform: translateY(130px) scaleX(.25); }
+  0% { opacity: 0; transform: translateY(132px) scaleX(.2); }
   12% { opacity: 1; }
   88% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-130px) scaleX(1); }
+  100% { opacity: 0; transform: translateY(-132px) scaleX(1); }
 }
 
 @keyframes intro-name { to { opacity: 1; transform: translateY(-2px); } }
 
 @keyframes brand-intro-exit {
-  to { opacity: 0; visibility: hidden; pointer-events: none; }
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.045); }
 }
 
 button,
@@ -1978,7 +1990,7 @@ h2 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .brand-intro.is-ready { animation-delay: .55s; }
+  .brand-intro.is-ready { animation-delay: 1.2s; }
   .brand-intro-logo { clip-path: inset(0); }
   .brand-intro-orbit,
   .brand-intro-scan { display: none; }
