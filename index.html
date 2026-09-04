@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=2.8.0">
+  <link rel="stylesheet" href="style.css?v=2.9.0">
 </head>
 
 <body>
@@ -404,10 +404,10 @@
             <span>📋 Planes de cuidado</span>
             <span>🩺 Priorizar pendientes</span>
           </div>
-          <a class="button assistant-launch" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">
+          <button id="assistantChooseProvider" class="button assistant-launch" type="button">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h7v7M21 3l-9 9"/><path d="M20 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5"/></svg>
-            Abrir conversación en ChatGPT
-          </a>
+            Elegir quién me responde
+          </button>
         </section>
 
         <section class="assistant-boundary" aria-label="Privacidad y seguridad de ABITIMSS">
@@ -450,6 +450,29 @@
         <button class="button button-secondary" value="cancel">Cancelar</button>
         <button id="confirmAction" class="button button-danger" value="confirm">Eliminar</button>
       </div>
+    </form>
+  </dialog>
+
+  <dialog id="assistantProviderDialog" class="dialog assistant-provider-dialog" aria-labelledby="assistantProviderTitle">
+    <form method="dialog">
+      <div class="dialog-icon assistant-dialog-icon">🩺</div>
+      <p class="eyebrow">Consulta externa</p>
+      <h2 id="assistantProviderTitle">¿Quién quieres que te responda?</h2>
+      <p>Elige la conversación que deseas abrir. BiometrIMSS no comparte tus guardias ni tus registros.</p>
+      <div class="assistant-provider-options">
+        <button class="assistant-provider" type="button" data-provider-name="ChatGPT" data-provider-url="https://chatgpt.com/">
+          <span aria-hidden="true">✦</span><strong>ChatGPT</strong><small>Abrir conversación</small>
+        </button>
+        <button class="assistant-provider" type="button" data-provider-name="Meta AI" data-provider-url="https://www.meta.ai/">
+          <span aria-hidden="true">∞</span><strong>Meta AI</strong><small>Abrir conversación</small>
+        </button>
+      </div>
+      <label class="field assistant-custom-provider" for="assistantExternalUrl">
+        <span>Otra app de IA o enfermería</span>
+        <input id="assistantExternalUrl" type="url" inputmode="url" placeholder="https://..." autocomplete="url">
+      </label>
+      <button id="assistantCustomLaunch" class="button button-secondary assistant-custom-launch" type="button">Abrir esta otra aplicación</button>
+      <button class="text-button assistant-cancel" value="cancel">Cancelar</button>
     </form>
   </dialog>
 

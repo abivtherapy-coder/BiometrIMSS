@@ -1436,6 +1436,58 @@ h2 {
 .assistant-boundary p { margin: 0; }
 .assistant-boundary strong { color: var(--green-900); }
 
+.assistant-provider-dialog form { padding: 21px; }
+.assistant-provider-dialog .eyebrow { margin-bottom: 2px; }
+.assistant-provider-dialog h2 { margin-bottom: 5px; }
+.assistant-dialog-icon {
+  color: var(--green-800);
+  background: var(--green-100);
+  font-size: 1.45rem;
+}
+
+.assistant-provider-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin: 17px 0 14px;
+}
+
+.assistant-provider {
+  display: grid;
+  min-height: 105px;
+  place-items: center;
+  padding: 12px 8px;
+  border: 1px solid #cde8de;
+  border-radius: 15px;
+  color: var(--green-900);
+  background: var(--green-50);
+  cursor: pointer;
+}
+
+.assistant-provider:hover,
+.assistant-provider:focus-visible {
+  border-color: var(--green-600);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(19, 164, 125, .13);
+}
+
+.assistant-provider > span {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.assistant-provider strong { font-size: .86rem; }
+.assistant-provider small { color: var(--muted); font-size: .62rem; }
+
+.assistant-custom-provider {
+  margin-top: 4px;
+  text-align: left;
+}
+
+.assistant-custom-provider span { font-size: .75rem; }
+.assistant-custom-launch { width: 100%; margin-top: 10px; }
+.assistant-cancel { margin-top: 13px; }
+
 .bottom-nav {
   position: fixed;
   z-index: 60;

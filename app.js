@@ -36,6 +36,7 @@
     bindHistory();
     bindSettings();
     bindInstall();
+    bindAssistant();
     renderAll();
     openHashView();
     registerServiceWorker();
@@ -91,6 +92,40 @@
       button.addEventListener("click", () => navigate(button.dataset.go));
     });
     window.addEventListener("hashchange", openHashView);
+  }
+
+  function bindAssistant() {
+    const dialog = $("assistantProviderDialog");
+    const chooseButton = $("assistantChooseProvider");
+    if (!dialog || !chooseButton) return;
+
+    chooseButton.addEventListener("click", () => {
+      if (typeof dialog.showModal === "function") dialog.showModal();
+      else showToast("Abre esta app en un navegador actualizado para elegir tu asistente externo.", "error");
+    });
+
+    dialog.querySelectorAll("[data-provider-url]").forEach((button) => {
+      button.addEventListener("click", () => openExternalAssistant(button.dataset.providerUrl, button.dataset.providerName));
+    });
+
+    $("assistantCustomLaunch").addEventListener("click", () => {
+      const input = $("assistantExternalUrl");
+      openExternalAssistant(input.value, "tu aplicación externa");
+    });
+
+    function openExternalAssistant(rawUrl, providerName) {
+      let url;
+      try {
+        url = new URL(String(rawUrl || "").trim());
+        if (!/^https?:$/.test(url.protocol)) throw new Error("invalid protocol");
+      } catch {
+        showToast("Escribe una dirección válida que empiece con https://", "error");
+        return;
+      }
+      dialog.close();
+      window.open(url.href, "_blank", "noopener,noreferrer");
+      showToast(`Abriendo conversación en ${providerName}. Tú decides qué información compartir.`);
+    }
   }
 
   function navigate(view, options = {}) {
