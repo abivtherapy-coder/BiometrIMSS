@@ -7,6 +7,8 @@
   const STORAGE = {
     settings: "biometrimss:v2:settings",
     records: "biometrimss:v2:records",
+    recordDraft: "biometrimss:v2:record-draft",
+    settingsDraft: "biometrimss:v2:settings-draft",
     installDismissed: "biometrimss:v2:install-dismissed"
   };
 
@@ -29,6 +31,7 @@
     setDefaultPeriods();
     populateSettingsForm();
     resetRecordForm(L.currentShiftDate(new Date(), state.settings));
+    restoreAutoSavedDrafts();
     bindNavigation();
     bindHome();
     bindRecordForm();
@@ -37,6 +40,7 @@
     bindSettings();
     bindInstall();
     bindAssistant();
+    window.addEventListener("pagehide", saveAutoSavedDrafts);
     renderAll();
     openHashView();
     registerServiceWorker();
@@ -93,6 +97,76 @@
     });
     window.addEventListener("hashchange", openHashView);
   }
+
+  function saveAutoSavedDrafts() {
+    saveRecordDraft();
+    saveSettingsDraft();
+  }
+
+  function saveRecordDraft() {
+    const draft = {
+      id: $("recordId").value,
+      shiftDate: $("shiftDate").value,
+      entryAt: $("entryAt").value,
+      exitAt: $("exitAt").value,
+      statusOverride: $("statusOverride").value,
+      notes: $("recordNotes").value
+    };
+    const hasChanges = Boolean(draft.id || draft.entryAt || draft.exitAt || draft.notes || draft.statusOverride !== "auto");
+    if (hasChanges) localStorage.setItem(STORAGE.recordDraft, JSON.stringify(draft));
+    else localStorage.removeItem(STORAGE.recordDraft);
+  }
+
+  function saveSettingsDraft() {
+    const draft = {
+      name: $("settingName").value,
+      employeeId: $("settingEmployeeId").value,
+      unit: $("settingUnit").value,
+      startTime: $("settingStartTime").value,
+      entryTolerance: $("settingEntryTolerance").value,
+      exitTime: $("settingExitTime").value,
+      exitTolerance: $("settingExitTolerance").value,
+      guardDays: [...document.querySelectorAll('input[name="guardDay"]:checked')].map((input) => input.value)
+    };
+    localStorage.setItem(STORAGE.settingsDraft, JSON.stringify(draft));
+  }
+
+  function restoreAutoSavedDrafts() {
+    try {
+      const recordDraft = JSON.parse(localStorage.getItem(STORAGE.recordDraft) || "null");
+      if (recordDraft) {
+        $("recordId").value = recordDraft.id || "";
+        $("shiftDate").value = recordDraft.shiftDate || $("shiftDate").value;
+        $("entryAt").value = recordDraft.entryAt || "";
+        $("exitAt").value = recordDraft.exitAt || "";
+        $("statusOverride").value = recordDraft.statusOverride || "auto";
+        $("recordNotes").value = recordDraft.notes || "";
+        updateScheduledHint();
+        updateNotesCount();
+        renderStatusPreview();
+        showToast("Recuperamos tu registro que estaba en borrador.");
+      }
+      const settingsDraft = JSON.parse(localStorage.getItem(STORAGE.settingsDraft) || "null");
+      if (settingsDraft) {
+        $("settingName").value = settingsDraft.name || "";
+        $("settingEmployeeId").value = settingsDraft.employeeId || "";
+        $("settingUnit").value = settingsDraft.unit || "";
+        ["startTime", "entryTolerance", "exitTime", "exitTolerance"].forEach((field) => {
+          if (settingsDraft[field]) $("setting" + field.charAt(0).toUpperCase() + field.slice(1)).value = settingsDraft[field];
+        });
+        if (Array.isArray(settingsDraft.guardDays)) {
+          document.querySelectorAll('input[name="guardDay"]').forEach((input) => {
+            input.checked = settingsDraft.guardDays.includes(input.value);
+          });
+        }
+      }
+    } catch (error) {
+      console.warn("No se pudieron recuperar los borradores automáticos.", error);
+    }
+  }
+
+  function clearRecordDraft() { localStorage.removeItem(STORAGE.recordDraft); }
+  function clearSettingsDraft() { localStorage.removeItem(STORAGE.settingsDraft); }
 
   function bindAssistant() {
     const dialog = $("assistantProviderDialog");
@@ -186,19 +260,26 @@
       $(id).addEventListener("input", () => {
         if (id === "shiftDate") updateScheduledHint();
         renderStatusPreview();
+        saveRecordDraft();
       });
     });
-    $("recordNotes").addEventListener("input", updateNotesCount);
+    $("recordNotes").addEventListener("input", () => {
+      updateNotesCount();
+      saveRecordDraft();
+    });
     $("setEntryNow").addEventListener("click", () => {
       $("entryAt").value = L.toDateTimeLocal(new Date());
       renderStatusPreview();
+      saveRecordDraft();
     });
     $("setExitNow").addEventListener("click", () => {
       $("exitAt").value = L.toDateTimeLocal(new Date());
       renderStatusPreview();
+      saveRecordDraft();
     });
     $("useSchedule").addEventListener("click", useScheduledTimes);
     $("cancelEdit").addEventListener("click", () => {
+      clearRecordDraft();
       resetRecordForm(L.currentShiftDate(new Date(), state.settings));
       showToast("Edición cancelada.");
     });
@@ -237,6 +318,10 @@
 
   function bindSettings() {
     $("settingsForm").addEventListener("submit", saveSettingsFromForm);
+    $("settingsForm").querySelectorAll("input").forEach((input) => {
+      input.addEventListener("input", saveSettingsDraft);
+      input.addEventListener("change", saveSettingsDraft);
+    });
     $("exportBackup").addEventListener("click", exportBackup);
     $("importBackup").addEventListener("change", importBackup);
     $("importTuPerfilPdf").addEventListener("change", importTuPerfilPdf);
@@ -373,6 +458,7 @@
     record[field] = L.toDateTimeLocal(current);
     record.updatedAt = new Date().toISOString();
     persistRecords();
+    clearRecordDraft();
     renderAll();
     showToast(`${type === "entry" ? "Entrada" : "Salida"} guardada a las ${formatTime(record[field])}.`);
   }
@@ -438,6 +524,7 @@
     if (index >= 0) state.records[index] = saved;
     else state.records.push(saved);
     persistRecords();
+    clearRecordDraft();
     state.selectedDate = saved.shiftDate;
     resetRecordForm(L.currentShiftDate(new Date(), state.settings));
     renderAll();
@@ -455,6 +542,7 @@
     $("entryAt").value = L.toDateTimeLocal(window.start);
     $("exitAt").value = L.toDateTimeLocal(window.exit);
     renderStatusPreview();
+    saveRecordDraft();
   }
 
   function formRecord() {
@@ -728,6 +816,7 @@
       guardDays
     });
     persistSettings();
+    clearSettingsDraft();
     renderAll();
     showToast("Ajustes guardados correctamente.");
     navigate("home");
