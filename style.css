@@ -73,8 +73,9 @@ body {
   justify-items: center;
   overflow: hidden;
   background: radial-gradient(circle at 50% 43%, #087f68 0, #034c40 34%, #012c27 72%, #001d1a 100%);
-  animation: brand-intro-exit .55s ease 2.45s forwards;
 }
+
+.brand-intro.is-ready { animation: brand-intro-exit .55s ease 2.45s forwards; }
 
 .brand-intro-logo {
   position: relative;
@@ -85,6 +86,9 @@ body {
   object-fit: cover;
   filter: drop-shadow(0 0 18px rgba(22, 255, 211, .38)) drop-shadow(0 0 25px rgba(255, 203, 74, .2));
   clip-path: inset(100% 0 0);
+}
+
+.brand-intro.is-ready .brand-intro-logo {
   animation: biometric-lines 1.35s cubic-bezier(.22, .8, .28, 1) .15s forwards,
     biometric-pulse .55s ease 1.55s 2 alternate;
 }
@@ -99,6 +103,9 @@ body {
   border-radius: 50%;
   box-shadow: 0 0 24px rgba(25, 246, 207, .2), inset 0 0 24px rgba(255, 201, 65, .12);
   opacity: 0;
+}
+
+.brand-intro.is-ready .brand-intro-orbit {
   animation: orbit-on .5s ease .65s forwards, orbit-spin 2s linear .65s infinite;
 }
 
@@ -111,8 +118,9 @@ body {
   background: #ffe488;
   box-shadow: 0 0 9px #fff, 0 0 22px #ffc62f;
   opacity: 0;
-  animation: scan-line 1.25s ease .25s forwards;
 }
+
+.brand-intro.is-ready .brand-intro-scan { animation: scan-line 1.25s ease .25s forwards; }
 
 .brand-intro p {
   z-index: 2;
@@ -122,8 +130,9 @@ body {
   font-weight: 800;
   letter-spacing: .24em;
   opacity: 0;
-  animation: intro-name .45s ease 1.5s forwards;
 }
+
+.brand-intro.is-ready p { animation: intro-name .45s ease 1.5s forwards; }
 
 @keyframes biometric-lines {
   0% { clip-path: inset(100% 0 0); opacity: .25; transform: scale(.92); }
@@ -1969,7 +1978,7 @@ h2 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .brand-intro { animation-delay: .55s; }
+  .brand-intro.is-ready { animation-delay: .55s; }
   .brand-intro-logo { clip-path: inset(0); }
   .brand-intro-orbit,
   .brand-intro-scan { display: none; }
