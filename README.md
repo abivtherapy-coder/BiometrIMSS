@@ -1,4 +1,4 @@
-# BiometrIMSS
+# ABITIMSS
 
 Aplicación web progresiva (PWA) para llevar un control personal de guardias y registros biométricos desde el teléfono.
 
@@ -39,4 +39,4 @@ npx serve .
 
 ## Privacidad
 
-BiometrIMSS es una herramienta personal e independiente. No es una aplicación oficial del IMSS y no sustituye los registros institucionales. La app no envía datos a servidores; la información permanece en el navegador del dispositivo, salvo que la persona descargue un respaldo o reporte.
+ABITIMSS es una herramienta personal e independiente. No es una aplicación oficial del IMSS y no sustituye los registros institucionales. La app no envía datos a servidores; la información permanece en el navegador del dispositivo, salvo que la persona descargue un respaldo o reporte.

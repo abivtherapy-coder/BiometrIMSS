@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "BiometrIMSS — Mi control de guardias",
-  "short_name": "BiometrIMSS",
+  "name": "ABITIMSS — Mi control de guardias",
+  "short_name": "ABITIMSS",
   "description": "Control personal de guardias y registros biométricos.",
   "lang": "es-MX",
   "dir": "ltr",

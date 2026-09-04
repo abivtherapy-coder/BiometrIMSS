@@ -319,7 +319,7 @@
     const noteY = summaryY + 106; ctx.fillStyle = "#f5faf8"; roundedRect(ctx, margin, noteY, tableWidth, 54, 10); ctx.fill();
     text(ctx, "NOTA:", margin + 18, noteY + 28, { size: 14, weight: 900, color: COLORS.green, baseline: "middle" });
     text(ctx, `Guardia completa: entrada hasta ${model.schedule.entryTolerance} y salida al día siguiente hasta ${model.schedule.exitTolerance}.`, margin + 72, noteY + 28, { size: 14, weight: 700, baseline: "middle", maxWidth: tableWidth - 90 });
-    text(ctx, "Documento personal de consulta · Generado por BiometrIMSS · Formato 9:16", width - margin, height - 22, { size: 13, color: COLORS.muted, align: "right" });
+    text(ctx, "Documento personal de consulta · Generado por ABITIMSS · Formato 9:16", width - margin, height - 22, { size: 13, color: COLORS.muted, align: "right" });
     return canvas;
   }
 
