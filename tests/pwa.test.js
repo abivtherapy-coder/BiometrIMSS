@@ -17,5 +17,5 @@ test("todos los recursos para uso sin conexión existen", () => {
 test("el manifiesto PWA contiene iconos instalables", () => {
   const manifest = JSON.parse(fs.readFileSync(path.join(root, "manifest.webmanifest"), "utf8"));
   assert.equal(manifest.display, "standalone");
-  for (const icon of manifest.icons) assert.equal(fs.existsSync(path.join(root, icon.src)), true, icon.src);
+  for (const icon of manifest.icons) assert.equal(fs.existsSync(path.join(root, icon.src.split("?")[0])), true, icon.src);
 });

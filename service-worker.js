@@ -1,4 +1,4 @@
-const CACHE_NAME = "biometrimss-v4.0.0";
+const CACHE_NAME = "biometrimss-v4.1.0";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -6,12 +6,11 @@ const APP_SHELL = [
   "./logic.js",
   "./report-image.js",
   "./app.js?v=4.0.0",
-  "./manifest.webmanifest",
-  "./icons/icon.svg",
-  "./icons/icon-180.png",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png",
-  "./icons/icon-maskable-512.png",
+  "./manifest.webmanifest?v=4.1.0",
+  "./icons/icon-180.png?v=4.1.0",
+  "./icons/icon-192.png?v=4.1.0",
+  "./icons/icon-512.png?v=4.1.0",
+  "./icons/icon-maskable-512.png?v=4.1.0",
   "./assets/abisai-pase-entrada.png",
   "./assets/abisai-pase-salida.png",
   "./assets/abisai-vacaciones.png",
