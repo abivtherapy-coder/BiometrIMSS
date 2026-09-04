@@ -99,9 +99,25 @@
     const chooseButton = $("assistantChooseProvider");
     if (!dialog || !chooseButton) return;
 
-    chooseButton.addEventListener("click", () => {
+    const providerTitle = $("assistantProviderTitle");
+    const providerDescription = $("assistantProviderDescription");
+    const defaultTitle = providerTitle.textContent;
+    const defaultDescription = providerDescription.textContent;
+    const chooseProvider = (topic) => {
+      if (topic) {
+        providerTitle.textContent = `¿Quién te responde sobre ${topic}?`;
+        providerDescription.textContent = `Elige dónde abrir tu consulta de ${topic}. BiometrIMSS no comparte tus guardias ni tus registros.`;
+      } else {
+        providerTitle.textContent = defaultTitle;
+        providerDescription.textContent = defaultDescription;
+      }
       if (typeof dialog.showModal === "function") dialog.showModal();
       else showToast("Abre esta app en un navegador actualizado para elegir tu asistente externo.", "error");
+    };
+
+    chooseButton.addEventListener("click", () => chooseProvider());
+    document.querySelectorAll("[data-assistant-topic]").forEach((button) => {
+      button.addEventListener("click", () => chooseProvider(button.dataset.assistantTopic));
     });
 
     dialog.querySelectorAll("[data-provider-url]").forEach((button) => {

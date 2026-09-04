@@ -1,11 +1,11 @@
-const CACHE_NAME = "biometrimss-v3.7.0";
+const CACHE_NAME = "biometrimss-v3.8.0";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./style.css?v=3.7.0",
+  "./style.css?v=3.8.0",
   "./logic.js",
   "./report-image.js",
-  "./app.js?v=3.5.0",
+  "./app.js?v=3.8.0",
   "./manifest.webmanifest",
   "./icons/icon.svg",
   "./icons/icon-180.png",

@@ -1440,6 +1440,23 @@ h2 {
 
 .assistant-hero > * { position: relative; z-index: 1; }
 
+.assistant-hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.assistant-avatar {
+  width: 92px;
+  height: 92px;
+  flex: 0 0 auto;
+  object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, .88);
+  border-radius: 25px;
+  box-shadow: 0 12px 24px rgba(0, 37, 29, .25);
+}
+
 .assistant-hero-topline,
 .assistant-console-heading {
   display: flex;
@@ -1520,7 +1537,10 @@ h2 {
   margin-bottom: 15px;
 }
 
-.assistant-options span {
+.assistant-topic {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
   min-height: 58px;
   padding: 10px;
   border: 1px solid #d8ebe4;
@@ -1529,8 +1549,15 @@ h2 {
   background: var(--green-50);
   font-size: .7rem;
   font-weight: 760;
+  text-align: left;
+  cursor: pointer;
   line-height: 1.2;
 }
+
+.assistant-topic span { margin-left: 7px; }
+.assistant-topic small { color: var(--green-700); font-size: .62rem; font-weight: 850; }
+.assistant-topic:hover,
+.assistant-topic:focus-visible { border-color: var(--green-600); background: #fff; box-shadow: 0 0 0 3px rgba(19, 164, 125, .12); }
 
 .assistant-launch {
   width: 100%;

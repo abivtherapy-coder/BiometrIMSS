@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=3.7.0">
+  <link rel="stylesheet" href="style.css?v=3.8.0">
 </head>
 
 <body>
@@ -401,9 +401,14 @@
             <span class="assistant-status">● Modo guardia</span>
             <span class="assistant-version">ABITIMSS · BETA</span>
           </div>
-          <p class="eyebrow">Tu enfermero asistente</p>
-          <h1 id="assistantTitle">🩺 ABITIMSS</h1>
-          <p>Una central clara para organizar lo que necesitas resolver durante la guardia.</p>
+          <div class="assistant-hero-content">
+            <div>
+              <p class="eyebrow">Tu enfermero asistente</p>
+              <h1 id="assistantTitle">ABITIMSS</h1>
+              <p>Una central clara para organizar lo que necesitas resolver durante la guardia.</p>
+            </div>
+            <img class="assistant-avatar" src="assets/biometrimss-avatar-icon-v1.png" alt="Avatar de ABITIMSS">
+          </div>
         </section>
 
         <section class="assistant-console" aria-labelledby="assistantConsoleTitle">
@@ -415,11 +420,11 @@
             </div>
           </div>
           <p>ABITIMSS te acompaña desde BiometrIMSS. La conversación y la información que escribas se abren fuera de esta app, sólo cuando tú lo decidas.</p>
-          <div class="assistant-options" aria-label="Temas que ABITIMSS preparará">
-            <span>📝 Notas de enfermería</span>
-            <span>🧮 Cálculos y escalas</span>
-            <span>📋 Planes de cuidado</span>
-            <span>🩺 Priorizar pendientes</span>
+          <div class="assistant-options" aria-label="Elige el tema de tu consulta">
+            <button class="assistant-topic" type="button" data-assistant-topic="Notas de enfermería">📝 <span>Notas de enfermería</span><small>Elegir</small></button>
+            <button class="assistant-topic" type="button" data-assistant-topic="Cálculos y escalas">🧮 <span>Cálculos y escalas</span><small>Elegir</small></button>
+            <button class="assistant-topic" type="button" data-assistant-topic="Planes de cuidado">📋 <span>Planes de cuidado</span><small>Elegir</small></button>
+            <button class="assistant-topic" type="button" data-assistant-topic="Priorizar pendientes">🩺 <span>Priorizar pendientes</span><small>Elegir</small></button>
           </div>
           <button id="assistantChooseProvider" class="button assistant-launch" type="button">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h7v7M21 3l-9 9"/><path d="M20 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5"/></svg>
@@ -475,7 +480,7 @@
       <div class="dialog-icon assistant-dialog-icon">🩺</div>
       <p class="eyebrow">Consulta externa</p>
       <h2 id="assistantProviderTitle">¿Quién quieres que te responda?</h2>
-      <p>Elige la conversación que deseas abrir. BiometrIMSS no comparte tus guardias ni tus registros.</p>
+      <p id="assistantProviderDescription">Elige la conversación que deseas abrir. BiometrIMSS no comparte tus guardias ni tus registros.</p>
       <div class="assistant-provider-options">
         <button class="assistant-provider" type="button" data-provider-name="ChatGPT" data-provider-url="https://chatgpt.com/">
           <span aria-hidden="true">✦</span><strong>ChatGPT</strong><small>Abrir conversación</small>
@@ -496,6 +501,6 @@
   <script src="logic.js"></script>
   <script src="report-image.js"></script>
   <script src="vendor/pdf-lib/pdf-lib.min.js"></script>
-  <script src="app.js?v=3.5.0"></script>
+  <script src="app.js?v=3.8.0"></script>
 </body>
 </html>
