@@ -3,7 +3,7 @@
 
   const L = window.BiometrLogic;
   const R = window.BiometrReport;
-  const APP_VERSION = "2.5.0";
+  const APP_VERSION = "2.6.0";
   const STORAGE = {
     settings: "biometrimss:v2:settings",
     records: "biometrimss:v2:records",
@@ -246,7 +246,7 @@
 
   function openHashView() {
     const view = location.hash.replace("#", "");
-    if (["home", "register", "calendar", "history", "report", "settings", "assistant"].includes(view)) navigate(view, { keepScroll: true });
+    if (["home", "register", "calendar", "history", "report", "settings", "manual", "assistant"].includes(view)) navigate(view, { keepScroll: true });
   }
 
   function bindHome() {

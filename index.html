@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.webmanifest?v=4.1.0">
   <link rel="apple-touch-icon" href="icons/icon-180.png?v=4.1.0">
   <link rel="icon" href="icons/icon-192.png?v=4.1.0" type="image/png">
-  <link rel="stylesheet" href="style.css?v=4.3.0">
+  <link rel="stylesheet" href="style.css?v=4.4.0">
 </head>
 
 <body>
@@ -407,7 +407,59 @@
         <section class="about-card">
           <strong>BiometrIMSS <span id="appVersion">v2.0.0</span></strong>
           <p>Control personal de asistencia. No es una aplicación oficial del IMSS ni sustituye los registros institucionales.</p>
+          <button class="button button-secondary manual-open" type="button" data-go="manual">Ver manual de instalación y uso</button>
         </section>
+      </section>
+
+      <section id="view-manual" class="view" data-view="manual" aria-labelledby="manualTitle">
+        <div class="page-heading manual-heading">
+          <p class="eyebrow">Ayuda paso a paso</p>
+          <h1 id="manualTitle">Manual de instalación y uso</h1>
+          <p>Todo lo necesario para instalar, configurar y utilizar BiometrIMSS en el teléfono.</p>
+          <button class="text-button" type="button" data-go="settings">← Volver a Ajustes</button>
+        </div>
+
+        <nav class="card manual-index" aria-label="Contenido del manual">
+          <strong>Contenido</strong>
+          <a href="#manual-install-ios">Instalar en iPhone o iPad</a>
+          <a href="#manual-install-android">Instalar en Android</a>
+          <a href="#manual-setup">Configuración inicial</a>
+          <a href="#manual-vacations">Periodos vacacionales</a>
+          <a href="#manual-pdf">Importar PDF de TuPerfilIMSS</a>
+          <a href="#manual-use">Registrar y revisar guardias</a>
+          <a href="#manual-reports">Informes y respaldos</a>
+          <a href="#manual-assistant">ABITIMSS y asistentes externos</a>
+        </nav>
+
+        <article class="manual-content">
+          <section id="manual-install-ios" class="card manual-step">
+            <span class="manual-number">1</span><div><h2>Instalar en iPhone o iPad</h2><ol><li>Abre el enlace de BiometrIMSS en <strong>Safari</strong>.</li><li>Toca el botón <strong>Compartir</strong>.</li><li>Selecciona <strong>Agregar a inicio</strong>.</li><li>Confirma con <strong>Agregar</strong>. El icono aparecerá en tu pantalla de inicio.</li></ol><p class="field-note">Si ya estaba instalada, ábrela con internet una vez para recibir la actualización más reciente.</p></div>
+          </section>
+          <section id="manual-install-android" class="card manual-step">
+            <span class="manual-number">2</span><div><h2>Instalar en Android</h2><ol><li>Abre el enlace en <strong>Google Chrome</strong>.</li><li>Toca el menú de tres puntos.</li><li>Elige <strong>Instalar aplicación</strong> o <strong>Agregar a pantalla principal</strong>.</li><li>Confirma la instalación.</li></ol></div>
+          </section>
+          <section id="manual-setup" class="card manual-step">
+            <span class="manual-number">3</span><div><h2>Configuración inicial</h2><ol><li>Entra en <strong>Ajustes</strong>.</li><li>Escribe nombre, matrícula y unidad médica.</li><li>Revisa entrada, tolerancia, salida y límite de salida.</li><li>Selecciona los días en que comienzan tus guardias.</li><li>Toca <strong>Guardar ajustes</strong>.</li></ol><p>Estos datos se usan para clasificar las checadas y preparar los informes.</p></div>
+          </section>
+          <section id="manual-vacations" class="card manual-step">
+            <span class="manual-number">4</span><div><h2>Programar periodos vacacionales</h2><ol><li>En Ajustes busca <strong>Periodos vacacionales</strong>.</li><li>Selecciona las fechas Desde y Hasta.</li><li>Agrega una nota opcional.</li><li>Toca <strong>Agregar periodo vacacional</strong>.</li></ol><p>Las guardias comprendidas en ese periodo aparecerán como vacaciones y no contarán como faltas, incidencias ni reducirán la asistencia real.</p></div>
+          </section>
+          <section id="manual-pdf" class="card manual-step">
+            <span class="manual-number">5</span><div><h2>Importar PDF de TuPerfilIMSS</h2><ol><li>Descarga el Registro de Eventos directamente desde TuPerfilIMSS.</li><li>Abre <strong>Ajustes → Respaldo de datos</strong>.</li><li>Toca <strong>Cargar PDF TuPerfilIMSS</strong>.</li><li>Selecciona el documento desde Archivos o el almacenamiento del teléfono.</li><li>Revisa el resumen y confirma <strong>Importar checadas</strong>.</li></ol><p class="field-note">Cada persona debe seleccionar su propio PDF en su dispositivo. BiometrIMSS no envía ese archivo a servidores.</p></div>
+          </section>
+          <section id="manual-use" class="card manual-step">
+            <span class="manual-number">6</span><div><h2>Registrar y revisar guardias</h2><ul><li><strong>Inicio:</strong> registra entrada o salida rápidamente.</li><li><strong>Registrar:</strong> captura o corrige fecha, horas, estado y notas.</li><li><strong>Calendario:</strong> consulta guardias, vacaciones y resultados por color.</li><li><strong>Historial:</strong> filtra, edita o elimina registros.</li></ul><p>Una guardia pasada sin entrada ni salida se convierte en Falta real, salvo que tenga vacaciones, permiso, incapacidad, convenio, festivo o justificación.</p></div>
+          </section>
+          <section id="manual-reports" class="card manual-step">
+            <span class="manual-number">7</span><div><h2>Informes y respaldos</h2><ul><li>En Historial elige el periodo y genera el informe digital, PDF o imagen 9:16.</li><li>Verifica siempre fechas, checadas, estados y notas antes de compartirlo.</li><li>En Ajustes usa <strong>Descargar respaldo</strong> para guardar una copia JSON.</li><li>Usa <strong>Restaurar respaldo</strong> para recuperar esa copia en otro dispositivo.</li></ul></div>
+          </section>
+          <section id="manual-assistant" class="card manual-step">
+            <span class="manual-number">8</span><div><h2>ABITIMSS y asistentes externos</h2><p>Selecciona el tema y elige ChatGPT, Meta AI o Gemini. La conversación se abre fuera de BiometrIMSS y tú decides qué escribir.</p><p class="field-note">No compartas nombres, expedientes ni información identificable de pacientes. Revisa cualquier respuesta con los protocolos de tu servicio.</p></div>
+          </section>
+          <section class="card manual-help">
+            <h2>Si algo no aparece o no funciona</h2><ol><li>Comprueba que tengas internet.</li><li>Cierra y vuelve a abrir la aplicación.</li><li>Abre una vez el enlace en Safari o Chrome para actualizarla.</li><li>No desinstales ni borres datos sin descargar antes un respaldo.</li></ol>
+          </section>
+        </article>
       </section>
 
       <section id="view-assistant" class="view" data-view="assistant" aria-labelledby="assistantTitle">
@@ -516,9 +568,9 @@
     </form>
   </dialog>
 
-  <script src="logic.js?v=4.3.0"></script>
-  <script src="report-image.js?v=4.3.0"></script>
+  <script src="logic.js?v=4.4.0"></script>
+  <script src="report-image.js?v=4.4.0"></script>
   <script src="vendor/pdf-lib/pdf-lib.min.js"></script>
-  <script src="app.js?v=4.3.0"></script>
+  <script src="app.js?v=4.4.0"></script>
 </body>
 </html>

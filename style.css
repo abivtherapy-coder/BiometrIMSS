@@ -1299,6 +1299,53 @@ h2 {
 .vacation-period-item small { color: var(--muted); font-size: .66rem; }
 .vacation-remove { color: var(--red); }
 
+.manual-open {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.manual-heading .text-button {
+  margin-top: 10px;
+}
+
+.manual-index {
+  display: grid;
+  gap: 8px;
+  padding: 17px;
+  margin-bottom: 14px;
+}
+
+.manual-index strong { margin-bottom: 3px; }
+.manual-index a { color: var(--green-800); font-size: .74rem; font-weight: 750; text-decoration: none; }
+.manual-content { display: grid; gap: 12px; }
+
+.manual-step {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 12px;
+  padding: 17px;
+  scroll-margin-top: 80px;
+}
+
+.manual-number {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--green-700);
+  font-weight: 900;
+}
+
+.manual-step h2,
+.manual-help h2 { margin: 3px 0 9px; font-size: .94rem; }
+.manual-step p { margin: 9px 0 0; color: var(--muted); font-size: .72rem; line-height: 1.55; }
+.manual-step ol,
+.manual-step ul,
+.manual-help ol { margin: 0; padding-left: 19px; color: var(--ink); font-size: .72rem; line-height: 1.6; }
+.manual-help { padding: 17px; margin-bottom: 14px; }
+
 .privacy-note {
   display: flex;
   align-items: flex-start;

@@ -19,3 +19,12 @@ test("el manifiesto PWA contiene iconos instalables", () => {
   assert.equal(manifest.display, "standalone");
   for (const icon of manifest.icons) assert.equal(fs.existsSync(path.join(root, icon.src.split("?")[0])), true, icon.src);
 });
+
+test("incluye un manual accesible con instalación para iOS y Android", () => {
+  const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  assert.match(html, /id="view-manual"/);
+  assert.match(html, /Instalar en iPhone o iPad/);
+  assert.match(html, /Instalar en Android/);
+  assert.match(html, /Importar PDF de TuPerfilIMSS/);
+  assert.match(html, /Periodos vacacionales/);
+});
