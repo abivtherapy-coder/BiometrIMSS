@@ -44,7 +44,10 @@
 
 | Prioridad | Idea o necesidad | Por qué ayudaría | Ejemplo de uso |
 | --- | --- | --- | --- |
+| Alta | ABITIMSS: priorización estructurada de atención durante la guardia | Ayudaría a ordenar pacientes asignados y no olvidar reevaluaciones o pendientes | Lista privada de pacientes por camas/iniciales, motivo, señales de alarma definidas por el servicio, hora de reevaluación y tareas pendientes |
 | Alta / Media / Baja | | | |
+
+> **Requisito de seguridad para esta futura función:** ABITIMSS deberá presentar la información como apoyo organizativo y de priorización configurable según el protocolo de la unidad. Nunca deberá sustituir la valoración clínica, una respuesta de urgencia, la comunicación con el equipo tratante ni los lineamientos institucionales. No se registrarán nombres completos ni datos identificables de pacientes.
 
 ## Cierre semanal
 
