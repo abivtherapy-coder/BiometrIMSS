@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=3.4.0">
+  <link rel="stylesheet" href="style.css?v=3.5.0">
 </head>
 
 <body>
@@ -201,6 +201,7 @@
               <span>Justificación o notas</span>
               <textarea id="recordNotes" rows="4" maxlength="700" placeholder="Ej. incapacidad, comisión, aclaración o dato importante…"></textarea>
               <small><span id="notesCount">0</span>/700 caracteres</small>
+              <small id="notesRequirement" class="notes-requirement" hidden>La nota es obligatoria para este tipo de justificación.</small>
             </label>
           </div>
 
@@ -495,6 +496,6 @@
   <script src="logic.js"></script>
   <script src="report-image.js"></script>
   <script src="vendor/pdf-lib/pdf-lib.min.js"></script>
-  <script src="app.js?v=3.4.0"></script>
+  <script src="app.js?v=3.5.0"></script>
 </body>
 </html>

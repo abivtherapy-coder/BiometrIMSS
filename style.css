@@ -764,6 +764,13 @@ h2 {
   resize: vertical;
 }
 
+.notes-requirement {
+  display: block;
+  margin-top: 6px;
+  color: var(--red);
+  font-weight: 750;
+}
+
 .field input:focus,
 .field select:focus,
 .field textarea:focus {

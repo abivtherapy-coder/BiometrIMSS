@@ -385,6 +385,12 @@
       return;
     }
 
+    if (requiresJustificationNote(draft.statusOverride) && !draft.notes) {
+      showToast("Escribe una nota para registrar esta justificación.", "error");
+      $("recordNotes").focus();
+      return;
+    }
+
     if (!draft.entryAt && !draft.exitAt && draft.statusOverride === "auto") {
       const accepted = await askConfirmation(
         "¿Guardar sin checadas?",
@@ -454,6 +460,7 @@
     preview.className = `status-preview status-${evaluation.category} status-code-${evaluation.status}`;
     preview.querySelector("strong").textContent = evaluation.label;
     preview.querySelector("small").textContent = evaluation.reason;
+    updateNotesRequirement(draft.statusOverride);
   }
 
   function updateScheduledHint() {
@@ -464,6 +471,16 @@
 
   function updateNotesCount() {
     $("notesCount").textContent = $("recordNotes").value.length;
+  }
+
+  function requiresJustificationNote(status) {
+    return ["justificada", "incapacidad", "permiso", "convenio", "vacaciones", "festivo"].includes(status);
+  }
+
+  function updateNotesRequirement(status) {
+    const required = requiresJustificationNote(status);
+    $("notesRequirement").hidden = !required;
+    $("recordNotes").required = required;
   }
 
   function resetRecordForm(date) {
