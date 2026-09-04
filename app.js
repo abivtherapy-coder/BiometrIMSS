@@ -773,6 +773,7 @@
       <header class="digital-report-header">
         <div><p class="eyebrow">BiometrIMSS · documento digital</p><h2>Informe de guardias</h2></div>
         <span>Generado ${escapeHtml(new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" }).format(new Date()))}</span>
+        <div class="digital-report-hero-avatar" aria-hidden="true"></div>
       </header>
       <section class="digital-report-profile">
         <div><span>Personal</span><strong>${escapeHtml(model.profile.name)}</strong></div>
@@ -789,10 +790,19 @@
       <section class="digital-report-details">
         <h3>Detalle de guardias</h3>
         <div class="digital-report-table-wrap"><table><thead><tr><th>Guardia</th><th>Entrada</th><th>Salida</th><th>Estatus</th><th>Detalle</th></tr></thead><tbody>
-          ${model.rows.length ? model.rows.map((row) => `<tr><td>${escapeHtml(row.date)}</td><td>${escapeHtml(row.entry)}</td><td>${escapeHtml(`${row.exitDate} · ${row.exit}`)}</td><td><span class="record-status status-code-${escapeHtml(row.status)}">${escapeHtml(row.statusLabel)}</span></td><td>${escapeHtml(row.typeLabel)}</td></tr>`).join("") : '<tr><td colspan="5">No hay guardias programadas en este periodo.</td></tr>'}
+          ${model.rows.length ? model.rows.map((row) => `<tr><td>${escapeHtml(row.date)}</td><td>${escapeHtml(row.entry)}</td><td>${escapeHtml(`${row.exitDate} · ${row.exit}`)}</td><td><span class="report-state-avatar avatar-${reportAvatarName(row.status)}" aria-hidden="true"></span><span class="record-status status-code-${escapeHtml(row.status)}">${escapeHtml(row.statusLabel)}</span></td><td>${escapeHtml(row.typeLabel)}</td></tr>`).join("") : '<tr><td colspan="5">No hay guardias programadas en este periodo.</td></tr>'}
         </tbody></table></div>
       </section>
       <footer class="digital-report-footer">Documento personal de consulta generado por BiometrIMSS. Verifica la información antes de presentarla o utilizarla como referencia.</footer>`;
+  }
+
+  function reportAvatarName(status) {
+    if (status === "vacaciones") return "vacation";
+    if (status === "incapacidad") return "care";
+    if (status === "pendiente" || status === "festivo") return "schedule";
+    if (status === "pase-salida" || status === "salida-anticipada") return "exit";
+    if (["retardo", "omision-entrada", "omision-salida", "falta", "fuera-horario"].includes(status)) return "alert";
+    return "complete";
   }
 
   async function exportPdf(event) {

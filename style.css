@@ -1317,11 +1317,13 @@ h2 {
 }
 
 .digital-report-header {
+  position: relative;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 15px;
-  padding: 20px;
+  min-height: 118px;
+  padding: 20px 126px 20px 20px;
   color: #fff;
   background: linear-gradient(130deg, #063d34, #08745a);
 }
@@ -1329,6 +1331,20 @@ h2 {
 .digital-report-header .eyebrow { margin-bottom: 4px; color: #b8ecdc; }
 .digital-report-header h2 { margin: 0; font-size: 1.3rem; }
 .digital-report-header > span { max-width: 9rem; color: rgba(255,255,255,.75); font-size: .64rem; line-height: 1.3; text-align: right; }
+
+.digital-report-hero-avatar {
+  position: absolute;
+  right: -1px;
+  bottom: -14px;
+  width: 126px;
+  height: 126px;
+  background-image: url("assets/abit-ai-states-sticker-sheet-v1.png");
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 205% 205%;
+  filter: drop-shadow(0 7px 7px rgba(0, 43, 33, .22));
+  pointer-events: none;
+}
 
 .digital-report-profile {
   display: grid;
@@ -1362,6 +1378,33 @@ h2 {
 .digital-report td { padding: 10px 8px; border-top: 1px solid #e1ece8; vertical-align: top; }
 .digital-report tr:nth-child(even) td { background: #fbfdfc; }
 .digital-report td:last-child { min-width: 11rem; color: var(--muted); }
+.digital-report td:nth-child(4) { min-width: 8.8rem; }
+.report-state-avatar {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  border-radius: 9px;
+  vertical-align: middle;
+  background-color: #effbf7;
+  background-repeat: no-repeat;
+  box-shadow: inset 0 0 0 1px rgba(8, 116, 90, .12);
+}
+
+.report-state-avatar.avatar-complete,
+.report-state-avatar.avatar-schedule,
+.report-state-avatar.avatar-vacation,
+.report-state-avatar.avatar-care {
+  background-image: url("assets/abit-ai-states-sticker-sheet-v1.png");
+  background-size: 205% 205%;
+}
+
+.report-state-avatar.avatar-complete { background-position: 0 100%; }
+.report-state-avatar.avatar-schedule { background-position: 100% 100%; }
+.report-state-avatar.avatar-vacation { background-position: 0 0; }
+.report-state-avatar.avatar-care { background-position: 100% 0; }
+.report-state-avatar.avatar-alert { background-image: url("assets/abisai-pase-entrada.png"); background-position: center; background-size: 135%; }
+.report-state-avatar.avatar-exit { background-image: url("assets/abisai-pase-salida.png"); background-position: center; background-size: 135%; }
 .digital-report-footer { padding: 13px 18px; border-top: 1px solid var(--line); color: var(--muted); background: #f8fcfa; font-size: .65rem; line-height: 1.45; }
 
 .assistant-hero {
