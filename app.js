@@ -178,12 +178,14 @@
     ["historyStart", "historyEnd", "historyStatus"].forEach((id) => $(id).addEventListener("change", renderHistory));
     $("historyList").addEventListener("click", handleRecordAction);
     $("exportImage").addEventListener("click", exportImage);
+    $("exportPdf").addEventListener("click", exportPdf);
   }
 
   function bindSettings() {
     $("settingsForm").addEventListener("submit", saveSettingsFromForm);
     $("exportBackup").addEventListener("click", exportBackup);
     $("importBackup").addEventListener("change", importBackup);
+    $("importTuPerfilPdf").addEventListener("change", importTuPerfilPdf);
   }
 
   function bindInstall() {
@@ -347,8 +349,8 @@
 
     if (!draft.entryAt && !draft.exitAt && draft.statusOverride === "auto") {
       const accepted = await askConfirmation(
-        "¿Registrar una falta?",
-        "No agregaste entrada ni salida. El estado automático será “Falta”.",
+        "¿Guardar sin checadas?",
+        "Si la guardia ya concluyó, se mostrará como “Falta real”. Antes de que concluya quedará pendiente.",
         "Sí, registrar"
       );
       if (!accepted) return;
@@ -548,6 +550,7 @@
 
     $("historyCount").textContent = `${records.length} ${records.length === 1 ? "registro" : "registros"}`;
     $("exportImage").disabled = records.length === 0;
+    $("exportPdf").disabled = records.length === 0 || !window.PDFLib;
     if (!records.length) {
       $("historyList").innerHTML = `
         <div class="card empty-state">
@@ -736,6 +739,80 @@
     } catch (error) {
       console.error(error);
       showToast("Ese archivo no es una importación válida de BiometrIMSS.", "error");
+    }
+  }
+
+  async function exportPdf() {
+    const start = $("historyStart").value;
+    const end = $("historyEnd").value;
+    const records = L.recordsInRange(state.records, start, end);
+    if (!records.length || !window.PDFLib) return;
+    const button = $("exportPdf");
+    const originalLabel = button.innerHTML;
+    button.disabled = true;
+    button.textContent = "Generando PDF…";
+    try {
+      const canvas = await R.renderReport(records, state.settings, start, end, L);
+      const imageBytes = await (await R.canvasToBlob(canvas)).arrayBuffer();
+      const pdf = await window.PDFLib.PDFDocument.create();
+      const image = await pdf.embedPng(imageBytes);
+      const page = pdf.addPage([canvas.width, canvas.height]);
+      page.drawImage(image, { x: 0, y: 0, width: canvas.width, height: canvas.height });
+      pdf.setTitle(`Informe de guardias ${start} a ${end}`);
+      pdf.setAuthor(state.settings.name || "BiometrIMSS");
+      pdf.setSubject("Documento digital de consulta personal");
+      pdf.setCreator("BiometrIMSS");
+      const bytes = await pdf.save();
+      downloadBlob(`Informe_guardias_${start}_${end}.pdf`, new Blob([bytes], { type: "application/pdf" }));
+      showToast("Documento PDF descargado correctamente.");
+    } catch (error) {
+      console.error(error);
+      showToast("No se pudo generar el documento PDF. Inténtalo nuevamente.", "error");
+    } finally {
+      button.innerHTML = originalLabel;
+      button.disabled = records.length === 0 || !window.PDFLib;
+    }
+  }
+
+  async function importTuPerfilPdf(event) {
+    const file = event.target.files && event.target.files[0];
+    event.target.value = "";
+    if (!file) return;
+    const isPdf = file.type === "application/pdf" || /\.pdf$/i.test(file.name);
+    if (!isPdf) {
+      showToast("Selecciona un archivo PDF de TuPerfilIMSS.", "error");
+      return;
+    }
+    if (file.size > 15 * 1024 * 1024) {
+      showToast("El PDF supera el límite de 15 MB. Usa un archivo más pequeño.", "error");
+      return;
+    }
+    try {
+      const pdfjs = await import("./vendor/pdfjs/pdf.min.mjs");
+      pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdfjs/pdf.worker.min.mjs";
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      const pdf = await pdfjs.getDocument({ data: bytes }).promise;
+      let extractedText = "";
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+        const page = await pdf.getPage(pageNumber);
+        const content = await page.getTextContent();
+        extractedText += `${content.items.map((item) => item.str).join(" ")}\n`;
+      }
+      const importedRecords = L.parseTuPerfilImssText(extractedText, state.settings);
+      const preview = L.mergeRecordsByShiftDate(state.records, importedRecords);
+      const accepted = await askConfirmation(
+        "Importar checadas de TuPerfilIMSS",
+        `Se detectaron ${importedRecords.length} guardias en ${file.name}. Se agregarán ${preview.added}, se completarán ${preview.updated} y se conservarán ${preview.skipped} registros sin cambios.`,
+        "Importar checadas"
+      );
+      if (!accepted) return;
+      state.records = preview.records;
+      persistRecords();
+      renderAll();
+      showToast(`Importación terminada: ${preview.added} agregadas, ${preview.updated} completadas y ${preview.skipped} sin cambios.`);
+    } catch (error) {
+      console.error(error);
+      showToast(error.message || "No se pudo leer el PDF de TuPerfilIMSS.", "error");
     }
   }
 

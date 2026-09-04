@@ -98,3 +98,32 @@ test("acepta pase oficial y vacaciones como clasificación manual", () => {
   assert.equal(officialPass.status, "pase-salida");
   assert.equal(vacation.status, "vacaciones");
 });
+
+test("no crea faltas para guardias futuras y marca como falta real una guardia vencida sin checadas", () => {
+  const records = [{ shiftDate: "2026-08-04", entryAt: "", exitAt: "", statusOverride: "vacaciones" }];
+  const evaluations = L.scheduledEvaluations(records, "2026-08-04", "2026-08-08", settings, "2026-08-06T12:00:00");
+  assert.equal(evaluations.find((item) => item.record.shiftDate === "2026-08-04").evaluation.status, "vacaciones");
+  assert.equal(evaluations.find((item) => item.record.shiftDate === "2026-08-06").evaluation.status, "pendiente");
+  assert.equal(evaluations.find((item) => item.record.shiftDate === "2026-08-08").evaluation.status, "pendiente");
+
+  const old = L.scheduledEvaluations([], "2026-08-04", "2026-08-04", settings, "2026-08-06T12:00:00");
+  assert.equal(old[0].evaluation.status, "falta");
+});
+
+test("el resumen cuenta las faltas reales y todas las justificaciones manuales", () => {
+  const records = [
+    { shiftDate: "2026-08-04", entryAt: "", exitAt: "", statusOverride: "incapacidad" },
+    { shiftDate: "2026-08-06", entryAt: "", exitAt: "", statusOverride: "permiso" }
+  ];
+  const stats = L.calculateStats(records, "2026-08-04", "2026-08-08", settings, "2026-08-10T12:00:00");
+  assert.equal(stats.justified, 2);
+  assert.equal(stats.absences, 1);
+});
+
+test("lee las checadas nocturnas de un PDF de TuPerfilIMSS", () => {
+  const pdfText = "BIOMÉTRICO REGISTRO DE EVENTOS\n11.52.14.103 20:57:33 04/08/2026 E\n11.52.14.105 08:27:17 05/08/2026 E\n11.52.14.103 21:05:11 06/08/2026 E\n11.52.14.103 08:49:39 07/08/2026 S";
+  const records = L.parseTuPerfilImssText(pdfText, settings);
+  assert.equal(records.length, 2);
+  assert.deepEqual(records.find((record) => record.shiftDate === "2026-08-04").entryAt, "2026-08-04T20:57");
+  assert.deepEqual(records.find((record) => record.shiftDate === "2026-08-04").exitAt, "2026-08-05T08:27");
+});

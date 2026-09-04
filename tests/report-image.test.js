@@ -12,9 +12,10 @@ test("prepara un informe de imagen ordenado y con resumen", () => {
     { shiftDate: "2026-08-04", entryAt: "2026-08-04T20:57", exitAt: "2026-08-05T08:27", statusOverride: "auto" }
   ];
   const model = R.buildReportModel(records, settings, "2026-08-01", "2026-08-31", L, "2026-09-01T12:00:00");
-  assert.equal(model.rows.length, 2);
-  assert.match(model.rows[0].date, /^04[- ]ago/);
+  assert.equal(model.rows.length, 13);
+  assert.match(model.rows[0].date, /^01[- ]ago/);
   assert.equal(model.summary.efectiva, 1);
   assert.equal(model.summary.retardo, 1);
+  assert.equal(model.summary.falta, 11);
   assert.equal(model.profile.unit, "HGZ 42");
 });

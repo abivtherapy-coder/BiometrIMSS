@@ -25,8 +25,11 @@
     "omision-salida": { label: "Omisión de salida", category: "incident", description: "Hay entrada, pero no se registró la salida." },
     "salida-anticipada": { label: "Salida anticipada", category: "incident", description: "La salida fue anterior a la hora configurada." },
     justificada: { label: "Justificada", category: "justified", description: "Registro marcado como justificado." },
+    incapacidad: { label: "Incapacidad", category: "justified", description: "Guardia justificada por incapacidad." },
+    permiso: { label: "Permiso", category: "justified", description: "Guardia justificada por permiso." },
     convenio: { label: "Convenio", category: "agreement", description: "Guardia cubierta mediante convenio." },
     vacaciones: { label: "Vacaciones", category: "vacation", description: "Día correspondiente a vacaciones." },
+    festivo: { label: "Festivo o descanso", category: "justified", description: "Día festivo o descanso programado." },
     falta: { label: "Falta", category: "absence", description: "No hubo entrada ni salida registradas." },
     pendiente: { label: "Pendiente", category: "pending", description: "La guardia todavía no concluye o faltan datos." }
   });
@@ -149,6 +152,10 @@
       return { status: "pendiente", ...STATUS_META.pendiente, reason: "Revisa la fecha y el horario configurado." };
     }
 
+    if (!entry && !exit && now <= window.exitTolerance) {
+      return { status: "pendiente", ...STATUS_META.pendiente, reason: "La guardia todavía no concluye." };
+    }
+
     if (!entry && !exit) {
       return { status: "falta", ...STATUS_META.falta, reason: "No se capturaron checadas de entrada ni de salida." };
     }
@@ -213,6 +220,29 @@
     return list.filter((record) => record.shiftDate >= start && record.shiftDate <= end);
   }
 
+  function scheduledEvaluations(records, start, end, settings, nowValue) {
+    const config = normalizeSettings(settings);
+    const now = parseDateTime(nowValue) || new Date();
+    const byDate = new Map(recordsInRange(records, start, end).map((record) => [record.shiftDate, record]));
+
+    return scheduledDates(start, end, config).map((shiftDate) => {
+      const window = shiftWindow(shiftDate, config);
+      const complete = Boolean(window.exitTolerance && window.exitTolerance < now);
+      const record = byDate.get(shiftDate) || {
+        id: `scheduled-${shiftDate}`,
+        shiftDate,
+        entryAt: "",
+        exitAt: "",
+        statusOverride: "auto",
+        notes: ""
+      };
+      const evaluation = complete
+        ? evaluateRecord(record, config, now)
+        : { status: "pendiente", ...STATUS_META.pendiente, reason: "La guardia todavía no concluye." };
+      return { record, evaluation, complete, scheduled: true };
+    });
+  }
+
   function mergeRecordsByShiftDate(currentRecords, incomingRecords) {
     const current = Array.isArray(currentRecords) ? currentRecords.map((record) => ({ ...record })) : [];
     const incoming = Array.isArray(incomingRecords) ? incomingRecords : [];
@@ -256,26 +286,56 @@
     };
   }
 
+  function parseTuPerfilImssText(text, settings) {
+    const source = String(text || "");
+    if (!/BIOM.?TRICO[\s\S]*REGISTRO\s+DE\s+EVENTOS/i.test(source)) {
+      throw new Error("El PDF no parece ser un Registro de Eventos de TuPerfilIMSS.");
+    }
+    const config = normalizeSettings(settings);
+    const eventPattern = /(?:\b\d{1,3}(?:\.\d{1,3}){3}\s*)?(\d{2}):(\d{2}):(\d{2})\s*(\d{2})\/(\d{2})\/(\d{4})\s*[ES]\b/g;
+    const byShiftDate = new Map();
+    let match;
+    while ((match = eventPattern.exec(source))) {
+      const [, hours, minutes, seconds, day, month, year] = match;
+      const eventDate = new Date(Number(year), Number(month) - 1, Number(day), Number(hours), Number(minutes), Number(seconds));
+      if (Number.isNaN(eventDate.getTime())) continue;
+      const isNightEntry = eventDate.getHours() >= 15;
+      const shiftDate = formatDateKey(isNightEntry ? eventDate : addDays(eventDate, -1));
+      const eventAt = toDateTimeLocal(eventDate);
+      const record = byShiftDate.get(shiftDate) || {
+        id: `tuperfil-${shiftDate}`,
+        shiftDate,
+        entryAt: "",
+        exitAt: "",
+        statusOverride: "auto",
+        notes: "Importado desde PDF de TuPerfilIMSS"
+      };
+      if (isNightEntry) {
+        if (!record.entryAt || eventAt < record.entryAt) record.entryAt = eventAt;
+      } else if (!record.exitAt || eventAt > record.exitAt) {
+        record.exitAt = eventAt;
+      }
+      byShiftDate.set(shiftDate, record);
+    }
+    const records = [...byShiftDate.values()].filter((record) => record.entryAt || record.exitAt).sort((a, b) => b.shiftDate.localeCompare(a.shiftDate));
+    if (!records.length) throw new Error("No se encontraron checadas con fecha y hora en el PDF.");
+    return records;
+  }
+
   function calculateStats(records, start, end, settings, nowValue) {
     const list = recordsInRange(records, start, end);
     const scheduled = scheduledDates(start, end, settings);
-    const now = parseDateTime(nowValue) || new Date();
-    const dueScheduled = scheduled.filter((date) => {
-      const window = shiftWindow(date, settings);
-      return window.exitTolerance && window.exitTolerance < now;
-    });
-    const evaluations = list.map((record) => ({ record, evaluation: evaluateRecord(record, settings, nowValue) }));
+    const evaluations = scheduledEvaluations(records, start, end, settings, nowValue);
+    const dueScheduled = evaluations.filter(({ complete }) => complete);
     const effective = evaluations.filter(({ evaluation }) => evaluation.status === "efectiva").length;
-    const justified = evaluations.filter(({ evaluation }) => evaluation.status === "justificada").length;
+    const justified = evaluations.filter(({ evaluation }) => evaluation.category === "justified").length;
     const incidents = evaluations.filter(({ evaluation }) => INCIDENT_STATUSES.has(evaluation.status)).length;
     const absences = evaluations.filter(({ evaluation }) => evaluation.status === "falta").length;
     const pending = evaluations.filter(({ evaluation }) => evaluation.status === "pendiente").length;
     const agreements = evaluations.filter(({ evaluation }) => evaluation.status === "convenio").length;
     const vacations = evaluations.filter(({ evaluation }) => evaluation.status === "vacaciones").length;
-    const scheduledSet = new Set(scheduled);
-    const capturedScheduled = new Set(list.filter((record) => scheduledSet.has(record.shiftDate)).map((record) => record.shiftDate)).size;
-    const dueSet = new Set(dueScheduled);
-    const capturedDue = new Set(list.filter((record) => dueSet.has(record.shiftDate)).map((record) => record.shiftDate)).size;
+    const capturedScheduled = evaluations.filter(({ record }) => Boolean(record.entryAt || record.exitAt || record.statusOverride !== "auto")).length;
+    const capturedDue = dueScheduled.filter(({ record }) => Boolean(record.entryAt || record.exitAt || record.statusOverride !== "auto")).length;
 
     return {
       scheduled: scheduled.length,
@@ -364,9 +424,11 @@
     isScheduledDate,
     mergeRecordsByShiftDate,
     normalizeSettings,
+    parseTuPerfilImssText,
     parseDateKey,
     recordsInRange,
     recordsToCsv,
+    scheduledEvaluations,
     scheduledDates,
     shiftWindow,
     toDateTimeLocal,

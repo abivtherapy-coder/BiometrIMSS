@@ -181,8 +181,11 @@
                 <option value="omision-salida">Omisión de salida</option>
                 <option value="salida-anticipada">Salida anticipada</option>
                 <option value="justificada">Justificada</option>
+                <option value="incapacidad">Incapacidad</option>
+                <option value="permiso">Permiso</option>
                 <option value="convenio">Convenio</option>
                 <option value="vacaciones">Vacaciones</option>
+                <option value="festivo">Festivo o descanso programado</option>
                 <option value="falta">Falta</option>
               </select>
             </label>
@@ -291,6 +294,10 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 20h14"/></svg>
             Descargar informe
           </button>
+          <button id="exportPdf" class="button button-small button-primary" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v5h5M8 16h8M8 12h5"/></svg>
+            Documento PDF
+          </button>
         </div>
         <div id="historyList" class="history-list"></div>
       </section>
@@ -359,7 +366,9 @@
           <div class="data-actions">
             <button id="exportBackup" class="button button-secondary" type="button">Descargar respaldo</button>
             <label class="button button-secondary file-button">Restaurar respaldo<input id="importBackup" type="file" accept="application/json,.json"></label>
+            <label class="button button-secondary file-button">Cargar PDF TuPerfilIMSS<input id="importTuPerfilPdf" type="file" accept="application/pdf,.pdf"></label>
           </div>
+          <p class="field-note">El PDF se revisará antes de importar. Nunca se reemplazarán tus registros sin mostrarte un resumen.</p>
           <p class="privacy-note"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Tus datos permanecen en este dispositivo. La app no los envía a ningún servidor.</p>
         </section>
 
@@ -405,6 +414,7 @@
 
   <script src="logic.js"></script>
   <script src="report-image.js"></script>
+  <script src="vendor/pdf-lib/pdf-lib.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

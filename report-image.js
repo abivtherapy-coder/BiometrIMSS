@@ -8,8 +8,9 @@
   const COLORS = Object.freeze({
     efectiva: "#2f8b35", retardo: "#e0aa00", "pase-salida": "#e56f18",
     "salida-anticipada": "#e56f18", "omision-entrada": "#2f80d0",
-    "omision-salida": "#7a4fc2", justificada: "#d84f8b", convenio: "#009fa3",
+    "omision-salida": "#7a4fc2", justificada: "#d84f8b", incapacidad: "#b14aa0", permiso: "#5668c9", convenio: "#009fa3",
     vacaciones: "#8a5b35", falta: "#d62828", pendiente: "#75827e",
+    festivo: "#2b8f83",
     "fuera-horario": "#555f5c", green: "#08745a", dark: "#063d34",
     ink: "#17201e", muted: "#60706c", line: "#bdc9c5"
   });
@@ -21,8 +22,11 @@
     ["omision-entrada", "Omisión de entrada", "Sin entrada, pero sí con salida"],
     ["omision-salida", "Omisión de salida", "Con entrada, pero sin salida"],
     ["justificada", "Justificada", "Incidencia con justificación"],
+    ["incapacidad", "Incapacidad", "Guardia justificada por incapacidad"],
+    ["permiso", "Permiso", "Guardia justificada por permiso"],
     ["convenio", "Convenio", "Guardia cubierta mediante convenio"],
     ["vacaciones", "Vacaciones", "Día correspondiente a vacaciones"],
+    ["festivo", "Festivo o descanso", "Día festivo o descanso programado"],
     ["falta", "Falta real", "Sin entrada ni salida"]
   ]);
 
@@ -70,12 +74,13 @@
 
   function buildReportModel(records, settings, start, end, logic, nowValue) {
     const config = logic.normalizeSettings(settings);
-    const rows = (Array.isArray(records) ? records : []).slice().sort((a, b) => a.shiftDate.localeCompare(b.shiftDate)).map((record) => {
-      const evaluation = logic.evaluateRecord(record, config, nowValue);
+    const rows = logic.scheduledEvaluations(records, start, end, config, nowValue).map(({ record, evaluation }) => {
+      const notes = String(record.notes || "").trim();
       return {
         date: dateLabel(record.shiftDate, logic, true), entry: timeLabel(record.entryAt),
         exitDate: exitDateLabel(record, logic), exit: timeLabel(record.exitAt), status: evaluation.status,
-        statusLabel: broadStatus(evaluation.status, Boolean(record.exitAt)), typeLabel: evaluation.label.toUpperCase()
+        statusLabel: broadStatus(evaluation.status, Boolean(record.exitAt)),
+        typeLabel: notes ? `${evaluation.label.toUpperCase()} · ${notes}` : evaluation.label.toUpperCase()
       };
     });
     const summary = rows.reduce((counts, row) => {
@@ -266,9 +271,9 @@
   }
 
   function drawPortraitLegend(ctx, model, images, x, y, width, height) {
-    const gap = 10; const columns = 3; const rows = 3;
+    const gap = 10; const columns = 3; const rows = Math.ceil(LEGEND.length / columns);
     const cardWidth = (width - gap * (columns - 1)) / columns;
-    const cardHeight = (height - gap * (rows - 1)) / rows;
+    const cardHeight = Math.max(54, (height - gap * (rows - 1)) / rows);
     LEGEND.forEach(([status, label, detail], index) => {
       const col = index % columns; const row = Math.floor(index / columns);
       const left = x + col * (cardWidth + gap); const top = y + row * (cardHeight + gap);
