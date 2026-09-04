@@ -7,8 +7,8 @@
   <meta name="description" content="Control personal de guardias y registros biométricos.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="ABITIMSS">
-  <title>ABITIMSS</title>
+  <meta name="apple-mobile-web-app-title" content="BiometrIMSS">
+  <title>BiometrIMSS</title>
 
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -24,7 +24,7 @@
           <svg viewBox="0 0 48 48"><path d="M24 7a17 17 0 0 0-17 17c0 6.6 3.8 12.4 9.4 15.2"/><path d="M24 13a11 11 0 0 0-11 11c0 4.5 2.7 8.4 6.6 10.1"/><path d="M24 19a5 5 0 0 0-5 5c0 6.6-2.1 12.1-5.2 16.6"/><path d="M29 24c0 9.1-2.2 15.6-4.4 19"/><path d="M35 24c0 8.4-1.2 13.7-3.2 18"/><path d="M41 24A17 17 0 0 0 24 7"/></svg>
         </span>
         <span>
-          <strong>ABITIMSS</strong>
+          <strong>BiometrIMSS</strong>
           <small>Mi control de guardias</small>
         </span>
       </button>
@@ -124,7 +124,7 @@
             <svg viewBox="0 0 24 24"><path d="M12 16V3m0 0 4 4m-4-4L8 7M5 12v8h14v-8"/></svg>
           </div>
           <div>
-            <strong>Instala ABITIMSS en tu iPhone</strong>
+            <strong>Instala BiometrIMSS en tu iPhone</strong>
             <p>En Safari toca Compartir y después “Agregar a inicio”.</p>
           </div>
           <button id="dismissInstallCard" class="close-button" type="button" aria-label="Ocultar indicación">×</button>
@@ -373,8 +373,25 @@
         </section>
 
         <section class="about-card">
-          <strong>ABITIMSS <span id="appVersion">v2.0.0</span></strong>
+          <strong>BiometrIMSS <span id="appVersion">v2.0.0</span></strong>
           <p>Control personal de asistencia. No es una aplicación oficial del IMSS ni sustituye los registros institucionales.</p>
+        </section>
+      </section>
+
+      <section id="view-assistant" class="view" data-view="assistant" aria-labelledby="assistantTitle">
+        <div class="page-heading">
+          <p class="eyebrow">Herramienta clínica</p>
+          <h1 id="assistantTitle">🩺 ABITIMSS</h1>
+          <p>Tu enfermero asistente para organizar notas, cálculos y planes de cuidado.</p>
+        </div>
+        <section class="card">
+          <h2>Enfermero asistente</h2>
+          <p>ABITIMSS vive dentro de BiometrIMSS. Tus notas clínicas se mantienen separadas de tus guardias y checadas.</p>
+        </section>
+        <section class="card">
+          <h2>Herramientas preparadas</h2>
+          <p>📝 Notas de enfermería · 🧮 Calculadoras · 📋 Escalas · 🩺 NANDA, NIC y NOC.</p>
+          <p class="muted">Todo resultado debe ser revisado por ti antes de usarlo en una nota clínica o expediente.</p>
         </section>
       </section>
     </main>
@@ -394,6 +411,9 @@
       </button>
       <button class="nav-item" type="button" data-go="settings">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1a1.7 1.7 0 0 0 1.9.3A1.7 1.7 0 0 0 10 3v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg><span>Ajustes</span>
+      </button>
+      <button class="nav-item" type="button" data-go="assistant">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18"/><path d="M7 7h10v10H7z"/></svg><span>ABITIMSS</span>
       </button>
     </nav>
   </div>

@@ -1,17 +1,13 @@
-(function startABITIMSS() {
+(function startBiometrIMSS() {
   "use strict";
 
   const L = window.BiometrLogic;
   const R = window.BiometrReport;
   const APP_VERSION = "2.4.0";
   const STORAGE = {
-    settings: "abitimss:v1:settings",
-    records: "abitimss:v1:records",
-    installDismissed: "abitimss:v1:install-dismissed"
-  };
-  const LEGACY_STORAGE = {
     settings: "biometrimss:v2:settings",
-    records: "biometrimss:v2:records"
+    records: "biometrimss:v2:records",
+    installDismissed: "biometrimss:v2:install-dismissed"
   };
 
   const $ = (id) => document.getElementById(id);
@@ -47,7 +43,7 @@
 
   function loadSettings() {
     try {
-      const saved = JSON.parse(localStorage.getItem(STORAGE.settings) || localStorage.getItem(LEGACY_STORAGE.settings) || "null");
+      const saved = JSON.parse(localStorage.getItem(STORAGE.settings) || "null");
       if (saved) return L.normalizeSettings(saved);
     } catch (error) {
       console.warn("No se pudieron leer los ajustes guardados.", error);
@@ -63,7 +59,7 @@
 
   function loadRecords() {
     try {
-      const saved = JSON.parse(localStorage.getItem(STORAGE.records) || localStorage.getItem(LEGACY_STORAGE.records) || "[]");
+      const saved = JSON.parse(localStorage.getItem(STORAGE.records) || "[]");
       if (!Array.isArray(saved)) return [];
       return saved.map(normalizeRecord).filter(Boolean);
     } catch (error) {
@@ -119,7 +115,7 @@
 
   function openHashView() {
     const view = location.hash.replace("#", "");
-    if (["home", "register", "calendar", "history", "settings"].includes(view)) navigate(view, { keepScroll: true });
+    if (["home", "register", "calendar", "history", "settings", "assistant"].includes(view)) navigate(view, { keepScroll: true });
   }
 
   function bindHome() {
@@ -677,7 +673,7 @@
     try {
       const canvas = await R.renderReport(records, state.settings, start, end, L);
       const blob = await R.canvasToBlob(canvas);
-      downloadBlob(`ABITIMSS_9x16_${start}_${end}.png`, blob);
+      downloadBlob(`BiometrIMSS_9x16_${start}_${end}.png`, blob);
       showToast("Informe descargado como imagen.");
     } catch (error) {
       console.error(error);
@@ -690,13 +686,13 @@
 
   function exportBackup() {
     const backup = {
-      app: "ABITIMSS",
+      app: "BiometrIMSS",
       version: APP_VERSION,
       exportedAt: new Date().toISOString(),
       settings: state.settings,
       records: state.records
     };
-    downloadFile(`ABITIMSS_respaldo_${L.formatDateKey(new Date())}.json`, JSON.stringify(backup, null, 2), "application/json");
+    downloadFile(`BiometrIMSS_respaldo_${L.formatDateKey(new Date())}.json`, JSON.stringify(backup, null, 2), "application/json");
     showToast("Respaldo descargado.");
   }
 
@@ -706,7 +702,7 @@
     if (!file) return;
     try {
       const data = JSON.parse(await file.text());
-      if (!data || !["ABITIMSS", "BiometrIMSS"].includes(data.app) || !Array.isArray(data.records) || !data.settings) throw new Error("Formato inválido");
+      if (!data || data.app !== "BiometrIMSS" || !Array.isArray(data.records) || !data.settings) throw new Error("Formato inválido");
       const validRecords = data.records.map(normalizeRecord).filter(Boolean);
       const mergeMode = data.importMode === "merge";
       const accepted = await askConfirmation(
@@ -742,7 +738,7 @@
       showToast("Respaldo restaurado correctamente.");
     } catch (error) {
       console.error(error);
-      showToast("Ese archivo no es un respaldo válido de ABITIMSS.", "error");
+      showToast("Ese archivo no es una importación válida de BiometrIMSS.", "error");
     }
   }
 
@@ -763,9 +759,9 @@
       const page = pdf.addPage([canvas.width, canvas.height]);
       page.drawImage(image, { x: 0, y: 0, width: canvas.width, height: canvas.height });
       pdf.setTitle(`Informe de guardias ${start} a ${end}`);
-      pdf.setAuthor(state.settings.name || "ABITIMSS");
+      pdf.setAuthor(state.settings.name || "BiometrIMSS");
       pdf.setSubject("Documento digital de consulta personal");
-      pdf.setCreator("ABITIMSS");
+      pdf.setCreator("BiometrIMSS");
       const bytes = await pdf.save();
       downloadBlob(`Informe_guardias_${start}_${end}.pdf`, new Blob([bytes], { type: "application/pdf" }));
       showToast("Documento PDF descargado correctamente.");

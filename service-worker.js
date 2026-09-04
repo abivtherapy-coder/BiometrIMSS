@@ -1,4 +1,4 @@
-const CACHE_NAME = "abitimss-v1.0.0";
+const CACHE_NAME = "biometrimss-v2.6.0";
 const APP_SHELL = [
   "./",
   "./index.html",
