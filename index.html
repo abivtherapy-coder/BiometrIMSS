@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/icon-180.png">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css?v=3.0.0">
+  <link rel="stylesheet" href="style.css?v=3.1.0">
 </head>
 
 <body>
@@ -290,9 +290,9 @@
 
         <div class="history-toolbar">
           <p id="historyCount">0 registros</p>
-          <button id="exportImage" class="button button-small button-secondary" type="button">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 20h14"/></svg>
-            Descargar informe
+          <button id="openDigitalReport" class="button button-small button-secondary" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v5h5M8 12h8M8 16h8"/></svg>
+            Ver informe
           </button>
           <button id="exportPdf" class="button button-small button-primary" type="button">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v5h5M8 16h8M8 12h5"/></svg>
@@ -300,6 +300,22 @@
           </button>
         </div>
         <div id="historyList" class="history-list"></div>
+      </section>
+
+      <section id="view-report" class="view" data-view="report" aria-labelledby="digitalReportTitle">
+        <div class="page-heading-row report-page-heading">
+          <div>
+            <p class="eyebrow">Documento digital</p>
+            <h1 id="digitalReportTitle">Informe de guardias</h1>
+            <p>Consulta el documento dentro de BiometrIMSS antes de descargarlo.</p>
+          </div>
+          <button class="button button-small button-secondary" type="button" data-go="history">Volver</button>
+        </div>
+        <div class="report-actions">
+          <button id="printDigitalReport" class="button button-secondary" type="button">Imprimir o guardar PDF</button>
+          <button id="downloadDigitalPdf" class="button button-primary" type="button">Descargar documento PDF</button>
+        </div>
+        <article id="digitalReportContent" class="digital-report" aria-live="polite"></article>
       </section>
 
       <section id="view-settings" class="view" data-view="settings" aria-labelledby="settingsTitle">
@@ -479,6 +495,6 @@
   <script src="logic.js"></script>
   <script src="report-image.js"></script>
   <script src="vendor/pdf-lib/pdf-lib.min.js"></script>
-  <script src="app.js?v=3.0.0"></script>
+  <script src="app.js?v=3.1.0"></script>
 </body>
 </html>

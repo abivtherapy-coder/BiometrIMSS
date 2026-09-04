@@ -143,6 +143,7 @@
     if (!options.keepScroll) window.scrollTo({ top: 0, behavior: "smooth" });
     if (view === "calendar") renderCalendar();
     if (view === "history") renderHistory();
+    if (view === "report") renderDigitalReport();
     if (view === "home") renderHome();
     if (view === "settings") populateSettingsForm();
     $("mainContent").focus({ preventScroll: true });
@@ -150,7 +151,7 @@
 
   function openHashView() {
     const view = location.hash.replace("#", "");
-    if (["home", "register", "calendar", "history", "settings", "assistant"].includes(view)) navigate(view, { keepScroll: true });
+    if (["home", "register", "calendar", "history", "report", "settings", "assistant"].includes(view)) navigate(view, { keepScroll: true });
   }
 
   function bindHome() {
@@ -212,8 +213,10 @@
   function bindHistory() {
     ["historyStart", "historyEnd", "historyStatus"].forEach((id) => $(id).addEventListener("change", renderHistory));
     $("historyList").addEventListener("click", handleRecordAction);
-    $("exportImage").addEventListener("click", exportImage);
+    $("openDigitalReport").addEventListener("click", () => navigate("report"));
     $("exportPdf").addEventListener("click", exportPdf);
+    $("downloadDigitalPdf").addEventListener("click", exportPdf);
+    $("printDigitalReport").addEventListener("click", () => window.print());
   }
 
   function bindSettings() {
@@ -584,8 +587,9 @@
     }).sort((a, b) => b.shiftDate.localeCompare(a.shiftDate));
 
     $("historyCount").textContent = `${records.length} ${records.length === 1 ? "registro" : "registros"}`;
-    $("exportImage").disabled = records.length === 0;
-    $("exportPdf").disabled = records.length === 0 || !window.PDFLib;
+    const hasReportRows = getReportModel().rows.length > 0;
+    $("openDigitalReport").disabled = !hasReportRows;
+    $("exportPdf").disabled = !hasReportRows || !window.PDFLib;
     if (!records.length) {
       $("historyList").innerHTML = `
         <div class="card empty-state">
@@ -696,29 +700,6 @@
     navigate("home");
   }
 
-  async function exportImage() {
-    const start = $("historyStart").value;
-    const end = $("historyEnd").value;
-    const records = L.recordsInRange(state.records, start, end);
-    if (!records.length) return;
-    const button = $("exportImage");
-    const originalLabel = button.innerHTML;
-    button.disabled = true;
-    button.textContent = "Generando imagen…";
-    try {
-      const canvas = await R.renderReport(records, state.settings, start, end, L);
-      const blob = await R.canvasToBlob(canvas);
-      downloadBlob(`BiometrIMSS_9x16_${start}_${end}.png`, blob);
-      showToast("Informe descargado como imagen.");
-    } catch (error) {
-      console.error(error);
-      showToast("No se pudo generar la imagen. Inténtalo nuevamente.", "error");
-    } finally {
-      button.innerHTML = originalLabel;
-      button.disabled = records.length === 0;
-    }
-  }
-
   function exportBackup() {
     const backup = {
       app: "BiometrIMSS",
@@ -777,36 +758,133 @@
     }
   }
 
-  async function exportPdf() {
-    const start = $("historyStart").value;
-    const end = $("historyEnd").value;
-    const records = L.recordsInRange(state.records, start, end);
-    if (!records.length || !window.PDFLib) return;
-    const button = $("exportPdf");
+  function getReportModel() {
+    return R.buildReportModel(state.records, state.settings, $("historyStart").value, $("historyEnd").value, L);
+  }
+
+  function renderDigitalReport() {
+    const model = getReportModel();
+    const summary = model.summary;
+    const total = model.rows.length;
+    const effective = summary.efectiva || 0;
+    const justified = (summary.justificada || 0) + (summary.incapacidad || 0) + (summary.permiso || 0) + (summary.convenio || 0) + (summary.vacaciones || 0) + (summary.festivo || 0);
+    const incidents = Math.max(0, total - effective - justified - (summary.pendiente || 0));
+    $("digitalReportContent").innerHTML = `
+      <header class="digital-report-header">
+        <div><p class="eyebrow">BiometrIMSS · documento digital</p><h2>Informe de guardias</h2></div>
+        <span>Generado ${escapeHtml(new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" }).format(new Date()))}</span>
+      </header>
+      <section class="digital-report-profile">
+        <div><span>Personal</span><strong>${escapeHtml(model.profile.name)}</strong></div>
+        <div><span>Matrícula</span><strong>${escapeHtml(model.profile.employeeId)}</strong></div>
+        <div><span>Unidad</span><strong>${escapeHtml(model.profile.unit)}</strong></div>
+        <div><span>Periodo</span><strong>${escapeHtml(model.period)}</strong></div>
+      </section>
+      <section class="digital-report-summary" aria-label="Resumen del periodo">
+        <div><span>Guardias</span><strong>${total}</strong></div>
+        <div><span>Efectivas</span><strong>${effective}</strong></div>
+        <div><span>Justificadas</span><strong>${justified}</strong></div>
+        <div><span>Incidencias</span><strong>${incidents}</strong></div>
+      </section>
+      <section class="digital-report-details">
+        <h3>Detalle de guardias</h3>
+        <div class="digital-report-table-wrap"><table><thead><tr><th>Guardia</th><th>Entrada</th><th>Salida</th><th>Estatus</th><th>Detalle</th></tr></thead><tbody>
+          ${model.rows.length ? model.rows.map((row) => `<tr><td>${escapeHtml(row.date)}</td><td>${escapeHtml(row.entry)}</td><td>${escapeHtml(`${row.exitDate} · ${row.exit}`)}</td><td><span class="record-status status-code-${escapeHtml(row.status)}">${escapeHtml(row.statusLabel)}</span></td><td>${escapeHtml(row.typeLabel)}</td></tr>`).join("") : '<tr><td colspan="5">No hay guardias programadas en este periodo.</td></tr>'}
+        </tbody></table></div>
+      </section>
+      <footer class="digital-report-footer">Documento personal de consulta generado por BiometrIMSS. Verifica la información antes de presentarla o utilizarla como referencia.</footer>`;
+  }
+
+  async function exportPdf(event) {
+    const model = getReportModel();
+    if (!model.rows.length || !window.PDFLib) return;
+    const button = event && event.currentTarget ? event.currentTarget : $("exportPdf");
     const originalLabel = button.innerHTML;
     button.disabled = true;
     button.textContent = "Generando PDF…";
     try {
-      const canvas = await R.renderReport(records, state.settings, start, end, L);
-      const imageBytes = await (await R.canvasToBlob(canvas)).arrayBuffer();
-      const pdf = await window.PDFLib.PDFDocument.create();
-      const image = await pdf.embedPng(imageBytes);
-      const page = pdf.addPage([canvas.width, canvas.height]);
-      page.drawImage(image, { x: 0, y: 0, width: canvas.width, height: canvas.height });
+      const bytes = await createDigitalPdf(model);
+      const start = $("historyStart").value;
+      const end = $("historyEnd").value;
+      const pdf = await window.PDFLib.PDFDocument.load(bytes);
       pdf.setTitle(`Informe de guardias ${start} a ${end}`);
       pdf.setAuthor(state.settings.name || "BiometrIMSS");
       pdf.setSubject("Documento digital de consulta personal");
       pdf.setCreator("BiometrIMSS");
-      const bytes = await pdf.save();
-      downloadBlob(`Informe_guardias_${start}_${end}.pdf`, new Blob([bytes], { type: "application/pdf" }));
+      downloadBlob(`Informe_guardias_${start}_${end}.pdf`, new Blob([await pdf.save()], { type: "application/pdf" }));
       showToast("Documento PDF descargado correctamente.");
     } catch (error) {
       console.error(error);
       showToast("No se pudo generar el documento PDF. Inténtalo nuevamente.", "error");
     } finally {
       button.innerHTML = originalLabel;
-      button.disabled = records.length === 0 || !window.PDFLib;
+      button.disabled = !model.rows.length || !window.PDFLib;
     }
+  }
+
+  async function createDigitalPdf(model) {
+    const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
+    const pdf = await PDFDocument.create();
+    const regular = await pdf.embedFont(StandardFonts.Helvetica);
+    const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
+    const pageSize = [595.28, 841.89];
+    const margin = 42;
+    const safeText = (value) => String(value || "-").replace(/[\u2022\u00b7]/g, "-").replace(/[\u2013\u2014]/g, "-").replace(/[^\x20-\xFF]/g, "?");
+    const shorten = (value, limit) => {
+      const text = safeText(value);
+      return text.length > limit ? `${text.slice(0, Math.max(1, limit - 3))}...` : text;
+    };
+    let page;
+    let cursorY;
+    let pageNumber = 0;
+    const newPage = (continued = false) => {
+      page = pdf.addPage(pageSize);
+      pageNumber += 1;
+      page.drawRectangle({ x: 0, y: pageSize[1] - 92, width: pageSize[0], height: 92, color: rgb(0.024, 0.24, 0.20) });
+      page.drawText(continued ? "INFORME DE GUARDIAS - CONTINUACION" : "BIOMETRIMSS - INFORME DE GUARDIAS", { x: margin, y: pageSize[1] - 43, size: 15, font: bold, color: rgb(1, 1, 1) });
+      page.drawText(safeText(model.period), { x: margin, y: pageSize[1] - 66, size: 9, font: regular, color: rgb(0.86, 0.96, 0.92) });
+      page.drawText(`Pagina ${pageNumber}`, { x: pageSize[0] - margin - 45, y: 25, size: 8, font: regular, color: rgb(0.37, 0.48, 0.45) });
+      cursorY = pageSize[1] - 118;
+    };
+    const labelValue = (label, value, x, width) => {
+      page.drawText(label.toUpperCase(), { x, y: cursorY, size: 7, font: bold, color: rgb(0.04, 0.46, 0.35) });
+      page.drawText(shorten(value, Math.floor(width / 5.2)), { x, y: cursorY - 14, size: 9, font: bold, color: rgb(0.09, 0.20, 0.18) });
+    };
+    newPage();
+    labelValue("Personal", model.profile.name, margin, 245);
+    labelValue("Matrícula", model.profile.employeeId, 292, 120);
+    labelValue("Unidad", model.profile.unit, 425, 128);
+    cursorY -= 42;
+    const summary = model.summary;
+    const justified = (summary.justificada || 0) + (summary.incapacidad || 0) + (summary.permiso || 0) + (summary.convenio || 0) + (summary.vacaciones || 0) + (summary.festivo || 0);
+    const summaryItems = [["Guardias", model.rows.length], ["Efectivas", summary.efectiva || 0], ["Justificadas", justified], ["Asistencia", `${model.attendanceRate}%`]];
+    const summaryWidth = (pageSize[0] - margin * 2) / summaryItems.length;
+    summaryItems.forEach(([label, value], index) => {
+      const x = margin + index * summaryWidth;
+      page.drawRectangle({ x, y: cursorY - 44, width: summaryWidth - 5, height: 38, color: rgb(0.94, 0.98, 0.96) });
+      page.drawText(label.toUpperCase(), { x: x + 8, y: cursorY - 19, size: 6.5, font: bold, color: rgb(0.04, 0.46, 0.35) });
+      page.drawText(String(value), { x: x + 8, y: cursorY - 35, size: 13, font: bold, color: rgb(0.02, 0.24, 0.20) });
+    });
+    cursorY -= 68;
+    const drawTableHeader = () => {
+      page.drawRectangle({ x: margin, y: cursorY - 18, width: pageSize[0] - margin * 2, height: 22, color: rgb(0.024, 0.24, 0.20) });
+      [["GUARDIA", 0], ["ENTRADA", 86], ["SALIDA", 142], ["ESTATUS", 218], ["DETALLE", 303]].forEach(([label, offset]) => page.drawText(label, { x: margin + offset + 5, y: cursorY - 10, size: 6.5, font: bold, color: rgb(1, 1, 1) }));
+      cursorY -= 22;
+    };
+    drawTableHeader();
+    model.rows.forEach((row, index) => {
+      if (cursorY < 76) {
+        newPage(true);
+        drawTableHeader();
+      }
+      const y = cursorY - 18;
+      page.drawRectangle({ x: margin, y, width: pageSize[0] - margin * 2, height: 22, color: index % 2 ? rgb(0.98, 0.99, 0.985) : rgb(1, 1, 1) });
+      const values = [shorten(row.date, 16), shorten(row.entry, 10), shorten(`${row.exitDate} ${row.exit}`, 16), shorten(row.statusLabel, 18), shorten(row.typeLabel, 34)];
+      const offsets = [0, 86, 142, 218, 303];
+      values.forEach((value, valueIndex) => page.drawText(value, { x: margin + offsets[valueIndex] + 5, y: cursorY - 11, size: 6.5, font: valueIndex === 3 ? bold : regular, color: rgb(0.09, 0.20, 0.18) }));
+      cursorY -= 22;
+    });
+    return pdf.save();
   }
 
   async function importTuPerfilPdf(event) {
