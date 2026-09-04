@@ -28,3 +28,12 @@ test("incluye un manual accesible con instalación para iOS y Android", () => {
   assert.match(html, /Importar PDF de TuPerfilIMSS/);
   assert.match(html, /Periodos vacacionales/);
 });
+
+test("el informe permite elegir periodo y filtrar el resumen sin la palomita decorativa", () => {
+  const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  const app = fs.readFileSync(path.join(root, "app.js"), "utf8");
+  assert.match(html, /id="reportStart"/);
+  assert.match(html, /id="reportEnd"/);
+  assert.match(app, /data-report-filter/);
+  assert.doesNotMatch(app, /digital-report-hero-avatar/);
+});

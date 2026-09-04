@@ -64,6 +64,93 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.brand-intro {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 43%, #087f68 0, #034c40 34%, #012c27 72%, #001d1a 100%);
+  animation: brand-intro-exit .55s ease 2.45s forwards;
+}
+
+.brand-intro-logo {
+  position: relative;
+  z-index: 2;
+  width: min(64vw, 290px);
+  aspect-ratio: 1;
+  border-radius: 28%;
+  object-fit: cover;
+  filter: drop-shadow(0 0 18px rgba(22, 255, 211, .38)) drop-shadow(0 0 25px rgba(255, 203, 74, .2));
+  clip-path: inset(100% 0 0);
+  animation: biometric-lines 1.35s cubic-bezier(.22, .8, .28, 1) .15s forwards,
+    biometric-pulse .55s ease 1.55s 2 alternate;
+}
+
+.brand-intro-orbit {
+  position: absolute;
+  z-index: 1;
+  width: min(76vw, 345px);
+  aspect-ratio: 1;
+  border: 2px solid rgba(255, 207, 84, .58);
+  border-right-color: rgba(33, 255, 216, .9);
+  border-radius: 50%;
+  box-shadow: 0 0 24px rgba(25, 246, 207, .2), inset 0 0 24px rgba(255, 201, 65, .12);
+  opacity: 0;
+  animation: orbit-on .5s ease .65s forwards, orbit-spin 2s linear .65s infinite;
+}
+
+.brand-intro-scan {
+  position: absolute;
+  z-index: 3;
+  width: min(60vw, 270px);
+  height: 3px;
+  border-radius: 50%;
+  background: #ffe488;
+  box-shadow: 0 0 9px #fff, 0 0 22px #ffc62f;
+  opacity: 0;
+  animation: scan-line 1.25s ease .25s forwards;
+}
+
+.brand-intro p {
+  z-index: 2;
+  margin: 18px 0 0;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: .24em;
+  opacity: 0;
+  animation: intro-name .45s ease 1.5s forwards;
+}
+
+@keyframes biometric-lines {
+  0% { clip-path: inset(100% 0 0); opacity: .25; transform: scale(.92); }
+  45% { opacity: 1; }
+  100% { clip-path: inset(0); opacity: 1; transform: scale(1); }
+}
+
+@keyframes biometric-pulse {
+  to { filter: drop-shadow(0 0 27px rgba(22, 255, 211, .7)) drop-shadow(0 0 34px rgba(255, 203, 74, .48)); transform: scale(1.025); }
+}
+
+@keyframes orbit-on { to { opacity: 1; } }
+@keyframes orbit-spin { to { transform: rotate(360deg); } }
+
+@keyframes scan-line {
+  0% { opacity: 0; transform: translateY(130px) scaleX(.25); }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-130px) scaleX(1); }
+}
+
+@keyframes intro-name { to { opacity: 1; transform: translateY(-2px); } }
+
+@keyframes brand-intro-exit {
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
 button,
 input,
 select,
@@ -1395,6 +1482,13 @@ h2 {
   margin-bottom: 13px;
 }
 
+.report-period-picker {
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.report-period-picker h2 { margin: 0; font-size: .86rem; }
+
 .digital-report {
   overflow: hidden;
   border: 1px solid #cfe5dc;
@@ -1405,33 +1499,15 @@ h2 {
 
 .digital-report-header {
   position: relative;
-  min-height: 118px;
-  padding: 20px 104px 20px 20px;
+  min-height: 104px;
+  padding: 20px;
   color: #fff;
   background: linear-gradient(130deg, #063d34, #08745a);
 }
 
 .digital-report-header .eyebrow { margin-bottom: 4px; color: #b8ecdc; }
 .digital-report-header h2 { margin: 0; font-size: 1.3rem; }
-.digital-report-header > span { position: absolute; top: 20px; right: 105px; width: 62px; color: rgba(255,255,255,.75); font-size: .58rem; line-height: 1.3; text-align: right; }
-
-.digital-report-hero-avatar {
-  position: absolute;
-  right: -2px;
-  bottom: -5px;
-  width: 108px;
-  height: 108px;
-  display: grid;
-  place-items: center;
-  border: 5px solid rgba(255, 255, 255, .22);
-  border-radius: 22px 22px 4px 22px;
-  color: var(--green-900);
-  background: #fff;
-  box-shadow: 0 8px 16px rgba(0, 43, 33, .22);
-  pointer-events: none;
-}
-
-.digital-report-hero-avatar::after { content: "✓"; font-size: 3.2rem; font-weight: 900; }
+.digital-report-header > span { position: absolute; top: 20px; right: 20px; width: 82px; color: rgba(255,255,255,.75); font-size: .58rem; line-height: 1.3; text-align: right; }
 
 .digital-report-profile {
   display: grid;
@@ -1453,14 +1529,18 @@ h2 {
   background: #fff;
 }
 
-.digital-report-summary > div { min-width: 0; padding: 10px 7px; border-radius: 11px; background: var(--green-50); text-align: center; }
+.digital-report-summary > button { min-width: 0; padding: 10px 7px; border: 2px solid transparent; border-radius: 11px; background: var(--green-50); text-align: center; cursor: pointer; }
 .digital-report-summary strong { display: block; margin-top: 4px; color: var(--green-900); font-size: 1.2rem; }
 .digital-report-summary span { font-size: .53rem; }
 .digital-report-summary .report-total-absence { background: #fff0f1; }
 .digital-report-summary .report-total-absence strong { color: var(--red); }
+.digital-report-summary > button.is-selected { border-color: var(--green-700); box-shadow: 0 0 0 2px rgba(8, 116, 90, .1); }
+.digital-report-summary > button:focus-visible { outline: 3px solid rgba(19, 164, 125, .28); outline-offset: 2px; }
 
 .digital-report-details { padding: 5px 14px 16px; }
 .digital-report-details h3 { margin: 12px 2px; font-size: .95rem; }
+.report-detail-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.report-detail-heading span { color: var(--muted); font-size: .66rem; font-weight: 750; }
 .digital-report-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
 .digital-report table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: .71rem; }
 .digital-report th { padding: 10px 8px; color: #fff; background: var(--green-950); font-size: .6rem; letter-spacing: .04em; text-align: left; text-transform: uppercase; }
@@ -1889,6 +1969,11 @@ h2 {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .brand-intro { animation-delay: .55s; }
+  .brand-intro-logo { clip-path: inset(0); }
+  .brand-intro-orbit,
+  .brand-intro-scan { display: none; }
+  .brand-intro p { opacity: 1; }
   *,
   *::before,
   *::after {

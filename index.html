@@ -10,18 +10,24 @@
   <meta name="apple-mobile-web-app-title" content="BiometrIMSS">
   <title>BiometrIMSS</title>
 
-  <link rel="manifest" href="manifest.webmanifest?v=4.1.0">
-  <link rel="apple-touch-icon" href="icons/icon-180.png?v=4.1.0">
-  <link rel="icon" href="icons/icon-192.png?v=4.1.0" type="image/png">
-  <link rel="stylesheet" href="style.css?v=4.4.0">
+  <link rel="manifest" href="manifest.webmanifest?v=4.6.0">
+  <link rel="apple-touch-icon" href="icons/icon-180.png?v=4.6.0">
+  <link rel="icon" href="icons/icon-192.png?v=4.6.0" type="image/png">
+  <link rel="stylesheet" href="style.css?v=4.6.0">
 </head>
 
 <body>
+  <div class="brand-intro" aria-hidden="true">
+    <div class="brand-intro-orbit"></div>
+    <img class="brand-intro-logo" src="assets/biometrimss-logo-v1.png" alt="">
+    <span class="brand-intro-scan"></span>
+    <p>BIOMETRIMSS</p>
+  </div>
   <div class="app-shell">
     <header class="topbar">
       <button class="brand" type="button" data-go="home" aria-label="Ir al inicio">
         <span class="brand-mark" aria-hidden="true">
-          <img src="assets/biometrimss-avatar-icon-v3.png" alt="">
+          <img src="assets/biometrimss-logo-v1.png" alt="">
         </span>
         <span>
           <strong>BiometrIMSS</strong>
@@ -312,6 +318,14 @@
           </div>
           <button class="button button-small button-secondary" type="button" data-go="history">Volver</button>
         </div>
+        <section class="card report-period-picker" aria-label="Periodo del informe">
+          <div class="section-heading compact"><div><p class="eyebrow">Periodo</p><h2>Selecciona las fechas del informe</h2></div></div>
+          <div class="date-range">
+            <label>Desde<input id="reportStart" type="date"></label>
+            <span aria-hidden="true">—</span>
+            <label>Hasta<input id="reportEnd" type="date"></label>
+          </div>
+        </section>
         <div class="report-actions">
           <button id="printDigitalReport" class="button button-secondary" type="button">Imprimir o guardar PDF</button>
           <button id="downloadDigitalPdf" class="button button-primary" type="button">Descargar documento PDF</button>
@@ -568,9 +582,9 @@
     </form>
   </dialog>
 
-  <script src="logic.js?v=4.4.0"></script>
-  <script src="report-image.js?v=4.4.0"></script>
+  <script src="logic.js?v=4.6.0"></script>
+  <script src="report-image.js?v=4.6.0"></script>
   <script src="vendor/pdf-lib/pdf-lib.min.js"></script>
-  <script src="app.js?v=4.4.0"></script>
+  <script src="app.js?v=4.6.0"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 
   const L = window.BiometrLogic;
   const R = window.BiometrReport;
-  const APP_VERSION = "2.6.0";
+  const APP_VERSION = "2.8.0";
   const STORAGE = {
     settings: "biometrimss:v2:settings",
     records: "biometrimss:v2:records",
@@ -21,6 +21,7 @@
     view: "home",
     calendarMonth: initialMonth,
     selectedDate: L.formatDateKey(now),
+    reportFilter: "all",
     deferredInstallPrompt: null
   };
 
@@ -89,6 +90,8 @@
     $("periodEnd").value = end;
     $("historyStart").value = start;
     $("historyEnd").value = end;
+    $("reportStart").value = start;
+    $("reportEnd").value = end;
   }
 
   function bindNavigation() {
@@ -238,7 +241,12 @@
     if (!options.keepScroll) window.scrollTo({ top: 0, behavior: "smooth" });
     if (view === "calendar") renderCalendar();
     if (view === "history") renderHistory();
-    if (view === "report") renderDigitalReport();
+    if (view === "report") {
+      $("reportStart").value = $("historyStart").value;
+      $("reportEnd").value = $("historyEnd").value;
+      state.reportFilter = "all";
+      renderDigitalReport();
+    }
     if (view === "home") renderHome();
     if (view === "settings") populateSettingsForm();
     $("mainContent").focus({ preventScroll: true });
@@ -319,6 +327,18 @@
     $("exportPdf").addEventListener("click", exportPdf);
     $("downloadDigitalPdf").addEventListener("click", exportPdf);
     $("printDigitalReport").addEventListener("click", () => window.print());
+    ["reportStart", "reportEnd"].forEach((id) => $(id).addEventListener("change", () => {
+      $(id === "reportStart" ? "historyStart" : "historyEnd").value = $(id).value;
+      state.reportFilter = "all";
+      renderHistory();
+      renderDigitalReport();
+    }));
+    $("digitalReportContent").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-report-filter]");
+      if (!button) return;
+      state.reportFilter = button.dataset.reportFilter;
+      renderDigitalReport();
+    });
   }
 
   function bindSettings() {
@@ -963,11 +983,19 @@
     const absences = summary.falta || 0;
     const pending = summary.pendiente || 0;
     const incidents = model.incidentCount;
+    const filterLabels = { all: "todas las guardias", efectiva: "guardias efectivas", justified: "guardias justificadas", falta: "faltas reales", pendiente: "guardias pendientes", incident: "incidencias" };
+    const rowMatchesFilter = (row) => {
+      if (state.reportFilter === "all") return true;
+      if (state.reportFilter === "justified") return ["justificada", "incapacidad", "permiso", "convenio", "vacaciones", "festivo"].includes(row.status);
+      if (state.reportFilter === "incident") return L.INCIDENT_STATUSES.has(row.status) || row.status === "falta";
+      return row.status === state.reportFilter;
+    };
+    const visibleRows = model.rows.filter(rowMatchesFilter);
+    const summaryButton = (filter, label, count, extraClass = "") => `<button class="report-summary-button ${extraClass}${state.reportFilter === filter ? " is-selected" : ""}" type="button" data-report-filter="${filter}" aria-pressed="${state.reportFilter === filter}"><span>${label}</span><strong>${count}</strong></button>`;
     $("digitalReportContent").innerHTML = `
       <header class="digital-report-header">
         <div><p class="eyebrow">BiometrIMSS · documento digital</p><h2>Informe de guardias</h2></div>
         <span>Generado ${escapeHtml(new Intl.DateTimeFormat("es-MX", { dateStyle: "medium", timeStyle: "short" }).format(new Date()))}</span>
-        <div class="digital-report-hero-avatar" aria-hidden="true"></div>
       </header>
       <section class="digital-report-profile">
         <div><span>Personal</span><strong>${escapeHtml(model.profile.name)}</strong></div>
@@ -976,17 +1004,17 @@
         <div><span>Periodo</span><strong>${escapeHtml(model.period)}</strong></div>
       </section>
       <section class="digital-report-summary" aria-label="Resumen del periodo">
-        <div><span>Guardias</span><strong>${total}</strong></div>
-        <div><span>Efectivas</span><strong>${effective}</strong></div>
-        <div><span>Justificadas</span><strong>${justified}</strong></div>
-        <div class="report-total-absence"><span>Faltas reales</span><strong>${absences}</strong></div>
-        <div><span>Pendientes</span><strong>${pending}</strong></div>
-        <div><span>Incidencias</span><strong>${incidents}</strong></div>
+        ${summaryButton("all", "Guardias", total)}
+        ${summaryButton("efectiva", "Efectivas", effective)}
+        ${summaryButton("justified", "Justificadas", justified)}
+        ${summaryButton("falta", "Faltas reales", absences, "report-total-absence")}
+        ${summaryButton("pendiente", "Pendientes", pending)}
+        ${summaryButton("incident", "Incidencias", incidents)}
       </section>
       <section class="digital-report-details">
-        <h3>Detalle de guardias</h3>
+        <div class="report-detail-heading"><h3>Detalle: ${escapeHtml(filterLabels[state.reportFilter] || filterLabels.all)}</h3><span>${visibleRows.length} ${visibleRows.length === 1 ? "registro" : "registros"}</span></div>
         <div class="digital-report-table-wrap"><table><thead><tr><th>Guardia</th><th>Entrada</th><th>Salida</th><th>Estatus</th><th>Detalle</th></tr></thead><tbody>
-          ${model.rows.length ? model.rows.map((row) => `<tr><td>${escapeHtml(row.date)}</td><td>${escapeHtml(row.entry)}</td><td>${escapeHtml(`${row.exitDate} · ${row.exit}`)}</td><td><span class="report-state-avatar avatar-${reportAvatarName(row.status)}" aria-hidden="true"></span><span class="record-status status-code-${escapeHtml(row.status)}">${escapeHtml(row.statusLabel)}</span></td><td>${escapeHtml(row.typeLabel)}</td></tr>`).join("") : '<tr><td colspan="5">No hay guardias programadas en este periodo.</td></tr>'}
+          ${visibleRows.length ? visibleRows.map((row) => `<tr><td>${escapeHtml(row.date)}</td><td>${escapeHtml(row.entry)}</td><td>${escapeHtml(`${row.exitDate} · ${row.exit}`)}</td><td><span class="report-state-avatar avatar-${reportAvatarName(row.status)}" aria-hidden="true"></span><span class="record-status status-code-${escapeHtml(row.status)}">${escapeHtml(row.statusLabel)}</span></td><td>${escapeHtml(row.typeLabel)}</td></tr>`).join("") : '<tr><td colspan="5">No hay registros de este tipo en el periodo seleccionado.</td></tr>'}
         </tbody></table></div>
       </section>
       <footer class="digital-report-footer">Documento personal de consulta generado por BiometrIMSS. Verifica la información antes de presentarla o utilizarla como referencia.</footer>`;
