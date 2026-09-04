@@ -1,8 +1,8 @@
-const CACHE_NAME = "biometrimss-v3.6.0";
+const CACHE_NAME = "biometrimss-v3.7.0";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./style.css?v=3.6.0",
+  "./style.css?v=3.7.0",
   "./logic.js",
   "./report-image.js",
   "./app.js?v=3.5.0",
@@ -16,6 +16,7 @@ const APP_SHELL = [
   "./assets/abisai-pase-salida.png",
   "./assets/abisai-vacaciones.png",
   "./assets/abit-ai-states-sticker-sheet-v1.png",
+  "./assets/biometrimss-avatar-icon-v1.png",
   "./vendor/pdfjs/pdf.min.mjs",
   "./vendor/pdfjs/pdf.worker.min.mjs",
   "./vendor/pdf-lib/pdf-lib.min.js"
