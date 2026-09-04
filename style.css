@@ -1266,6 +1266,39 @@ h2 {
   opacity: 0;
 }
 
+.visually-hidden-file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vacation-icon { font-size: 1.1rem; }
+
+.vacation-period-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.vacation-period-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 12px;
+  border: 1px solid #e4c9ad;
+  border-radius: 12px;
+  background: #fff9f1;
+}
+
+.vacation-period-item div { display: grid; gap: 3px; }
+.vacation-period-item strong { font-size: .75rem; }
+.vacation-period-item small { color: var(--muted); font-size: .66rem; }
+.vacation-remove { color: var(--red); }
+
 .privacy-note {
   display: flex;
   align-items: flex-start;

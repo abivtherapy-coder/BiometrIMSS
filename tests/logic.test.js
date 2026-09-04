@@ -127,3 +127,39 @@ test("lee las checadas nocturnas de un PDF de TuPerfilIMSS", () => {
   assert.deepEqual(records.find((record) => record.shiftDate === "2026-08-04").entryAt, "2026-08-04T20:57");
   assert.deepEqual(records.find((record) => record.shiftDate === "2026-08-04").exitAt, "2026-08-05T08:27");
 });
+
+test("convierte las guardias dentro de un periodo vacacional en vacaciones programadas", () => {
+  const vacationSettings = L.normalizeSettings({
+    ...settings,
+    vacationPeriods: [{ id: "verano", start: "2026-08-04", end: "2026-08-08", notes: "Primer periodo" }]
+  });
+  const evaluations = L.scheduledEvaluations([], "2026-08-04", "2026-08-08", vacationSettings, "2026-08-10T12:00:00");
+  assert.equal(evaluations.length, 3);
+  assert.deepEqual(evaluations.map((item) => item.evaluation.status), ["vacaciones", "vacaciones", "vacaciones"]);
+  assert.equal(evaluations[0].record.notes, "Primer periodo");
+  assert.equal(L.vacationPeriodForDate("2026-08-05", vacationSettings).id, "verano");
+});
+
+test("mantiene como vacaciones una guardia futura ya programada", () => {
+  const vacationSettings = L.normalizeSettings({
+    guardDays: [2],
+    vacationPeriods: [{ id: "futuras", start: "2026-08-18", end: "2026-08-18" }]
+  });
+  const evaluations = L.scheduledEvaluations([], "2026-08-18", "2026-08-18", vacationSettings, "2026-08-12T12:00:00");
+  assert.equal(evaluations[0].evaluation.status, "vacaciones");
+});
+
+test("excluye justificaciones y pendientes de incidencias y asistencia real", () => {
+  const metrics = L.summarizeReportEvaluations([
+    { status: "efectiva" },
+    { status: "vacaciones" },
+    { status: "permiso" },
+    { status: "incapacidad" },
+    { status: "convenio" },
+    { status: "festivo" },
+    { status: "pendiente" }
+  ]);
+  assert.equal(metrics.incidentCount, 0);
+  assert.equal(metrics.attendanceEligible, 1);
+  assert.equal(metrics.attendanceRate, 100);
+});

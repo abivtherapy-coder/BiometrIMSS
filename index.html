@@ -13,7 +13,7 @@
   <link rel="manifest" href="manifest.webmanifest?v=4.1.0">
   <link rel="apple-touch-icon" href="icons/icon-180.png?v=4.1.0">
   <link rel="icon" href="icons/icon-192.png?v=4.1.0" type="image/png">
-  <link rel="stylesheet" href="style.css?v=4.0.0">
+  <link rel="stylesheet" href="style.css?v=4.3.0">
 </head>
 
 <body>
@@ -369,6 +369,20 @@
             </div>
           </section>
 
+          <section class="card form-card settings-section vacation-settings">
+            <div class="settings-title">
+              <span class="settings-icon vacation-icon" aria-hidden="true">☀</span>
+              <div><h2>Periodos vacacionales</h2><p>Programa tus vacaciones para que no se cuenten como faltas ni incidencias.</p></div>
+            </div>
+            <div class="form-grid">
+              <label class="field"><span>Desde</span><input id="vacationStart" type="date"></label>
+              <label class="field"><span>Hasta</span><input id="vacationEnd" type="date"></label>
+            </div>
+            <label class="field full-field"><span>Nota opcional</span><input id="vacationNotes" type="text" maxlength="120" placeholder="Ej. Primer periodo vacacional"></label>
+            <button id="addVacationPeriod" class="button button-secondary" type="button">Agregar periodo vacacional</button>
+            <div id="vacationPeriodsList" class="vacation-period-list" aria-live="polite"></div>
+          </section>
+
           <button class="button button-primary sticky-save" type="submit">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5 9.2 17 19 7"/></svg>
             Guardar ajustes
@@ -383,7 +397,8 @@
           <div class="data-actions">
             <button id="exportBackup" class="button button-secondary" type="button">Descargar respaldo</button>
             <label class="button button-secondary file-button">Restaurar respaldo<input id="importBackup" type="file" accept="application/json,.json"></label>
-            <label class="button button-secondary file-button">Cargar PDF TuPerfilIMSS<input id="importTuPerfilPdf" type="file" accept="application/pdf,.pdf"></label>
+            <button id="chooseTuPerfilPdf" class="button button-secondary" type="button">Cargar PDF TuPerfilIMSS</button>
+            <input id="importTuPerfilPdf" class="visually-hidden-file" type="file" accept="application/pdf,.pdf">
           </div>
           <p class="field-note">El PDF se revisará antes de importar. Nunca se reemplazarán tus registros sin mostrarte un resumen.</p>
           <p class="privacy-note"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Tus datos permanecen en este dispositivo. La app no los envía a ningún servidor.</p>
@@ -488,6 +503,9 @@
         <button class="assistant-provider" type="button" data-provider-name="Meta AI" data-provider-url="https://www.meta.ai/">
           <span aria-hidden="true">∞</span><strong>Meta AI</strong><small>Abrir conversación</small>
         </button>
+        <button class="assistant-provider" type="button" data-provider-name="Gemini" data-provider-url="https://gemini.google.com/">
+          <span aria-hidden="true">◆</span><strong>Gemini</strong><small>Abrir conversación</small>
+        </button>
       </div>
       <label class="field assistant-custom-provider" for="assistantExternalUrl">
         <span>Otra app de IA o enfermería</span>
@@ -498,9 +516,9 @@
     </form>
   </dialog>
 
-  <script src="logic.js"></script>
-  <script src="report-image.js"></script>
+  <script src="logic.js?v=4.3.0"></script>
+  <script src="report-image.js?v=4.3.0"></script>
   <script src="vendor/pdf-lib/pdf-lib.min.js"></script>
-  <script src="app.js?v=4.2.0"></script>
+  <script src="app.js?v=4.3.0"></script>
 </body>
 </html>

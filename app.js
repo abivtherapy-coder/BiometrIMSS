@@ -3,7 +3,7 @@
 
   const L = window.BiometrLogic;
   const R = window.BiometrReport;
-  const APP_VERSION = "2.4.0";
+  const APP_VERSION = "2.5.0";
   const STORAGE = {
     settings: "biometrimss:v2:settings",
     records: "biometrimss:v2:records",
@@ -126,7 +126,8 @@
       entryTolerance: $("settingEntryTolerance").value,
       exitTime: $("settingExitTime").value,
       exitTolerance: $("settingExitTolerance").value,
-      guardDays: [...document.querySelectorAll('input[name="guardDay"]:checked')].map((input) => input.value)
+      guardDays: [...document.querySelectorAll('input[name="guardDay"]:checked')].map((input) => input.value),
+      vacationPeriods: state.settings.vacationPeriods
     };
     localStorage.setItem(STORAGE.settingsDraft, JSON.stringify(draft));
   }
@@ -158,6 +159,10 @@
           document.querySelectorAll('input[name="guardDay"]').forEach((input) => {
             input.checked = settingsDraft.guardDays.includes(input.value);
           });
+        }
+        if (Array.isArray(settingsDraft.vacationPeriods)) {
+          state.settings = L.normalizeSettings({ ...state.settings, vacationPeriods: settingsDraft.vacationPeriods });
+          renderVacationPeriods();
         }
       }
     } catch (error) {
@@ -324,7 +329,13 @@
     });
     $("exportBackup").addEventListener("click", exportBackup);
     $("importBackup").addEventListener("change", importBackup);
+    $("chooseTuPerfilPdf").addEventListener("click", () => $("importTuPerfilPdf").click());
     $("importTuPerfilPdf").addEventListener("change", importTuPerfilPdf);
+    $("addVacationPeriod").addEventListener("click", addVacationPeriod);
+    $("vacationPeriodsList").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-remove-vacation]");
+      if (button) removeVacationPeriod(button.dataset.removeVacation);
+    });
   }
 
   function bindInstall() {
@@ -376,10 +387,11 @@
 
     const shiftDate = L.currentShiftDate(current, state.settings);
     const todayScheduled = L.isScheduledDate(shiftDate, state.settings);
+    const todayVacation = L.vacationPeriodForDate(shiftDate, state.settings);
     const todayRecord = state.records.find((record) => record.shiftDate === shiftDate);
     const badge = $("todayShiftBadge");
-    badge.classList.toggle("is-shift", todayScheduled);
-    badge.textContent = todayScheduled ? "Día de guardia" : "Día libre";
+    badge.classList.toggle("is-shift", todayScheduled && !todayVacation);
+    badge.textContent = todayVacation ? "Vacaciones" : todayScheduled ? "Día de guardia" : "Día libre";
 
     if (todayRecord) {
       const evaluation = L.evaluateRecord(todayRecord, state.settings, current);
@@ -420,7 +432,8 @@
     container.innerHTML = dates.map((dateKey) => {
       const date = L.parseDateKey(dateKey);
       const record = state.records.find((item) => item.shiftDate === dateKey);
-      const evaluation = record ? L.evaluateRecord(record, state.settings) : null;
+      const vacation = L.vacationPeriodForDate(dateKey, state.settings);
+      const evaluation = record ? L.evaluateRecord(record, state.settings) : vacation ? L.manualEvaluation("vacaciones") : null;
       return `
         <div class="upcoming-item">
           <div class="date-tile"><strong>${date.getDate()}</strong><small>${shortMonth(date)}</small></div>
@@ -689,7 +702,8 @@
     $("addSelectedDay").hidden = Boolean(record);
     if (!record) {
       const scheduled = L.isScheduledDate(state.selectedDate, state.settings);
-      $("selectedDayContent").innerHTML = `<div class="empty-state compact-empty"><p>${scheduled ? "Guardia programada todavía sin captura." : "No hay un registro en esta fecha."}</p></div>`;
+      const vacation = L.vacationPeriodForDate(state.selectedDate, state.settings);
+      $("selectedDayContent").innerHTML = `<div class="empty-state compact-empty"><p>${vacation ? `Vacaciones programadas${vacation.notes ? ` · ${escapeHtml(vacation.notes)}` : ""}.` : scheduled ? "Guardia programada todavía sin captura." : "No hay un registro en esta fecha."}</p></div>`;
       return;
     }
     $("selectedDayContent").innerHTML = recordCard(record, true);
@@ -779,6 +793,61 @@
     document.querySelectorAll('input[name="guardDay"]').forEach((input) => {
       input.checked = state.settings.guardDays.includes(Number(input.value));
     });
+    renderVacationPeriods();
+  }
+
+  function renderVacationPeriods() {
+    const container = $("vacationPeriodsList");
+    if (!container) return;
+    const periods = state.settings.vacationPeriods || [];
+    if (!periods.length) {
+      container.innerHTML = '<p class="field-note">Todavía no hay periodos vacacionales programados.</p>';
+      return;
+    }
+    container.innerHTML = periods.map((period) => `
+      <article class="vacation-period-item">
+        <div><strong>${escapeHtml(formatFriendlyDate(period.start))} — ${escapeHtml(formatFriendlyDate(period.end))}</strong>${period.notes ? `<small>${escapeHtml(period.notes)}</small>` : ""}</div>
+        <button class="text-button vacation-remove" type="button" data-remove-vacation="${escapeHtml(period.id)}">Eliminar</button>
+      </article>`).join("");
+  }
+
+  function addVacationPeriod() {
+    const start = $("vacationStart").value;
+    const end = $("vacationEnd").value;
+    if (!L.parseDateKey(start) || !L.parseDateKey(end)) {
+      showToast("Selecciona las fechas de inicio y fin de las vacaciones.", "error");
+      return;
+    }
+    if (start > end) {
+      showToast("La fecha final no puede ser anterior a la fecha inicial.", "error");
+      return;
+    }
+    const overlaps = (state.settings.vacationPeriods || []).some((period) => start <= period.end && end >= period.start);
+    if (overlaps) {
+      showToast("Este periodo se cruza con otras vacaciones ya programadas.", "error");
+      return;
+    }
+    const period = { id: createId(), start, end, notes: $("vacationNotes").value.trim() };
+    state.settings = L.normalizeSettings({ ...state.settings, vacationPeriods: [...state.settings.vacationPeriods, period] });
+    persistSettings();
+    $("vacationStart").value = "";
+    $("vacationEnd").value = "";
+    $("vacationNotes").value = "";
+    renderVacationPeriods();
+    renderAll();
+    showToast("Periodo vacacional agregado.");
+  }
+
+  async function removeVacationPeriod(id) {
+    const period = (state.settings.vacationPeriods || []).find((item) => item.id === id);
+    if (!period) return;
+    const accepted = await askConfirmation("Eliminar periodo vacacional", `Se eliminarán las vacaciones del ${formatFriendlyDate(period.start)} al ${formatFriendlyDate(period.end)}.`, "Eliminar");
+    if (!accepted) return;
+    state.settings = L.normalizeSettings({ ...state.settings, vacationPeriods: state.settings.vacationPeriods.filter((item) => item.id !== id) });
+    persistSettings();
+    renderVacationPeriods();
+    renderAll();
+    showToast("Periodo vacacional eliminado.");
   }
 
   function saveSettingsFromForm(event) {
@@ -813,7 +882,8 @@
       entryTolerance,
       exitTime,
       exitTolerance,
-      guardDays
+      guardDays,
+      vacationPeriods: state.settings.vacationPeriods
     });
     persistSettings();
     clearSettingsDraft();
@@ -892,7 +962,7 @@
     const justified = (summary.justificada || 0) + (summary.incapacidad || 0) + (summary.permiso || 0) + (summary.convenio || 0) + (summary.vacaciones || 0) + (summary.festivo || 0);
     const absences = summary.falta || 0;
     const pending = summary.pendiente || 0;
-    const incidents = Math.max(0, total - effective - justified - (summary.pendiente || 0));
+    const incidents = model.incidentCount;
     $("digitalReportContent").innerHTML = `
       <header class="digital-report-header">
         <div><p class="eyebrow">BiometrIMSS · documento digital</p><h2>Informe de guardias</h2></div>
@@ -993,7 +1063,7 @@
     cursorY -= 42;
     const summary = model.summary;
     const justified = (summary.justificada || 0) + (summary.incapacidad || 0) + (summary.permiso || 0) + (summary.convenio || 0) + (summary.vacaciones || 0) + (summary.festivo || 0);
-    const incidents = Math.max(0, model.rows.length - (summary.efectiva || 0) - justified - (summary.pendiente || 0));
+    const incidents = model.incidentCount;
     const summaryItems = [["Guardias", model.rows.length], ["Efectivas", summary.efectiva || 0], ["Justificadas", justified], ["Faltas reales", summary.falta || 0], ["Pendientes", summary.pendiente || 0], ["Incidencias", incidents], ["Asistencia", `${model.attendanceRate}%`]];
     const summaryWidth = (pageSize[0] - margin * 2) / 4;
     summaryItems.forEach(([label, value], index) => {

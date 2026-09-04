@@ -83,14 +83,12 @@
         typeLabel: notes ? `${evaluation.label.toUpperCase()} · ${notes}` : evaluation.label.toUpperCase()
       };
     });
-    const summary = rows.reduce((counts, row) => {
-      counts[row.status] = (counts[row.status] || 0) + 1;
-      return counts;
-    }, {});
+    const metrics = logic.summarizeReportEvaluations(rows);
     return {
       profile: { name: config.name || "Sin nombre registrado", employeeId: config.employeeId || "Sin matrícula", unit: config.unit || "Sin unidad registrada" },
-      schedule: config, period: `${dateLabel(start, logic)} al ${dateLabel(end, logic)}`, rows, summary,
-      attendanceRate: rows.length ? Math.round(((summary.efectiva || 0) / rows.length) * 1000) / 10 : 0
+      schedule: config, period: `${dateLabel(start, logic)} al ${dateLabel(end, logic)}`, rows,
+      summary: metrics.summary, incidentCount: metrics.incidentCount,
+      attendanceEligible: metrics.attendanceEligible, attendanceRate: metrics.attendanceRate
     };
   }
 
@@ -291,7 +289,7 @@
   }
 
   function drawPortraitSummary(ctx, model, x, y, width) {
-    const total = model.rows.length; const effective = model.summary.efectiva || 0; const incidents = Math.max(0, total - effective);
+    const total = model.rows.length; const effective = model.summary.efectiva || 0; const incidents = model.incidentCount;
     const cards = [["TOTAL GUARDIAS", total], ["EFECTIVAS", effective], ["INCIDENCIAS", incidents], ["ASISTENCIA REAL", `${model.attendanceRate}%`]];
     const cardWidth = width / cards.length;
     ctx.fillStyle = COLORS.dark; roundedRect(ctx, x, y, width, 92, 12); ctx.fill();

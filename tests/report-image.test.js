@@ -19,3 +19,24 @@ test("prepara un informe de imagen ordenado y con resumen", () => {
   assert.equal(model.summary.falta, 11);
   assert.equal(model.profile.unit, "HGZ 42");
 });
+
+test("usa las mismas reglas para incidencias y asistencia en todos los informes", () => {
+  const settings = L.normalizeSettings({
+    guardDays: [2],
+    vacationPeriods: [{ id: "vacaciones", start: "2026-08-11", end: "2026-08-11" }]
+  });
+  const records = [{
+    shiftDate: "2026-08-04",
+    entryAt: "2026-08-04T20:30",
+    exitAt: "2026-08-05T08:10",
+    statusOverride: "auto"
+  }];
+  const model = R.buildReportModel(records, settings, "2026-08-04", "2026-08-18", L, "2026-08-12T12:00:00");
+  assert.equal(model.rows.length, 3);
+  assert.equal(model.summary.efectiva, 1);
+  assert.equal(model.summary.vacaciones, 1);
+  assert.equal(model.summary.pendiente, 1);
+  assert.equal(model.incidentCount, 0);
+  assert.equal(model.attendanceEligible, 1);
+  assert.equal(model.attendanceRate, 100);
+});

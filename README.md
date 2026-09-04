@@ -12,7 +12,9 @@ Aplicación web progresiva (PWA) para llevar un control personal de guardias y r
 - Historial editable y exportación mensual en CSV.
 - Respaldo y restauración en JSON.
 - Horario y días de guardia configurables.
-- Instalación en iPhone y funcionamiento sin conexión.
+- Periodos vacacionales programados, visibles en el calendario y excluidos de faltas, incidencias y asistencia real.
+- Acceso externo a ChatGPT, Meta AI y Gemini desde ABITIMSS.
+- Instalación en iPhone, iPad y Android, y funcionamiento sin conexión.
 - Datos almacenados únicamente en el dispositivo mediante `localStorage`.
 
 ## Configuración inicial

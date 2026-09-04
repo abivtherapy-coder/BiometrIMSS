@@ -13,7 +13,8 @@
     entryTolerance: "21:00",
     exitTime: "08:10",
     exitTolerance: "10:10",
-    guardDays: [2, 4, 6]
+    guardDays: [2, 4, 6],
+    vacationPeriods: []
   });
 
   const STATUS_META = Object.freeze({
@@ -81,11 +82,32 @@
       ? [...new Set(source.guardDays.map(Number).filter((day) => day >= 0 && day <= 6))].sort((a, b) => a - b)
       : [...DEFAULT_SETTINGS.guardDays];
 
+    const vacationPeriods = Array.isArray(source.vacationPeriods)
+      ? source.vacationPeriods.map((period, index) => {
+        const start = String(period && period.start || "");
+        const end = String(period && period.end || "");
+        if (!parseDateKey(start) || !parseDateKey(end) || start > end) return null;
+        return {
+          id: /^[a-zA-Z0-9_-]{1,100}$/.test(String(period.id || "")) ? String(period.id) : `vacation-${start}-${end}-${index}`,
+          start,
+          end,
+          notes: String(period.notes || "").trim().slice(0, 120)
+        };
+      }).filter(Boolean).sort((a, b) => a.start.localeCompare(b.start))
+      : [];
+
     return {
       ...DEFAULT_SETTINGS,
       ...source,
-      guardDays: guardDays.length ? guardDays : [...DEFAULT_SETTINGS.guardDays]
+      guardDays: guardDays.length ? guardDays : [...DEFAULT_SETTINGS.guardDays],
+      vacationPeriods
     };
+  }
+
+  function vacationPeriodForDate(dateValue, settings) {
+    const key = dateValue instanceof Date ? formatDateKey(dateValue) : String(dateValue || "");
+    if (!parseDateKey(key)) return null;
+    return normalizeSettings(settings).vacationPeriods.find((period) => key >= period.start && key <= period.end) || null;
   }
 
   function dateTimeForShift(shiftDate, time, forceNextDay) {
@@ -228,19 +250,40 @@
     return scheduledDates(start, end, config).map((shiftDate) => {
       const window = shiftWindow(shiftDate, config);
       const complete = Boolean(window.exitTolerance && window.exitTolerance < now);
+      const vacation = vacationPeriodForDate(shiftDate, config);
       const record = byDate.get(shiftDate) || {
         id: `scheduled-${shiftDate}`,
         shiftDate,
         entryAt: "",
         exitAt: "",
-        statusOverride: "auto",
-        notes: ""
+        statusOverride: vacation ? "vacaciones" : "auto",
+        notes: vacation ? (vacation.notes || "Periodo vacacional programado") : ""
       };
-      const evaluation = complete
+      const evaluation = record.statusOverride && record.statusOverride !== "auto"
         ? evaluateRecord(record, config, now)
-        : { status: "pendiente", ...STATUS_META.pendiente, reason: "La guardia todavía no concluye." };
+        : complete
+          ? evaluateRecord(record, config, now)
+          : { status: "pendiente", ...STATUS_META.pendiente, reason: "La guardia todavía no concluye." };
       return { record, evaluation, complete, scheduled: true };
     });
+  }
+
+  function summarizeReportEvaluations(evaluations) {
+    const list = Array.isArray(evaluations) ? evaluations : [];
+    const summary = list.reduce((counts, item) => {
+      const status = item && item.status ? item.status : "pendiente";
+      counts[status] = (counts[status] || 0) + 1;
+      return counts;
+    }, {});
+    const incidentCount = list.filter((item) => item && (INCIDENT_STATUSES.has(item.status) || item.status === "falta")).length;
+    const attendanceEligible = list.filter((item) => item && (item.status === "efectiva" || INCIDENT_STATUSES.has(item.status) || item.status === "falta")).length;
+    const effective = summary.efectiva || 0;
+    return {
+      summary,
+      incidentCount,
+      attendanceEligible,
+      attendanceRate: attendanceEligible ? Math.round((effective / attendanceEligible) * 1000) / 10 : 0
+    };
   }
 
   function mergeRecordsByShiftDate(currentRecords, incomingRecords) {
@@ -422,6 +465,7 @@
     formatDateKey,
     getStatusMeta,
     isScheduledDate,
+    manualEvaluation,
     mergeRecordsByShiftDate,
     normalizeSettings,
     parseTuPerfilImssText,
@@ -430,9 +474,11 @@
     recordsToCsv,
     scheduledEvaluations,
     scheduledDates,
+    summarizeReportEvaluations,
     shiftWindow,
     toDateTimeLocal,
     toMinutes,
-    upcomingScheduledDates
+    upcomingScheduledDates,
+    vacationPeriodForDate
   };
 }));
