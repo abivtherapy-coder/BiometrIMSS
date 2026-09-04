@@ -1356,7 +1356,7 @@ h2 {
 
 .digital-report-summary {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   padding: 12px;
   gap: 8px;
   background: #fff;
@@ -1365,6 +1365,8 @@ h2 {
 .digital-report-summary > div { min-width: 0; padding: 10px 7px; border-radius: 11px; background: var(--green-50); text-align: center; }
 .digital-report-summary strong { display: block; margin-top: 4px; color: var(--green-900); font-size: 1.2rem; }
 .digital-report-summary span { font-size: .53rem; }
+.digital-report-summary .report-total-absence { background: #fff0f1; }
+.digital-report-summary .report-total-absence strong { color: var(--red); }
 
 .digital-report-details { padding: 5px 14px 16px; }
 .digital-report-details h3 { margin: 12px 2px; font-size: .95rem; }

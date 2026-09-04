@@ -768,6 +768,8 @@
     const total = model.rows.length;
     const effective = summary.efectiva || 0;
     const justified = (summary.justificada || 0) + (summary.incapacidad || 0) + (summary.permiso || 0) + (summary.convenio || 0) + (summary.vacaciones || 0) + (summary.festivo || 0);
+    const absences = summary.falta || 0;
+    const pending = summary.pendiente || 0;
     const incidents = Math.max(0, total - effective - justified - (summary.pendiente || 0));
     $("digitalReportContent").innerHTML = `
       <header class="digital-report-header">
@@ -785,6 +787,8 @@
         <div><span>Guardias</span><strong>${total}</strong></div>
         <div><span>Efectivas</span><strong>${effective}</strong></div>
         <div><span>Justificadas</span><strong>${justified}</strong></div>
+        <div class="report-total-absence"><span>Faltas reales</span><strong>${absences}</strong></div>
+        <div><span>Pendientes</span><strong>${pending}</strong></div>
         <div><span>Incidencias</span><strong>${incidents}</strong></div>
       </section>
       <section class="digital-report-details">
@@ -867,15 +871,19 @@
     cursorY -= 42;
     const summary = model.summary;
     const justified = (summary.justificada || 0) + (summary.incapacidad || 0) + (summary.permiso || 0) + (summary.convenio || 0) + (summary.vacaciones || 0) + (summary.festivo || 0);
-    const summaryItems = [["Guardias", model.rows.length], ["Efectivas", summary.efectiva || 0], ["Justificadas", justified], ["Asistencia", `${model.attendanceRate}%`]];
-    const summaryWidth = (pageSize[0] - margin * 2) / summaryItems.length;
+    const incidents = Math.max(0, model.rows.length - (summary.efectiva || 0) - justified - (summary.pendiente || 0));
+    const summaryItems = [["Guardias", model.rows.length], ["Efectivas", summary.efectiva || 0], ["Justificadas", justified], ["Faltas reales", summary.falta || 0], ["Pendientes", summary.pendiente || 0], ["Incidencias", incidents], ["Asistencia", `${model.attendanceRate}%`]];
+    const summaryWidth = (pageSize[0] - margin * 2) / 4;
     summaryItems.forEach(([label, value], index) => {
-      const x = margin + index * summaryWidth;
-      page.drawRectangle({ x, y: cursorY - 44, width: summaryWidth - 5, height: 38, color: rgb(0.94, 0.98, 0.96) });
-      page.drawText(label.toUpperCase(), { x: x + 8, y: cursorY - 19, size: 6.5, font: bold, color: rgb(0.04, 0.46, 0.35) });
-      page.drawText(String(value), { x: x + 8, y: cursorY - 35, size: 13, font: bold, color: rgb(0.02, 0.24, 0.20) });
+      const column = index % 4;
+      const row = Math.floor(index / 4);
+      const x = margin + column * summaryWidth;
+      const y = cursorY - row * 45;
+      page.drawRectangle({ x, y: y - 39, width: summaryWidth - 5, height: 38, color: rgb(0.94, 0.98, 0.96) });
+      page.drawText(label.toUpperCase(), { x: x + 8, y: y - 16, size: 6.5, font: bold, color: rgb(0.04, 0.46, 0.35) });
+      page.drawText(String(value), { x: x + 8, y: y - 32, size: 13, font: bold, color: rgb(0.02, 0.24, 0.20) });
     });
-    cursorY -= 68;
+    cursorY -= 113;
     const drawTableHeader = () => {
       page.drawRectangle({ x: margin, y: cursorY - 18, width: pageSize[0] - margin * 2, height: 22, color: rgb(0.024, 0.24, 0.20) });
       [["GUARDIA", 0], ["ENTRADA", 86], ["SALIDA", 142], ["ESTATUS", 218], ["DETALLE", 303]].forEach(([label, offset]) => page.drawText(label, { x: margin + offset + 5, y: cursorY - 10, size: 6.5, font: bold, color: rgb(1, 1, 1) }));
