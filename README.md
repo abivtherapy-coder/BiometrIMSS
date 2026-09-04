@@ -40,3 +40,6 @@ npx serve .
 ## Privacidad
 
 BiometrIMSS es una herramienta personal e independiente. No es una aplicación oficial del IMSS y no sustituye los registros institucionales. La app no envía datos a servidores; la información permanece en el navegador del dispositivo, salvo que la persona descargue un respaldo o reporte.
+## Prueba semanal personal
+
+Para la prueba de uso real, consulta la [checklist semanal](docs/CHECKLIST-SEMANAL-BIOMETRIMSS.md).
