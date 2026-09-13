@@ -1,4 +1,4 @@
-const CACHE_NAME = "biometrimss-v4.7.0";
+const CACHE_NAME = "biometrimss-v4.8.0";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -41,6 +41,17 @@ self.addEventListener("fetch", (event) => {
 
   if (event.request.mode === "navigate") {
     event.respondWith(fetch(event.request).catch(() => caches.match("./index.html")));
+    return;
+  }
+
+  // El generador visual cambia con frecuencia: red primero para evitar informes viejos en la PWA.
+  if (url.pathname.endsWith("/report-image.js")) {
+    event.respondWith(
+      fetch(event.request).then((response) => {
+        if (response.ok) caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+        return response;
+      }).catch(() => caches.match(event.request))
+    );
     return;
   }
 
