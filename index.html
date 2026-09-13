@@ -604,5 +604,281 @@
   <script src="report-image.js?v=4.7.0"></script>
   <script src="vendor/pdf-lib/pdf-lib.min.js"></script>
   <script src="app.js?v=4.7.0"></script>
+<!-- ==========================================================
+ BIOMETRIMSS · DESCARGAR PDF ANIMADO / VISUAL
+ PARCHE ADITIVO — NO MODIFICA LOS PDF EXISTENTES
+========================================================== -->
+<style>
+  #downloadAnimatedPdf {
+    grid-column: 1 / -1;
+    min-height: 48px;
+    background: linear-gradient(135deg, #063d34, #0b8a68);
+    color: #fff;
+    border-color: #08745a;
+    box-shadow: 0 8px 20px rgba(8,116,90,.18);
+  }
+
+  #downloadAnimatedPdf:disabled {
+    opacity: .65;
+    cursor: wait;
+  }
+</style>
+
+<script>
+(() => {
+  "use strict";
+
+  function initAnimatedPdf() {
+    /* No duplicar el botón si el parche ya existe */
+    if (document.getElementById("downloadAnimatedPdf")) return;
+
+    const normalPdfButton =
+      document.getElementById("downloadDigitalPdf");
+
+    const actions =
+      normalPdfButton?.closest(".report-actions");
+
+    if (!normalPdfButton || !actions) {
+      console.warn(
+        "BiometrIMSS: no se encontró el área del informe."
+      );
+      return;
+    }
+
+    /* -------------------------------------------------------
+       CREAR TERCER BOTÓN
+       Los dos botones actuales quedan exactamente igual.
+    ------------------------------------------------------- */
+    const button = document.createElement("button");
+
+    button.id = "downloadAnimatedPdf";
+    button.className = "button button-primary";
+    button.type = "button";
+    button.innerHTML = "Descargar PDF animado";
+
+    normalPdfButton.insertAdjacentElement("afterend", button);
+
+    /* -------------------------------------------------------
+       DESCARGAR EL INFORME VISUAL COMO PDF
+    ------------------------------------------------------- */
+    button.addEventListener("click", async () => {
+      const originalText = button.innerHTML;
+
+      try {
+        button.disabled = true;
+        button.textContent = "Generando PDF animado…";
+
+        if (!window.BiometrReport) {
+          throw new Error(
+            "No está disponible el generador visual de BiometrIMSS."
+          );
+        }
+
+        if (!window.BiometrLogic) {
+          throw new Error(
+            "No está disponible la lógica de BiometrIMSS."
+          );
+        }
+
+        if (!window.PDFLib) {
+          throw new Error(
+            "No está disponible el generador PDF."
+          );
+        }
+
+        /* -----------------------------------------------
+           LEER LOS MISMOS DATOS QUE YA USA BIOMETRIMSS
+        ----------------------------------------------- */
+        let records = [];
+        let settings = {};
+
+        try {
+          records = JSON.parse(
+            localStorage.getItem(
+              "biometrimss:v2:records"
+            ) || "[]"
+          );
+
+          settings = JSON.parse(
+            localStorage.getItem(
+              "biometrimss:v2:settings"
+            ) || "{}"
+          );
+        } catch (error) {
+          throw new Error(
+            "No se pudieron leer los datos guardados."
+          );
+        }
+
+        const reportStart =
+          document.getElementById("reportStart")?.value ||
+          document.getElementById("historyStart")?.value;
+
+        const reportEnd =
+          document.getElementById("reportEnd")?.value ||
+          document.getElementById("historyEnd")?.value;
+
+        if (!reportStart || !reportEnd) {
+          throw new Error(
+            "Selecciona el periodo del informe."
+          );
+        }
+
+        /* -----------------------------------------------
+           GENERAR EL INFORME VISUAL ORIGINAL DE BIOMETRIMSS
+
+           Aquí se conservan:
+           ✓ avatares
+           ✓ colores
+           ✓ clasificación
+           ✓ leyenda
+           ✓ resumen
+           ✓ formato vertical 9:16
+        ----------------------------------------------- */
+        const canvas =
+          await window.BiometrReport.renderReport(
+            records,
+            settings,
+            reportStart,
+            reportEnd,
+            window.BiometrLogic
+          );
+
+        if (!canvas) {
+          throw new Error(
+            "No se pudo construir el informe visual."
+          );
+        }
+
+        /* Convertir el informe completo en PNG */
+        const pngBlob =
+          await new Promise((resolve, reject) => {
+            canvas.toBlob(
+              blob => {
+                if (blob) resolve(blob);
+                else reject(
+                  new Error(
+                    "No se pudo crear la imagen del informe."
+                  )
+                );
+              },
+              "image/png",
+              1
+            );
+          });
+
+        const pngBytes =
+          await pngBlob.arrayBuffer();
+
+        /* -----------------------------------------------
+           CREAR PDF 9:16
+        ----------------------------------------------- */
+        const {
+          PDFDocument
+        } = window.PDFLib;
+
+        const pdf =
+          await PDFDocument.create();
+
+        /*
+          540 x 960 mantiene exactamente
+          la proporción vertical 9:16.
+        */
+        const page =
+          pdf.addPage([540, 960]);
+
+        const image =
+          await pdf.embedPng(pngBytes);
+
+        page.drawImage(image, {
+          x: 0,
+          y: 0,
+          width: 540,
+          height: 960
+        });
+
+        /* Metadatos */
+        pdf.setTitle(
+          `BIOMETRIMSS · Informe visual ${reportStart} a ${reportEnd}`
+        );
+
+        pdf.setSubject(
+          "Informe visual de guardias con avatares y colores"
+        );
+
+        pdf.setCreator("BiometrIMSS");
+
+        if (settings.name) {
+          pdf.setAuthor(settings.name);
+        }
+
+        /* -----------------------------------------------
+           DESCARGAR
+        ----------------------------------------------- */
+        const bytes =
+          await pdf.save();
+
+        const blob =
+          new Blob(
+            [bytes],
+            { type: "application/pdf" }
+          );
+
+        const url =
+          URL.createObjectURL(blob);
+
+        const link =
+          document.createElement("a");
+
+        link.href = url;
+
+        link.download =
+          `BIOMETRIMSS_PDF_ANIMADO_${reportStart}_${reportEnd}.pdf`;
+
+        document.body.appendChild(link);
+
+        link.click();
+        link.remove();
+
+        setTimeout(() => {
+          URL.revokeObjectURL(url);
+        }, 1500);
+
+      } catch (error) {
+
+        console.error(
+          "BIOMETRIMSS PDF animado:",
+          error
+        );
+
+        alert(
+          error.message ||
+          "No se pudo generar el PDF animado."
+        );
+
+      } finally {
+
+        button.disabled = false;
+        button.innerHTML = originalText;
+
+      }
+    });
+  }
+
+  /* Funciona aunque el script se pegue al final */
+  if (
+    document.readyState === "loading"
+  ) {
+    document.addEventListener(
+      "DOMContentLoaded",
+      initAnimatedPdf,
+      { once: true }
+    );
+  } else {
+    initAnimatedPdf();
+  }
+})();
+</script>
+<!-- ===== FIN PDF ANIMADO BIOMETRIMSS ===== -->
 </body>
 </html>
