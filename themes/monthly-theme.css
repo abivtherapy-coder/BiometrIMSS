@@ -1,0 +1,232 @@
+/**
+ * BIOMETRIMSS · ESTILOS DE TEMÁTICAS MENSUALES
+ * 
+ * Variables CSS semánticas que cambian según el mes.
+ * Cada tema redefine los colores principales.
+ */
+
+/* ================================================================
+   VARIABLES BASE (ENERO - Año Nuevo)
+   ================================================================ */
+[data-month-theme="enero"],
+html:not([data-month-theme]) {
+  --theme-primary: #0d5d4f;
+  --theme-secondary: #1a8b78;
+  --theme-accent: #d4af37;
+  --theme-background: #f6fbf9;
+  --theme-surface: #ffffff;
+  --theme-text: #163b32;
+  --theme-decoration-opacity: 0.12;
+  --theme-hero-gradient: linear-gradient(140deg, #0d7766 0%, #084d42 53%, #063d37 100%);
+  --theme-topbar-gradient: linear-gradient(118deg, #053f35 0%, #076650 55%, #0b8d6a 100%);
+}
+
+/* ================================================================
+   FEBRERO - San Valentín
+   ================================================================ */
+[data-month-theme="febrero"] {
+  --theme-primary: #c8354a;
+  --theme-secondary: #e8516f;
+  --theme-accent: #d7f4e5;
+  --theme-background: #fef8fa;
+  --theme-surface: #ffffff;
+  --theme-text: #5a1f2a;
+  --theme-decoration-opacity: 0.14;
+  --theme-hero-gradient: linear-gradient(140deg, #d84d62 0%, #c8354a 53%, #a82e40 100%);
+  --theme-topbar-gradient: linear-gradient(118deg, #ad2439 0%, #c8354a 55%, #d84d62 100%);
+}
+
+/* ================================================================
+   MARZO - Primavera
+   ================================================================ */
+[data-month-theme="marzo"] {
+  --theme-primary: #4a9d5f;
+  --theme-secondary: #72c584;
+  --theme-accent: #f4b5a0;
+  --theme-background: #f8fdf5;
+  --theme-surface: #ffffff;
+  --theme-text: #2a5a36;
+  --theme-decoration-opacity: 0.13;
+  --theme-hero-gradient: linear-gradient(140deg, #5fb574 0%, #4a9d5f 53%, #3a7d4a 100%);
+  --theme-topbar-gradient: linear-gradient(118deg, #3a7d4a 0%, #4a9d5f 55%, #5fb574 100%);
+}
+
+/* ================================================================
+   ABRIL - Pascua
+   ================================================================ */
+[data-month-theme="abril"] {
+  --theme-primary: #7b9ec6;
+  --theme-secondary: #a8c5e0;
+  --theme-accent: #f4d4a8;
+  --theme-background: #f9f8fd;
+  --theme-surface: #ffffff;
+  --theme-text: #3a4f6b;
+  --theme-decoration-opacity: 0.12;
+  --theme-hero-gradient: linear-gradient(140deg, #8fb2d4 0%, #7b9ec6 53%, #6080a8 100%);
+  --theme-topbar-gradient: linear-gradient(118deg, #5d7a9a 0%, #7b9ec6 55%, #8fb2d4 100%);
+}
+
+/* ================================================================
+   MAYO - Enfermería
+   ================================================================ */
+[data-month-theme="mayo"] {
+  --theme-primary: #0b8d6a;
+  --theme-secondary: #1aaf8a;
+  --theme-accent: #f4d699;
+  --theme-background: #f6fbf9;
+  --theme-surface: #ffffff;
+  --theme-text: #163b32;
+  --theme-decoration-opacity: 0.11;
+  --theme-hero-gradient: linear-gradient(140deg, #13a47d 0%, #0b8d6a 53%, #07754f 100%);
+  --theme-topbar-gradient: linear-gradient(118deg, #065c4a 0%, #0b8d6a 55%, #13a47d 100%);
+}
+
+/* ================================================================
+   JUNIO - Día del Padre
+   ================================================================ */
+[data-month-theme="junio"] {
+  --theme-primary: #2477c8;
+  --theme-secondary: #4a90e2;
+  --theme-accent: #1a5c99;
+  --theme-background: #f5f9fc;
+  --theme-surface: #ffffff;
+  --theme-text: #1e3a52;
+  --theme-decoration-opacity: 0.12;
+  --theme-hero-gradient: linear-gradient(140deg, #3a85d9 0%, #2477c8 53%, #1a5c99 100%);
+  --theme-topbar-gradient: linear-gradient(118deg, #1a4d7a 0%, #2477c8 55%, #3a85d9 100%);
+}
+
+/* ================================================================
+   JULIO - Fondo de Ahorro
+   ================================================================ */
+[data-month-theme="julio"] {
+  --theme-primary: #0b8d6a;
+  --theme-secondary: #1ac291;
+  --theme-accent: #f4c547;
+  --theme-background: #f6fbf9;
+  --theme-surface: #ffffff;
+  --theme-text: #163b32;
+  --theme-decoration-opacity: 0.15;
+  --theme-hero-gradient: linear-gradient(140deg, #17b88a 0%, #0b8d6a 53%, #078054 100%);
+  --theme-topbar-gradient: linear-gradient(118deg, #065c4a 0%, #0b8d6a 55%, #17b88a 100%);
+}
+
+/* ================================================================
+   AGOSTO - Regreso
+   ================================================================ */
+[data-month-theme="agosto"] {
+  --theme-primary: #0b8d6a;
+  --theme-secondary: #1aaf8a;
+  --theme-accent: #7eb8d4;
+  --theme-background: #f6fbf9;
+  --theme-surface: #ffffff;
+  --theme-text: #163b32;
+  --theme-decoration-opacity: 0.11;
+  --theme-hero-gradient: linear-gradient(140deg, #13a47d 0%, #0b8d6a 53%, #07754f 100%);
+  --theme-topbar-gradient: linear-gradient(118deg, #065c4a 0%, #0b8d6a 55%, #13a47d 100%);
+}
+
+/* ================================================================
+   SEPTIEMBRE - ¡Viva México!
+   ================================================================ */
+[data-month-theme="septiembre"] {
+  --theme-primary: #006847;
+  --theme-secondary: #008f68;
+  --theme-accent: #ce1126;
+  --theme-background: #f5faf7;
+  --theme-surface: #ffffff;
+  --theme-text: #123c32;
+  --theme-decoration-opacity: 0.14;
+  --theme-hero-gradient: linear-gradient(140deg, #00a876 0%, #006847 53%, #004d35 100%);
+  --theme-topbar-gradient: linear-gradient(118deg, #003d2a 0%, #006847 55%, #00a876 100%);
+}
+
+/* ================================================================
+   OCTUBRE - Halloween
+   ================================================================ */
+[data-month-theme="octubre"] {
+  --theme-primary: #462068;
+  --theme-secondary: #6b3294;
+  --theme-accent: #f28c28;
+  --theme-background: #f8f4fb;
+  --theme-surface: #ffffff;
+  --theme-text: #271837;
+  --theme-decoration-opacity: 0.13;
+  --theme-hero-gradient: linear-gradient(140deg, #5d3d8a 0%, #462068 53%, #351547 100%);
+  --theme-topbar-gradient: linear-gradient(118deg, #2a0f37 0%, #462068 55%, #5d3d8a 100%);
+}
+
+/* ================================================================
+   NOVIEMBRE - Día de Muertos
+   ================================================================ */
+[data-month-theme="noviembre"] {
+  --theme-primary: #54206e;
+  --theme-secondary: #933c8f;
+  --theme-accent: #f28c28;
+  --theme-background: #fff8ef;
+  --theme-surface: #ffffff;
+  --theme-text: #312038;
+  --theme-decoration-opacity: 0.14;
+  --theme-hero-gradient: linear-gradient(140deg, #6b3a99 0%, #54206e 53%, #3d1654 100%);
+  --theme-topbar-gradient: linear-gradient(118deg, #2d0f42 0%, #54206e 55%, #6b3a99 100%);
+}
+
+/* ================================================================
+   DICIEMBRE - Feliz Navidad
+   ================================================================ */
+[data-month-theme="diciembre"] {
+  --theme-primary: #006b46;
+  --theme-secondary: #00875a;
+  --theme-accent: #c8282d;
+  --theme-background: #f6faf7;
+  --theme-surface: #ffffff;
+  --theme-text: #153d32;
+  --theme-decoration-opacity: 0.12;
+  --theme-hero-gradient: linear-gradient(140deg, #00a056 0%, #006b46 53%, #004d2f 100%);
+  --theme-topbar-gradient: linear-gradient(118deg, #003a23 0%, #006b46 55%, #00a056 100%);
+}
+
+/* ================================================================
+   APLICAR VARIABLES A COMPONENTES
+   ================================================================ */
+
+html[data-month-theme] {
+  background: var(--theme-background);
+}
+
+html[data-month-theme] body {
+  color: var(--theme-text);
+  background: var(--theme-background);
+}
+
+html[data-month-theme] .topbar {
+  background: var(--theme-topbar-gradient);
+}
+
+html[data-month-theme] .hero-card {
+  background: var(--theme-hero-gradient);
+}
+
+html[data-month-theme] .eyebrow {
+  color: var(--theme-primary);
+}
+
+html[data-month-theme] .button-primary {
+  background: linear-gradient(140deg, var(--theme-secondary), var(--theme-primary));
+}
+
+html[data-month-theme] .button-secondary {
+  color: var(--theme-primary);
+}
+
+html[data-month-theme] .text-button {
+  color: var(--theme-primary);
+}
+
+html[data-month-theme] .progress-track > span {
+  background: linear-gradient(90deg, var(--theme-secondary), var(--theme-primary));
+}
+
+html[data-month-theme] .progress-value {
+  color: var(--theme-primary);
+}
