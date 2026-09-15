@@ -21,11 +21,21 @@
     return themes.find(([id]) => id === String(requested || "").toLowerCase()) || themes[new Date().getMonth()];
   }
 
+  function ensureSeasonalStyles(id) {
+    if (id !== "septiembre" || document.getElementById("septemberVivaStyles")) return;
+    const link = document.createElement("link");
+    link.id = "septemberVivaStyles";
+    link.rel = "stylesheet";
+    link.href = "themes/september-viva.css?v=5.0.0";
+    document.head.append(link);
+  }
+
   function applyTheme() {
     const [id, label, symbol] = getTheme();
     document.documentElement.dataset.monthTheme = id;
     document.documentElement.style.setProperty("--theme-symbol", `"${symbol}"`);
     document.documentElement.style.setProperty("--theme-label", `"${label}"`);
+    ensureSeasonalStyles(id);
 
     const header = document.querySelector(".topbar");
     if (header && !header.querySelector(".month-decoration")) {
