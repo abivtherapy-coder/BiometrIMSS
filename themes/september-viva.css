@@ -1,157 +1,37 @@
-/* BIOMETRIMSS · SEPTIEMBRE — ¡Viva México!
-   Capa visual estacional. No altera datos, cálculos ni navegación. */
-html[data-month-theme="septiembre"] body {
-  background:
-    radial-gradient(circle at 8% 10%, rgba(0,143,104,.10), transparent 22rem),
-    linear-gradient(180deg,#edf8f5 0%,#fbfdfc 55%,#f3faf7 100%);
-}
-
-html[data-month-theme="septiembre"] .topbar {
-  min-height: 92px;
-  background:
-    linear-gradient(90deg,rgba(0,65,46,.98),rgba(0,115,83,.96)),
-    var(--theme-topbar-gradient);
-  border-bottom: 5px solid #fff;
-  box-shadow: 0 5px 0 #ce1126,0 9px 0 #fff,0 13px 0 #006847;
-}
-html[data-month-theme="septiembre"] .topbar::after {
-  content:"¡Viva México!\A MES DE SEPTIEMBRE";
-  white-space:pre;
-  position:absolute;
-  right:18px; top:16px;
-  text-align:center;
-  color:#fff;
-  font-weight:900;
-  font-size:17px;
-  line-height:1.05;
-  letter-spacing:.02em;
-  text-shadow:0 2px 8px rgba(0,0,0,.25);
-}
-html[data-month-theme="septiembre"] .topbar::before {
-  content:"🇲🇽";
-  position:absolute;
-  right:8px; top:4px;
-  font-size:22px;
-  z-index:2;
-}
-html[data-month-theme="septiembre"] .topbar .month-decoration { display:none; }
-html[data-month-theme="septiembre"] .brand { position:relative; z-index:3; }
-
-html[data-month-theme="septiembre"] .hero-card {
-  position:relative;
-  overflow:hidden;
-  border:1px solid rgba(0,82,58,.32);
-  background:
-    radial-gradient(circle at 91% 15%,rgba(255,255,255,.16),transparent 28%),
-    linear-gradient(135deg,#007a58 0%,#006847 48%,#004d35 100%);
-  box-shadow:0 13px 30px rgba(0,83,59,.22);
-}
-html[data-month-theme="septiembre"] .hero-card::before {
-  content:"▾  ▾  ▾  ▾  ▾  ▾  ▾";
-  position:absolute;
-  left:22px; top:-4px;
-  color:#fff;
-  font-family:Georgia,serif;
-  font-size:28px;
-  letter-spacing:2px;
-  text-shadow:22px 0 #ce1126,-22px 0 #008f68;
-  opacity:.92;
-  pointer-events:none;
-}
-html[data-month-theme="septiembre"] .hero-card::after {
-  content:"🇲🇽  ✦  ¡Viva México!";
-  position:absolute;
-  right:18px; bottom:118px;
-  color:#fff6dc;
-  font-weight:900;
-  font-size:15px;
-  transform:rotate(-2deg);
-  opacity:.95;
-  pointer-events:none;
-}
-html[data-month-theme="septiembre"] .hero-card .eyebrow,
-html[data-month-theme="septiembre"] .hero-card h1,
-html[data-month-theme="septiembre"] .hero-card .hero-message { color:#fff; }
-html[data-month-theme="septiembre"] .shift-badge {
-  background:#f5fff9;
-  color:#075d45;
-  border:1px solid rgba(255,255,255,.8);
-  box-shadow:0 4px 12px rgba(0,0,0,.12);
-}
-html[data-month-theme="septiembre"] .quick-actions .button {
-  border-radius:18px;
-  min-height:62px;
-  font-weight:850;
-}
-html[data-month-theme="septiembre"] .quick-actions .button-light {
-  background:#fff;
-  color:#006847;
-}
-html[data-month-theme="septiembre"] .quick-actions .button-ghost-light {
-  background:rgba(0,112,80,.74);
-  color:#fff;
-  border:1px solid rgba(255,255,255,.55);
-}
-
-html[data-month-theme="septiembre"] .period-card,
-html[data-month-theme="septiembre"] .card,
-html[data-month-theme="septiembre"] .metric-card {
-  position:relative;
-  overflow:hidden;
-  border-color:rgba(0,104,71,.12);
-  box-shadow:0 8px 22px rgba(0,83,59,.08);
-}
-html[data-month-theme="septiembre"] .period-card::after,
-html[data-month-theme="septiembre"] .metric-card::after {
-  content:"❧";
-  position:absolute;
-  right:8px; top:6px;
-  color:rgba(0,143,104,.20);
-  font-size:28px;
-  pointer-events:none;
-}
-html[data-month-theme="septiembre"] .metric-card:nth-of-type(3n+1)::after { color:rgba(206,17,38,.20); }
-html[data-month-theme="septiembre"] .metric-card:nth-of-type(3n+2)::after { color:rgba(0,143,104,.20); }
-html[data-month-theme="septiembre"] .metric-card:nth-of-type(3n)::after { color:rgba(206,17,38,.17); }
-
-html[data-month-theme="septiembre"] .progress-track > span {
-  background:linear-gradient(90deg,#008f68 0%,#16b98b 72%,#ce1126 100%);
-}
-html[data-month-theme="septiembre"] .progress-value { color:#008f68; }
-
-html[data-month-theme="septiembre"] .bottom-nav {
-  border-top:1px solid rgba(0,104,71,.14);
-  background:rgba(255,255,255,.96);
-}
-html[data-month-theme="septiembre"] .nav-item.is-active {
-  color:#006847;
-  background:#e5f7f0;
-}
-html[data-month-theme="septiembre"] .bottom-nav::after {
-  content:"ORGULLOSAMENTE IMSS";
-  position:absolute;
-  left:50%; bottom:2px;
-  transform:translateX(-50%);
-  color:#6d7774;
-  font-size:8px;
-  font-weight:800;
-  letter-spacing:.28em;
-  white-space:nowrap;
-  pointer-events:none;
-}
-
-@media (max-width:560px) {
-  html[data-month-theme="septiembre"] .topbar { min-height:84px; }
-  html[data-month-theme="septiembre"] .topbar::after { right:12px; top:18px; font-size:13px; }
-  html[data-month-theme="septiembre"] .topbar::before { font-size:17px; }
-  html[data-month-theme="septiembre"] .brand small { font-size:9px; letter-spacing:.12em; }
-  html[data-month-theme="septiembre"] .hero-card::after { right:12px; bottom:126px; font-size:12px; }
-}
-
-@media print {
-  html[data-month-theme="septiembre"] .topbar::before,
-  html[data-month-theme="septiembre"] .topbar::after,
-  html[data-month-theme="septiembre"] .hero-card::before,
-  html[data-month-theme="septiembre"] .hero-card::after,
-  html[data-month-theme="septiembre"] .bottom-nav::after { display:none!important; }
-}
+/* BIOMETRIMSS · SEPTIEMBRE — ¡Viva México! · referencia aprobada */
+html[data-month-theme="septiembre"] body{background:linear-gradient(180deg,#dff3ef 0,#f8fbfa 42%,#eef8f5 100%);}
+html[data-month-theme="septiembre"] .app-shell{background:transparent;}
+html[data-month-theme="septiembre"] .topbar{position:relative;min-height:118px;padding-top:22px;overflow:hidden;background:linear-gradient(100deg,#004f42,#007e68 55%,#00624f);border:0;border-radius:0 0 24px 24px;box-shadow:0 5px 0 #fff,0 9px 0 #ce1126,0 13px 0 #fff,0 17px 0 #006847;}
+html[data-month-theme="septiembre"] .topbar:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 110%,rgba(0,30,25,.28),transparent 35%),repeating-linear-gradient(120deg,transparent 0 45px,rgba(255,255,255,.025) 46px 48px);pointer-events:none;}
+html[data-month-theme="septiembre"] .topbar:after{content:"¡Viva\A México!\A M E S  D E  S E P T I E M B R E";white-space:pre;position:absolute;right:8%;top:17px;color:#fff;text-align:center;font-weight:900;font-size:22px;line-height:.92;font-style:italic;text-shadow:0 3px 8px rgba(0,0,0,.22);}
+html[data-month-theme="septiembre"] .brand{position:relative;z-index:2;align-items:center;}
+html[data-month-theme="septiembre"] .brand strong{font-size:24px;color:#fff;}
+html[data-month-theme="septiembre"] .brand small{color:#fff;letter-spacing:.22em;text-transform:uppercase;font-weight:700;}
+html[data-month-theme="septiembre"] .brand-mark{border:2px solid rgba(255,255,255,.8);border-radius:20px;background:#073f38;box-shadow:0 5px 16px rgba(0,0,0,.25);}
+html[data-month-theme="septiembre"] .month-decoration{display:none!important;}
+html[data-month-theme="septiembre"] #view-home{padding-top:20px;}
+html[data-month-theme="septiembre"] .hero-card{position:relative;min-height:420px;overflow:hidden;padding:54px 46% 24px 28px;border:1px solid rgba(0,86,62,.25);border-radius:28px;background:linear-gradient(105deg,rgba(0,121,87,.98) 0 52%,rgba(0,94,68,.72) 72%,rgba(0,74,54,.88)),url("../assets/abisai-pase-entrada.png") right 18px bottom 76px/44% auto no-repeat;box-shadow:0 14px 30px rgba(0,75,55,.18);}
+html[data-month-theme="septiembre"] .hero-card:before{content:"▾  ▾  ▾  ▾  ▾  ▾  ▾";position:absolute;left:28px;top:4px;color:#fff;font-family:Georgia,serif;font-size:29px;letter-spacing:2px;text-shadow:23px 0 #ce1126,-23px 0 #008f68;z-index:1;}
+html[data-month-theme="septiembre"] .hero-card:after{content:"Tema del mes  ·  ¡Viva México!";position:absolute;left:28px;bottom:106px;padding:9px 14px;border:2px dashed #e3c998;border-radius:12px;background:#fff8e7;color:#006847;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(0,0,0,.12);}
+html[data-month-theme="septiembre"] .hero-card .hero-topline,html[data-month-theme="septiembre"] .hero-card .hero-message{position:relative;z-index:2;}
+html[data-month-theme="septiembre"] .hero-card .eyebrow{color:#e8fff7!important;letter-spacing:.14em;font-weight:800;}
+html[data-month-theme="septiembre"] .hero-card h1{color:#fff;font-size:clamp(32px,6vw,54px);line-height:1.02;text-shadow:0 2px 8px rgba(0,0,0,.12);}
+html[data-month-theme="septiembre"] .hero-card .hero-message{color:#fff;font-size:17px;max-width:390px;}
+html[data-month-theme="septiembre"] .shift-badge{position:absolute;right:18px;top:22px;background:#f6fffb;color:#075e48;border:1px solid #d7f1e8;border-radius:999px;font-weight:800;z-index:3;}
+html[data-month-theme="septiembre"] .quick-actions{position:absolute;left:28px;right:28px;bottom:22px;z-index:4;display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+html[data-month-theme="septiembre"] .quick-actions .button{min-height:72px;border-radius:19px;font-size:19px;font-weight:900;}
+html[data-month-theme="septiembre"] .quick-actions .button-light{background:#fff;color:#006847;box-shadow:0 5px 14px rgba(0,0,0,.12);}
+html[data-month-theme="septiembre"] .quick-actions .button-ghost-light{background:rgba(0,112,80,.88);color:#fff;border:2px solid rgba(255,255,255,.35);}
+html[data-month-theme="septiembre"] .period-card,html[data-month-theme="septiembre"] .stat-card,html[data-month-theme="septiembre"] .progress-card{position:relative;overflow:hidden;border:1px solid rgba(0,104,71,.12);border-radius:24px;background:#fff;box-shadow:0 9px 22px rgba(0,83,59,.08);}
+html[data-month-theme="septiembre"] .period-card:before,html[data-month-theme="septiembre"] .progress-card:before{content:"";position:absolute;right:-20px;top:-9px;width:145px;height:34px;border-top:9px solid #006847;border-radius:50%;box-shadow:0 -6px 0 #fff,0 -12px 0 #ce1126;transform:rotate(8deg);opacity:.9;}
+html[data-month-theme="septiembre"] .stat-card:after{content:"✿";position:absolute;right:7px;top:4px;color:rgba(0,143,104,.18);font-size:32px;}
+html[data-month-theme="septiembre"] .stat-card:nth-child(even):after{color:rgba(206,17,38,.18);}
+html[data-month-theme="septiembre"] .stat-card strong{font-size:38px;}
+html[data-month-theme="septiembre"] .progress-track>span{background:linear-gradient(90deg,#00a87c,#37cba5 72%,#ce1126);}
+html[data-month-theme="septiembre"] .progress-value{color:#00906b;font-size:36px;}
+html[data-month-theme="septiembre"] .bottom-nav{position:relative;background:rgba(255,255,255,.98);border-top:1px solid #dcebe6;padding-bottom:20px;}
+html[data-month-theme="septiembre"] .bottom-nav:after{content:"🇲🇽   O R G U L L O S A M E N T E   I M S S   🇲🇽";position:absolute;left:50%;bottom:3px;transform:translateX(-50%);font-size:8px;font-weight:800;letter-spacing:.18em;color:#6c7774;white-space:nowrap;}
+html[data-month-theme="septiembre"] .nav-item.is-active{color:#006847;background:#e5f8f1;border-radius:16px;}
+@media(max-width:600px){html[data-month-theme="septiembre"] .topbar{min-height:105px;}html[data-month-theme="septiembre"] .topbar:after{right:5%;font-size:16px;top:18px;}html[data-month-theme="septiembre"] .brand strong{font-size:20px;}html[data-month-theme="septiembre"] .hero-card{min-height:410px;padding:55px 35% 112px 22px;background:linear-gradient(100deg,rgba(0,121,87,.98) 0 48%,rgba(0,94,68,.64) 72%,rgba(0,74,54,.78)),url("../assets/abisai-pase-entrada.png") right -12px bottom 82px/52% auto no-repeat;}html[data-month-theme="septiembre"] .hero-card:after{left:20px;bottom:106px;font-size:12px;}html[data-month-theme="septiembre"] .hero-card h1{font-size:36px;}html[data-month-theme="septiembre"] .hero-card .hero-message{font-size:15px;max-width:62%;}html[data-month-theme="septiembre"] .quick-actions{left:18px;right:18px;bottom:18px;gap:10px;}html[data-month-theme="septiembre"] .quick-actions .button{min-height:68px;font-size:16px;}}
+@media(max-width:390px){html[data-month-theme="septiembre"] .topbar:after{font-size:13px;right:3%;}html[data-month-theme="septiembre"] .hero-card{padding-left:18px;}html[data-month-theme="septiembre"] .hero-card .hero-message{max-width:58%;}}
+@media print{html[data-month-theme="septiembre"] .topbar:after,html[data-month-theme="septiembre"] .hero-card:before,html[data-month-theme="septiembre"] .hero-card:after,html[data-month-theme="septiembre"] .bottom-nav:after{display:none!important;}}
