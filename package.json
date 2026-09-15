@@ -5,7 +5,7 @@
   "description": "Control personal de guardias y registros biométricos.",
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "check": "node --check logic.js && node --check report-image.js && node --check app.js && node --check service-worker.js",
+    "check": "node --check logic.js && node --check report-image.js && node --check app.js && node --check service-worker.js && node --check themes/monthly-theme.js",
     "serve": "npx --yes serve ."
   },
   "engines": {

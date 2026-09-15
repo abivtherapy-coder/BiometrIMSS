@@ -55,12 +55,12 @@ html:not([data-month-theme]) {
    ABRIL - Pascua
    ================================================================ */
 [data-month-theme="abril"] {
-  --theme-primary: #7b9ec6;
-  --theme-secondary: #a8c5e0;
-  --theme-accent: #f4d4a8;
+  --theme-primary: #3979bb;
+  --theme-secondary: #76addb;
+  --theme-accent: #f4c547;
   --theme-background: #f9f8fd;
   --theme-surface: #ffffff;
-  --theme-text: #3a4f6b;
+  --theme-text: #244566;
   --theme-decoration-opacity: 0.12;
   --theme-hero-gradient: linear-gradient(140deg, #8fb2d4 0%, #7b9ec6 53%, #6080a8 100%);
   --theme-topbar-gradient: linear-gradient(118deg, #5d7a9a 0%, #7b9ec6 55%, #8fb2d4 100%);
@@ -70,15 +70,15 @@ html:not([data-month-theme]) {
    MAYO - Enfermería
    ================================================================ */
 [data-month-theme="mayo"] {
-  --theme-primary: #0b8d6a;
-  --theme-secondary: #1aaf8a;
-  --theme-accent: #f4d699;
-  --theme-background: #f6fbf9;
+  --theme-primary: #af4f74;
+  --theme-secondary: #d67799;
+  --theme-accent: #f3bed0;
+  --theme-background: #fff9fb;
   --theme-surface: #ffffff;
-  --theme-text: #163b32;
+  --theme-text: #5f2940;
   --theme-decoration-opacity: 0.11;
-  --theme-hero-gradient: linear-gradient(140deg, #13a47d 0%, #0b8d6a 53%, #07754f 100%);
-  --theme-topbar-gradient: linear-gradient(118deg, #065c4a 0%, #0b8d6a 55%, #13a47d 100%);
+  --theme-hero-gradient: linear-gradient(140deg, #d67799 0%, #af4f74 53%, #87334f 100%);
+  --theme-topbar-gradient: linear-gradient(118deg, #87334f 0%, #af4f74 55%, #d67799 100%);
 }
 
 /* ================================================================
@@ -229,4 +229,88 @@ html[data-month-theme] .progress-track > span {
 
 html[data-month-theme] .progress-value {
   color: var(--theme-primary);
+}
+
+/* Decoración ligera: siempre queda fuera del contenido y no cambia los datos. */
+html[data-month-theme] .topbar {
+  position: relative;
+  overflow: hidden;
+}
+
+.month-decoration {
+  position: absolute;
+  top: 7px;
+  right: 14px;
+  width: 72px;
+  height: 34px;
+  pointer-events: none;
+  opacity: .92;
+}
+
+.month-decoration::before,
+.month-decoration::after {
+  position: absolute;
+  display: block;
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif;
+  line-height: 1;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .16));
+}
+
+html[data-month-theme="enero"] .month-decoration::before { content: "✦  ✧"; color: #f4d699; font-size: 23px; top: 2px; left: 4px; }
+html[data-month-theme="febrero"] .month-decoration::before { content: "♥  ♥"; color: #ffd9e2; font-size: 21px; top: 3px; left: 4px; }
+html[data-month-theme="marzo"] .month-decoration::before { content: "✿  ♡"; color: #ffd1df; font-size: 22px; top: 2px; left: 4px; }
+html[data-month-theme="abril"] .month-decoration::before { content: "★  ✦"; color: #fff0a8; font-size: 22px; top: 2px; left: 4px; }
+html[data-month-theme="mayo"] .month-decoration::before { content: "✿  ✿"; color: #ffd5e1; font-size: 22px; top: 2px; left: 4px; }
+html[data-month-theme="junio"] .month-decoration::before { content: "●  ♥"; color: #cfe7ff; font-size: 20px; top: 4px; left: 6px; }
+html[data-month-theme="julio"] .month-decoration::before { content: "●  ●"; color: #f4c547; font-size: 18px; top: 4px; left: 5px; }
+html[data-month-theme="julio"] .month-decoration::after { content: "▰"; color: #c6f0d7; font-size: 25px; top: 1px; right: 6px; transform: rotate(-12deg); }
+html[data-month-theme="agosto"] .month-decoration::before { content: "✎  □"; color: #d7efff; font-size: 22px; top: 2px; left: 5px; }
+
+/* Septiembre: cinco banderines pequeños, sin ocupar los datos. */
+html[data-month-theme="septiembre"] .month-decoration {
+  top: 5px;
+  right: 9px;
+  width: 104px;
+  height: 38px;
+  background: linear-gradient(#f6f1d7, #f6f1d7) 4px 4px / 96px 2px no-repeat;
+}
+html[data-month-theme="septiembre"] .month-decoration::before {
+  content: "▾ ▾ ▾ ▾ ▾";
+  color: #e9f5ef;
+  font-family: Georgia, serif;
+  font-size: 25px;
+  letter-spacing: 1px;
+  top: 0;
+  left: 3px;
+  text-shadow: -21px 0 #008f68, 21px 0 #ce1126;
+}
+html[data-month-theme="septiembre"] .month-decoration::after {
+  content: "¡Viva!";
+  color: #f7f2df;
+  font-size: 8px;
+  font-weight: 800;
+  right: 0;
+  bottom: 1px;
+}
+
+html[data-month-theme="octubre"] .month-decoration::before { content: "◒  ✦"; color: #ffd19a; font-size: 22px; top: 2px; left: 4px; }
+html[data-month-theme="octubre"] .month-decoration::after { content: "⌁"; color: #e4c7ff; font-size: 24px; top: 1px; right: 7px; }
+html[data-month-theme="noviembre"] .month-decoration::before { content: "✿  ✦"; color: #ffc768; font-size: 22px; top: 2px; left: 4px; }
+html[data-month-theme="diciembre"] .month-decoration::before { content: "✦  ●"; color: #ffe4a1; font-size: 22px; top: 2px; left: 4px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .month-decoration { animation: month-decoration-float 5.5s ease-in-out infinite; }
+}
+
+@keyframes month-decoration-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@media (max-width: 420px) {
+  .month-decoration { right: 8px; transform: scale(.88); transform-origin: right top; }
+}
+
+@media print {
+  .month-decoration { display: none; }
 }

@@ -28,7 +28,7 @@
   ]);
 
   const ILLUSTRATIONS = Object.freeze({
-    logo:"assets/biometrimss-logo-v1.png",
+    logo:"assets/biometrimss-logo-transparent-v1.png",
     retardo:"assets/abisai-pase-entrada.png",
     "pase-salida":"assets/abisai-pase-salida.png",
     vacaciones:"assets/abisai-vacaciones.png"
