@@ -1,316 +1,55 @@
-/**
- * BIOMETRIMSS · ESTILOS DE TEMÁTICAS MENSUALES
- * 
- * Variables CSS semánticas que cambian según el mes.
- * Cada tema redefine los colores principales.
- */
+/* BIOMETRIMSS · Temática mensual global. Solo presentación visual. */
+[data-month-theme="enero"],html:not([data-month-theme]){--theme-primary:#0d5d4f;--theme-secondary:#1a8b78;--theme-accent:#d4af37;--theme-bg:#f6fbf9;--theme-soft:#edf8f4;--theme-text:#163b32;--theme-hero:linear-gradient(140deg,#0d7766,#084d42 55%,#063d37);--theme-top:linear-gradient(118deg,#053f35,#076650 55%,#0b8d6a)}
+[data-month-theme="febrero"]{--theme-primary:#b82f49;--theme-secondary:#e35c78;--theme-accent:#f3a8b8;--theme-bg:#fff7fa;--theme-soft:#fff0f4;--theme-text:#5a1f2a;--theme-hero:linear-gradient(140deg,#dc6078,#b82f49 55%,#8f2338);--theme-top:linear-gradient(118deg,#8f2338,#b82f49,#dc6078)}
+[data-month-theme="marzo"]{--theme-primary:#3d8d55;--theme-secondary:#72c584;--theme-accent:#f4b5a0;--theme-bg:#f8fdf5;--theme-soft:#eef9eb;--theme-text:#285535;--theme-hero:linear-gradient(140deg,#69b77a,#3d8d55 55%,#2e6e40);--theme-top:linear-gradient(118deg,#2e6e40,#3d8d55,#69b77a)}
+[data-month-theme="abril"]{--theme-primary:#557db5;--theme-secondary:#8cb1dc;--theme-accent:#efc45c;--theme-bg:#faf8ff;--theme-soft:#f2effc;--theme-text:#304967;--theme-hero:linear-gradient(140deg,#9abbe0,#718fc0 55%,#536f9b);--theme-top:linear-gradient(118deg,#536f9b,#718fc0,#9abbe0)}
+[data-month-theme="mayo"]{--theme-primary:#08745a;--theme-secondary:#16a07c;--theme-accent:#d6aa4d;--theme-bg:#f7fbf9;--theme-soft:#eaf7f2;--theme-text:#163b32;--theme-hero:linear-gradient(140deg,#18a783,#08745a 55%,#055141);--theme-top:linear-gradient(118deg,#05483b,#08745a,#18a783)}
+[data-month-theme="junio"]{--theme-primary:#276ea9;--theme-secondary:#4b91cf;--theme-accent:#d7a84a;--theme-bg:#f5f9fc;--theme-soft:#eaf3fb;--theme-text:#1e3a52;--theme-hero:linear-gradient(140deg,#4b91cf,#276ea9 55%,#1c527f);--theme-top:linear-gradient(118deg,#173f62,#276ea9,#4b91cf)}
+[data-month-theme="julio"]{--theme-primary:#08745a;--theme-secondary:#16a982;--theme-accent:#e0b43e;--theme-bg:#f6fbf9;--theme-soft:#e9f8f2;--theme-text:#163b32;--theme-hero:linear-gradient(140deg,#1ab68b,#08745a 55%,#056047);--theme-top:linear-gradient(118deg,#054c3c,#08745a,#1ab68b)}
+[data-month-theme="agosto"]{--theme-primary:#08745a;--theme-secondary:#269b86;--theme-accent:#6da7c7;--theme-bg:#f6fbf9;--theme-soft:#edf7f5;--theme-text:#163b32;--theme-hero:linear-gradient(140deg,#25a58a,#08745a 55%,#056047);--theme-top:linear-gradient(118deg,#054c3c,#08745a,#25a58a)}
+[data-month-theme="septiembre"]{--theme-primary:#006847;--theme-secondary:#008f68;--theme-accent:#ce1126;--theme-bg:#f5faf7;--theme-soft:#eaf6f0;--theme-text:#123c32;--theme-hero:linear-gradient(140deg,#00a876,#006847 55%,#004d35);--theme-top:linear-gradient(118deg,#003d2a,#006847 55%,#00a876)}
+[data-month-theme="octubre"]{--theme-primary:#462068;--theme-secondary:#6b3294;--theme-accent:#f28c28;--theme-bg:#f8f4fb;--theme-soft:#f0e8f7;--theme-text:#271837;--theme-hero:linear-gradient(140deg,#6a3a8f,#462068 55%,#30113f);--theme-top:linear-gradient(118deg,#260d34,#462068,#6a3a8f)}
+[data-month-theme="noviembre"]{--theme-primary:#54206e;--theme-secondary:#8b3b89;--theme-accent:#ef8b27;--theme-bg:#fff8ef;--theme-soft:#fff0df;--theme-text:#312038;--theme-hero:linear-gradient(140deg,#793b91,#54206e 55%,#351343);--theme-top:linear-gradient(118deg,#2a0d38,#54206e,#793b91)}
+[data-month-theme="diciembre"]{--theme-primary:#006b46;--theme-secondary:#00875a;--theme-accent:#c8282d;--theme-bg:#f6faf7;--theme-soft:#eaf5ef;--theme-text:#153d32;--theme-hero:linear-gradient(140deg,#009b62,#006b46 55%,#00452c);--theme-top:linear-gradient(118deg,#003a23,#006b46,#009b62)}
 
-/* ================================================================
-   VARIABLES BASE (ENERO - Año Nuevo)
-   ================================================================ */
-[data-month-theme="enero"],
-html:not([data-month-theme]) {
-  --theme-primary: #0d5d4f;
-  --theme-secondary: #1a8b78;
-  --theme-accent: #d4af37;
-  --theme-background: #f6fbf9;
-  --theme-surface: #ffffff;
-  --theme-text: #163b32;
-  --theme-decoration-opacity: 0.12;
-  --theme-hero-gradient: linear-gradient(140deg, #0d7766 0%, #084d42 53%, #063d37 100%);
-  --theme-topbar-gradient: linear-gradient(118deg, #053f35 0%, #076650 55%, #0b8d6a 100%);
-}
+html[data-month-theme],html[data-month-theme] body{background:var(--theme-bg);color:var(--theme-text)}
+html[data-month-theme] .topbar{background:var(--theme-top);position:relative;overflow:hidden}
+html[data-month-theme] .hero-card{background:var(--theme-hero);position:relative;overflow:hidden}
+html[data-month-theme] .hero-card:after{content:var(--theme-symbol);position:absolute;right:18px;bottom:12px;font-size:68px;line-height:1;color:#fff;opacity:.07;pointer-events:none}
+html[data-month-theme] .period-card,html[data-month-theme] .card,html[data-month-theme] .stat-card,html[data-month-theme] .install-card{border-color:color-mix(in srgb,var(--theme-primary) 15%,transparent);box-shadow:0 10px 28px color-mix(in srgb,var(--theme-primary) 8%,transparent)}
+html[data-month-theme] .eyebrow,html[data-month-theme] .text-button,html[data-month-theme] .progress-value{color:var(--theme-primary)}
+html[data-month-theme] .button-primary{background:linear-gradient(140deg,var(--theme-secondary),var(--theme-primary))}
+html[data-month-theme] .button-secondary,html[data-month-theme] .chip-button{color:var(--theme-primary);border-color:color-mix(in srgb,var(--theme-primary) 24%,#d9e4e0)}
+html[data-month-theme] .progress-track>span{background:linear-gradient(90deg,var(--theme-secondary),var(--theme-primary))}
+html[data-month-theme] input:focus,html[data-month-theme] select:focus,html[data-month-theme] textarea:focus{border-color:var(--theme-secondary);box-shadow:0 0 0 3px color-mix(in srgb,var(--theme-secondary) 14%,transparent)}
+html[data-month-theme] .bottom-nav,html[data-month-theme] nav{border-color:color-mix(in srgb,var(--theme-primary) 12%,#e6eeeb)}
+html[data-month-theme] .bottom-nav .is-active,html[data-month-theme] nav .is-active{color:var(--theme-primary)}
 
-/* ================================================================
-   FEBRERO - San Valentín
-   ================================================================ */
-[data-month-theme="febrero"] {
-  --theme-primary: #c8354a;
-  --theme-secondary: #e8516f;
-  --theme-accent: #d7f4e5;
-  --theme-background: #fef8fa;
-  --theme-surface: #ffffff;
-  --theme-text: #5a1f2a;
-  --theme-decoration-opacity: 0.14;
-  --theme-hero-gradient: linear-gradient(140deg, #d84d62 0%, #c8354a 53%, #a82e40 100%);
-  --theme-topbar-gradient: linear-gradient(118deg, #ad2439 0%, #c8354a 55%, #d84d62 100%);
-}
+.month-decoration{position:absolute;top:7px;right:12px;width:92px;height:34px;pointer-events:none;opacity:.9}
+.month-decoration:before,.month-decoration:after{position:absolute;display:block;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.14))}
+[data-month-theme="enero"] .month-decoration:before{content:"✦  ✧  ✦";color:#f4d699;font-size:21px}
+[data-month-theme="febrero"] .month-decoration:before{content:"♥  ♡  ♥";color:#ffd8e2;font-size:20px}
+[data-month-theme="marzo"] .month-decoration:before{content:"✿  ❀  ✿";color:#ffd0dc;font-size:20px}
+[data-month-theme="abril"] .month-decoration:before{content:"✦  ◌  ✦";color:#fff0a8;font-size:20px}
+[data-month-theme="mayo"] .month-decoration:before{content:"✚  ✦";color:#f0d58b;font-size:20px}
+[data-month-theme="junio"] .month-decoration:before{content:"♥  ✦";color:#d7eaff;font-size:20px}
+[data-month-theme="julio"] .month-decoration:before{content:"$  ✦  $";color:#f3d166;font-size:20px;font-weight:900}
+[data-month-theme="agosto"] .month-decoration:before{content:"✓  ✦";color:#d9efff;font-size:20px}
+[data-month-theme="septiembre"] .month-decoration:before{content:"▾ ▾ ▾ ▾";color:#f5ead7;font-size:25px;text-shadow:-20px 0 #008f68,20px 0 #ce1126}
+[data-month-theme="septiembre"] .month-decoration:after{content:"¡Viva!";right:0;bottom:0;color:#fff;font-size:9px;font-weight:800}
+[data-month-theme="octubre"] .month-decoration:before{content:"☾  ✦";color:#ffd09a;font-size:22px}
+[data-month-theme="octubre"] .month-decoration:after{content:"⌁";right:8px;color:#e4c7ff;font-size:24px}
+[data-month-theme="noviembre"] .month-decoration:before{content:"✿  ✦  ✿";color:#ffc768;font-size:20px}
+[data-month-theme="diciembre"] .month-decoration:before{content:"✦  ❄  ✦";color:#ffe4a1;font-size:20px}
 
-/* ================================================================
-   MARZO - Primavera
-   ================================================================ */
-[data-month-theme="marzo"] {
-  --theme-primary: #4a9d5f;
-  --theme-secondary: #72c584;
-  --theme-accent: #f4b5a0;
-  --theme-background: #f8fdf5;
-  --theme-surface: #ffffff;
-  --theme-text: #2a5a36;
-  --theme-decoration-opacity: 0.13;
-  --theme-hero-gradient: linear-gradient(140deg, #5fb574 0%, #4a9d5f 53%, #3a7d4a 100%);
-  --theme-topbar-gradient: linear-gradient(118deg, #3a7d4a 0%, #4a9d5f 55%, #5fb574 100%);
-}
+.monthly-theme-badge{display:flex;align-items:center;gap:9px;width:max-content;max-width:100%;margin-top:14px;padding:7px 11px;border:1px solid rgba(255,255,255,.25);border-radius:14px;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);color:#fff;position:relative;z-index:2}
+.monthly-theme-badge small,.monthly-theme-badge strong{display:block}.monthly-theme-badge small{font-size:9px;text-transform:uppercase;letter-spacing:.08em;opacity:.78}.monthly-theme-badge strong{font-size:13px;margin-top:1px}.monthly-theme-symbol{display:grid;place-items:center;width:29px;height:29px;border-radius:10px;background:rgba(255,255,255,.15);color:#fff;font-weight:900}
 
-/* ================================================================
-   ABRIL - Pascua
-   ================================================================ */
-[data-month-theme="abril"] {
-  --theme-primary: #3979bb;
-  --theme-secondary: #76addb;
-  --theme-accent: #f4c547;
-  --theme-background: #f9f8fd;
-  --theme-surface: #ffffff;
-  --theme-text: #244566;
-  --theme-decoration-opacity: 0.12;
-  --theme-hero-gradient: linear-gradient(140deg, #8fb2d4 0%, #7b9ec6 53%, #6080a8 100%);
-  --theme-topbar-gradient: linear-gradient(118deg, #5d7a9a 0%, #7b9ec6 55%, #8fb2d4 100%);
-}
+[data-month-theme="septiembre"] .hero-card{background-image:radial-gradient(circle at 90% 20%,rgba(206,17,38,.20),transparent 24%),var(--theme-hero)}
+[data-month-theme="octubre"] .hero-card{background-image:radial-gradient(circle at 88% 18%,rgba(242,140,40,.22),transparent 22%),var(--theme-hero)}
+[data-month-theme="noviembre"] .hero-card{background-image:radial-gradient(circle at 88% 18%,rgba(242,140,40,.26),transparent 25%),var(--theme-hero)}
+[data-month-theme="diciembre"] .hero-card{background-image:radial-gradient(circle at 88% 18%,rgba(200,40,45,.20),transparent 24%),var(--theme-hero)}
 
-/* ================================================================
-   MAYO - Enfermería
-   ================================================================ */
-[data-month-theme="mayo"] {
-  --theme-primary: #af4f74;
-  --theme-secondary: #d67799;
-  --theme-accent: #f3bed0;
-  --theme-background: #fff9fb;
-  --theme-surface: #ffffff;
-  --theme-text: #5f2940;
-  --theme-decoration-opacity: 0.11;
-  --theme-hero-gradient: linear-gradient(140deg, #d67799 0%, #af4f74 53%, #87334f 100%);
-  --theme-topbar-gradient: linear-gradient(118deg, #87334f 0%, #af4f74 55%, #d67799 100%);
-}
-
-/* ================================================================
-   JUNIO - Día del Padre
-   ================================================================ */
-[data-month-theme="junio"] {
-  --theme-primary: #2477c8;
-  --theme-secondary: #4a90e2;
-  --theme-accent: #1a5c99;
-  --theme-background: #f5f9fc;
-  --theme-surface: #ffffff;
-  --theme-text: #1e3a52;
-  --theme-decoration-opacity: 0.12;
-  --theme-hero-gradient: linear-gradient(140deg, #3a85d9 0%, #2477c8 53%, #1a5c99 100%);
-  --theme-topbar-gradient: linear-gradient(118deg, #1a4d7a 0%, #2477c8 55%, #3a85d9 100%);
-}
-
-/* ================================================================
-   JULIO - Fondo de Ahorro
-   ================================================================ */
-[data-month-theme="julio"] {
-  --theme-primary: #0b8d6a;
-  --theme-secondary: #1ac291;
-  --theme-accent: #f4c547;
-  --theme-background: #f6fbf9;
-  --theme-surface: #ffffff;
-  --theme-text: #163b32;
-  --theme-decoration-opacity: 0.15;
-  --theme-hero-gradient: linear-gradient(140deg, #17b88a 0%, #0b8d6a 53%, #078054 100%);
-  --theme-topbar-gradient: linear-gradient(118deg, #065c4a 0%, #0b8d6a 55%, #17b88a 100%);
-}
-
-/* ================================================================
-   AGOSTO - Regreso
-   ================================================================ */
-[data-month-theme="agosto"] {
-  --theme-primary: #0b8d6a;
-  --theme-secondary: #1aaf8a;
-  --theme-accent: #7eb8d4;
-  --theme-background: #f6fbf9;
-  --theme-surface: #ffffff;
-  --theme-text: #163b32;
-  --theme-decoration-opacity: 0.11;
-  --theme-hero-gradient: linear-gradient(140deg, #13a47d 0%, #0b8d6a 53%, #07754f 100%);
-  --theme-topbar-gradient: linear-gradient(118deg, #065c4a 0%, #0b8d6a 55%, #13a47d 100%);
-}
-
-/* ================================================================
-   SEPTIEMBRE - ¡Viva México!
-   ================================================================ */
-[data-month-theme="septiembre"] {
-  --theme-primary: #006847;
-  --theme-secondary: #008f68;
-  --theme-accent: #ce1126;
-  --theme-background: #f5faf7;
-  --theme-surface: #ffffff;
-  --theme-text: #123c32;
-  --theme-decoration-opacity: 0.14;
-  --theme-hero-gradient: linear-gradient(140deg, #00a876 0%, #006847 53%, #004d35 100%);
-  --theme-topbar-gradient: linear-gradient(118deg, #003d2a 0%, #006847 55%, #00a876 100%);
-}
-
-/* ================================================================
-   OCTUBRE - Halloween
-   ================================================================ */
-[data-month-theme="octubre"] {
-  --theme-primary: #462068;
-  --theme-secondary: #6b3294;
-  --theme-accent: #f28c28;
-  --theme-background: #f8f4fb;
-  --theme-surface: #ffffff;
-  --theme-text: #271837;
-  --theme-decoration-opacity: 0.13;
-  --theme-hero-gradient: linear-gradient(140deg, #5d3d8a 0%, #462068 53%, #351547 100%);
-  --theme-topbar-gradient: linear-gradient(118deg, #2a0f37 0%, #462068 55%, #5d3d8a 100%);
-}
-
-/* ================================================================
-   NOVIEMBRE - Día de Muertos
-   ================================================================ */
-[data-month-theme="noviembre"] {
-  --theme-primary: #54206e;
-  --theme-secondary: #933c8f;
-  --theme-accent: #f28c28;
-  --theme-background: #fff8ef;
-  --theme-surface: #ffffff;
-  --theme-text: #312038;
-  --theme-decoration-opacity: 0.14;
-  --theme-hero-gradient: linear-gradient(140deg, #6b3a99 0%, #54206e 53%, #3d1654 100%);
-  --theme-topbar-gradient: linear-gradient(118deg, #2d0f42 0%, #54206e 55%, #6b3a99 100%);
-}
-
-/* ================================================================
-   DICIEMBRE - Feliz Navidad
-   ================================================================ */
-[data-month-theme="diciembre"] {
-  --theme-primary: #006b46;
-  --theme-secondary: #00875a;
-  --theme-accent: #c8282d;
-  --theme-background: #f6faf7;
-  --theme-surface: #ffffff;
-  --theme-text: #153d32;
-  --theme-decoration-opacity: 0.12;
-  --theme-hero-gradient: linear-gradient(140deg, #00a056 0%, #006b46 53%, #004d2f 100%);
-  --theme-topbar-gradient: linear-gradient(118deg, #003a23 0%, #006b46 55%, #00a056 100%);
-}
-
-/* ================================================================
-   APLICAR VARIABLES A COMPONENTES
-   ================================================================ */
-
-html[data-month-theme] {
-  background: var(--theme-background);
-}
-
-html[data-month-theme] body {
-  color: var(--theme-text);
-  background: var(--theme-background);
-}
-
-html[data-month-theme] .topbar {
-  background: var(--theme-topbar-gradient);
-}
-
-html[data-month-theme] .hero-card {
-  background: var(--theme-hero-gradient);
-}
-
-html[data-month-theme] .eyebrow {
-  color: var(--theme-primary);
-}
-
-html[data-month-theme] .button-primary {
-  background: linear-gradient(140deg, var(--theme-secondary), var(--theme-primary));
-}
-
-html[data-month-theme] .button-secondary {
-  color: var(--theme-primary);
-}
-
-html[data-month-theme] .text-button {
-  color: var(--theme-primary);
-}
-
-html[data-month-theme] .progress-track > span {
-  background: linear-gradient(90deg, var(--theme-secondary), var(--theme-primary));
-}
-
-html[data-month-theme] .progress-value {
-  color: var(--theme-primary);
-}
-
-/* Decoración ligera: siempre queda fuera del contenido y no cambia los datos. */
-html[data-month-theme] .topbar {
-  position: relative;
-  overflow: hidden;
-}
-
-.month-decoration {
-  position: absolute;
-  top: 7px;
-  right: 14px;
-  width: 72px;
-  height: 34px;
-  pointer-events: none;
-  opacity: .92;
-}
-
-.month-decoration::before,
-.month-decoration::after {
-  position: absolute;
-  display: block;
-  font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif;
-  line-height: 1;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .16));
-}
-
-html[data-month-theme="enero"] .month-decoration::before { content: "✦  ✧"; color: #f4d699; font-size: 23px; top: 2px; left: 4px; }
-html[data-month-theme="febrero"] .month-decoration::before { content: "♥  ♥"; color: #ffd9e2; font-size: 21px; top: 3px; left: 4px; }
-html[data-month-theme="marzo"] .month-decoration::before { content: "✿  ♡"; color: #ffd1df; font-size: 22px; top: 2px; left: 4px; }
-html[data-month-theme="abril"] .month-decoration::before { content: "★  ✦"; color: #fff0a8; font-size: 22px; top: 2px; left: 4px; }
-html[data-month-theme="mayo"] .month-decoration::before { content: "✿  ✿"; color: #ffd5e1; font-size: 22px; top: 2px; left: 4px; }
-html[data-month-theme="junio"] .month-decoration::before { content: "●  ♥"; color: #cfe7ff; font-size: 20px; top: 4px; left: 6px; }
-html[data-month-theme="julio"] .month-decoration::before { content: "●  ●"; color: #f4c547; font-size: 18px; top: 4px; left: 5px; }
-html[data-month-theme="julio"] .month-decoration::after { content: "▰"; color: #c6f0d7; font-size: 25px; top: 1px; right: 6px; transform: rotate(-12deg); }
-html[data-month-theme="agosto"] .month-decoration::before { content: "✎  □"; color: #d7efff; font-size: 22px; top: 2px; left: 5px; }
-
-/* Septiembre: cinco banderines pequeños, sin ocupar los datos. */
-html[data-month-theme="septiembre"] .month-decoration {
-  top: 5px;
-  right: 9px;
-  width: 104px;
-  height: 38px;
-  background: linear-gradient(#f6f1d7, #f6f1d7) 4px 4px / 96px 2px no-repeat;
-}
-html[data-month-theme="septiembre"] .month-decoration::before {
-  content: "▾ ▾ ▾ ▾ ▾";
-  color: #e9f5ef;
-  font-family: Georgia, serif;
-  font-size: 25px;
-  letter-spacing: 1px;
-  top: 0;
-  left: 3px;
-  text-shadow: -21px 0 #008f68, 21px 0 #ce1126;
-}
-html[data-month-theme="septiembre"] .month-decoration::after {
-  content: "¡Viva!";
-  color: #f7f2df;
-  font-size: 8px;
-  font-weight: 800;
-  right: 0;
-  bottom: 1px;
-}
-
-html[data-month-theme="octubre"] .month-decoration::before { content: "◒  ✦"; color: #ffd19a; font-size: 22px; top: 2px; left: 4px; }
-html[data-month-theme="octubre"] .month-decoration::after { content: "⌁"; color: #e4c7ff; font-size: 24px; top: 1px; right: 7px; }
-html[data-month-theme="noviembre"] .month-decoration::before { content: "✿  ✦"; color: #ffc768; font-size: 22px; top: 2px; left: 4px; }
-html[data-month-theme="diciembre"] .month-decoration::before { content: "✦  ●"; color: #ffe4a1; font-size: 22px; top: 2px; left: 4px; }
-
-@media (prefers-reduced-motion: no-preference) {
-  .month-decoration { animation: month-decoration-float 5.5s ease-in-out infinite; }
-}
-
-@keyframes month-decoration-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
-}
-
-@media (max-width: 420px) {
-  .month-decoration { right: 8px; transform: scale(.88); transform-origin: right top; }
-}
-
-@media print {
-  .month-decoration { display: none; }
-}
+@media(prefers-reduced-motion:no-preference){.month-decoration{animation:month-float 5.5s ease-in-out infinite}}@keyframes month-float{50%{transform:translateY(-2px)}}
+@media(max-width:420px){.month-decoration{right:7px;transform:scale(.86);transform-origin:right top}.monthly-theme-badge{padding:6px 9px}.monthly-theme-badge strong{font-size:12px}}
+@media print{.month-decoration,.monthly-theme-badge{display:none!important}}
