@@ -1,4 +1,4 @@
-/* BIOMETRIMSS · SEPTIEMBRE — ¡Viva México! · v5.6 */
+/* BIOMETRIMSS · SEPTIEMBRE — ¡Viva México! · v5.8 */
 html[data-month-theme="septiembre"]{--sep-green:#006847;--sep-green-2:#008f68;--sep-red:#ce1126;--sep-gold:#d5b04c;--sep-ink:#153c35;--sep-mint:#e7f5f1}
 html[data-month-theme="septiembre"] body{background:#dcefeb;color:var(--sep-ink)}
 html[data-month-theme="septiembre"] .app-shell{background:linear-gradient(180deg,#d8ede8 0,#f7fbfa 52%,#edf7f4 100%)}
@@ -63,3 +63,205 @@ html[data-month-theme="septiembre"] .nav-item.is-active{color:#006847;background
 @media(max-width:600px){html[data-month-theme="septiembre"] .topbar{min-height:108px;padding:20px 14px}html[data-month-theme="septiembre"] .brand strong{font-size:19px}html[data-month-theme="septiembre"] .brand small{font-size:8px}html[data-month-theme="septiembre"] .sep-viva{font-size:16px;right:15%;top:18px}html[data-month-theme="septiembre"] .sep-month{font-size:6px;right:10%;top:57px}html[data-month-theme="septiembre"] #view-home>.hero-card{min-height:420px;padding:58px 43% 112px 18px}html[data-month-theme="septiembre"] .hero-card h1{font-size:34px}html[data-month-theme="septiembre"] .hero-card .hero-message{font-size:14px;max-width:64%}html[data-month-theme="septiembre"] .sep-character{right:-12px;top:54px;height:276px;width:48%}html[data-month-theme="septiembre"] .sep-theme-label{left:18px;bottom:106px;font-size:11px;padding:8px 9px 8px 34px}html[data-month-theme="septiembre"] .quick-actions{left:15px;right:15px;bottom:16px;gap:9px}html[data-month-theme="septiembre"] .quick-actions .button{min-height:64px;font-size:15px}html[data-month-theme="septiembre"] #view-home>.stats-grid{gap:8px}html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{min-height:112px;padding:13px 8px}html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card strong{font-size:29px}html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card>span:last-child{font-size:10px}}
 @media(max-width:390px){html[data-month-theme="septiembre"] .brand{max-width:58%}html[data-month-theme="septiembre"] .sep-viva{font-size:14px}html[data-month-theme="septiembre"] #view-home>.hero-card{padding-right:42%}html[data-month-theme="septiembre"] .hero-card .hero-message{max-width:60%}}
 @media print{html[data-month-theme="septiembre"] .sep-header-art,html[data-month-theme="septiembre"] .sep-papel,html[data-month-theme="septiembre"] .sep-confetti,html[data-month-theme="septiembre"] .sep-theme-label,html[data-month-theme="septiembre"] .sep-architecture,html[data-month-theme="septiembre"] .sep-character{display:none!important}}
+
+
+/* Ajuste de fidelidad móvil · referencia maestra · v5.8 */
+html[data-month-theme="septiembre"] .sep-viva{
+  width:132px;
+  white-space:normal;
+  text-wrap:balance;
+  line-height:.76;
+}
+html[data-month-theme="septiembre"] #view-home>.hero-card{
+  min-height:456px;
+  background:
+    radial-gradient(circle at 16% 108%,rgba(0,57,46,.78),transparent 42%),
+    radial-gradient(circle at 86% 110%,rgba(0,54,43,.62),transparent 43%),
+    linear-gradient(112deg,#079477 0%,#07846b 48%,#056653 100%);
+}
+html[data-month-theme="septiembre"] .sep-papel{
+  left:24px;
+  gap:0;
+}
+html[data-month-theme="septiembre"] .sep-papel span{
+  width:62px;
+  height:44px;
+  margin-right:-3px;
+  background-color:#fff;
+  background-image:
+    radial-gradient(circle at 18% 30%,transparent 0 3px,rgba(0,90,66,.18) 3.5px 5px,transparent 5.5px),
+    radial-gradient(circle at 50% 30%,transparent 0 3px,rgba(0,90,66,.18) 3.5px 5px,transparent 5.5px),
+    radial-gradient(circle at 82% 30%,transparent 0 3px,rgba(0,90,66,.18) 3.5px 5px,transparent 5.5px);
+  clip-path:polygon(0 0,100% 0,100% 72%,86% 89%,72% 76%,57% 94%,43% 77%,28% 94%,14% 78%,0 91%);
+}
+html[data-month-theme="septiembre"] .sep-character{
+  right:-8px;
+  top:39px;
+  width:52%;
+  height:338px;
+  object-position:right bottom;
+  filter:drop-shadow(0 12px 10px rgba(0,0,0,.2));
+}
+html[data-month-theme="septiembre"] .hero-card h1{
+  max-width:54%;
+  letter-spacing:-.025em;
+}
+html[data-month-theme="septiembre"] .hero-card .hero-message{
+  max-width:48%;
+}
+html[data-month-theme="septiembre"] .sep-theme-label{
+  min-width:300px;
+  border-color:#cfae64;
+  background:linear-gradient(90deg,#fffdf5,#fff7dc);
+  font-family:Georgia,"Times New Roman",serif;
+  font-style:italic;
+}
+html[data-month-theme="septiembre"] #view-home>.period-card{
+  background-color:#fff;
+  background-image:
+    radial-gradient(circle at 5% 92%,transparent 0 15px,rgba(0,143,104,.10) 16px 18px,transparent 19px),
+    radial-gradient(circle at 94% 78%,transparent 0 18px,rgba(206,17,38,.09) 19px 21px,transparent 22px);
+}
+html[data-month-theme="septiembre"] #view-home>.period-card:after{
+  content:"◠";
+  position:absolute;
+  right:13%;
+  bottom:12px;
+  color:rgba(0,104,71,.16);
+  font-size:70px;
+  font-weight:900;
+  transform:rotate(9deg) scaleX(1.45);
+  pointer-events:none;
+}
+html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{
+  background-color:#fff;
+  background-image:
+    radial-gradient(circle at 100% 100%,transparent 0 20px,rgba(0,143,104,.10) 21px 23px,transparent 24px),
+    radial-gradient(circle at 0 0,transparent 0 13px,rgba(206,17,38,.07) 14px 16px,transparent 17px);
+}
+html[data-month-theme="septiembre"] #view-home>.progress-card{
+  background:
+    radial-gradient(circle at 96% 84%,transparent 0 21px,rgba(0,104,71,.10) 22px 25px,transparent 26px),
+    #fff;
+}
+html[data-month-theme="septiembre"] .bottom-nav{
+  overflow:visible;
+  padding-bottom:34px;
+  background:
+    linear-gradient(8deg,transparent 0 78%,rgba(0,104,71,.06) 79% 81%,transparent 82%),
+    rgba(255,255,255,.985);
+}
+html[data-month-theme="septiembre"] .bottom-nav:before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-1px;
+  height:18px;
+  background:
+    linear-gradient(7deg,transparent 0 27%,#00865f 28% 39%,#fff 40% 52%,#ce1126 53% 65%,transparent 66%);
+  opacity:.95;
+  pointer-events:none;
+}
+html[data-month-theme="septiembre"] .bottom-nav:after{
+  bottom:17px;
+  z-index:2;
+}
+
+@media(max-width:600px){
+  html[data-month-theme="septiembre"] .topbar{
+    min-height:116px;
+    padding:20px 15px;
+  }
+  html[data-month-theme="septiembre"] .brand-mark{
+    width:54px;
+    height:54px;
+  }
+  html[data-month-theme="septiembre"] .brand strong{font-size:21px}
+  html[data-month-theme="septiembre"] .brand small{font-size:8.5px}
+  html[data-month-theme="septiembre"] .sep-header-art{
+    width:47%;
+    height:108px;
+    right:2%;
+    top:4px;
+  }
+  html[data-month-theme="septiembre"] .sep-viva{
+    width:95px;
+    right:16%;
+    top:17px;
+    font-size:22px;
+    line-height:.76;
+  }
+  html[data-month-theme="septiembre"] .sep-month{
+    right:11%;
+    top:70px;
+    font-size:6px;
+  }
+  html[data-month-theme="septiembre"] .sep-flag{font-size:23px}
+  html[data-month-theme="septiembre"] #view-home{
+    padding-top:26px;
+    padding-left:14px;
+    padding-right:14px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.hero-card{
+    min-height:452px;
+    padding:63px 45% 114px 20px;
+    border-radius:26px;
+  }
+  html[data-month-theme="septiembre"] .hero-card h1{
+    max-width:100%;
+    font-size:36px;
+    line-height:1.02;
+  }
+  html[data-month-theme="septiembre"] .hero-card .hero-message{
+    max-width:100%;
+    font-size:14px;
+    line-height:1.4;
+  }
+  html[data-month-theme="septiembre"] .shift-badge{
+    right:14px;
+    top:19px;
+    padding:9px 15px;
+  }
+  html[data-month-theme="septiembre"] .sep-papel{
+    left:20px;
+  }
+  html[data-month-theme="septiembre"] .sep-papel span{
+    width:43px;
+    height:37px;
+  }
+  html[data-month-theme="septiembre"] .sep-character{
+    right:-9px;
+    top:50px;
+    width:52%;
+    height:324px;
+  }
+  html[data-month-theme="septiembre"] .sep-theme-label{
+    left:18px;
+    bottom:107px;
+    min-width:0;
+    max-width:55%;
+    padding:9px 10px 9px 34px;
+    font-size:11px;
+  }
+  html[data-month-theme="septiembre"] .quick-actions{
+    left:15px;
+    right:15px;
+    bottom:17px;
+    gap:10px;
+  }
+  html[data-month-theme="septiembre"] .quick-actions .button{
+    min-height:72px;
+    border-radius:18px;
+    font-size:16px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.period-card{
+    padding:23px 22px 21px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{
+    min-height:116px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card>span:last-child{
+    font-size:11px;
+  }
+}
