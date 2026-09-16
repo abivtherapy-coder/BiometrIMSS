@@ -26,7 +26,7 @@
     const link = document.createElement("link");
     link.id = "septemberVivaStyles";
     link.rel = "stylesheet";
-    link.href = "themes/september-viva.css?v=5.4.0";
+    link.href = "themes/september-viva.css?v=5.5.0";
     document.head.append(link);
   }
 
@@ -36,6 +36,21 @@
     if (text) el.textContent = text;
     el.setAttribute("aria-hidden", "true");
     return el;
+  }
+
+  function normalizePermissionLabels() {
+    const justifiedStat = document.getElementById("statJustified");
+    const justifiedCard = justifiedStat && justifiedStat.closest(".stat-card");
+    const justifiedLabel = justifiedCard && justifiedCard.querySelector("span:last-child");
+    if (justifiedLabel) justifiedLabel.textContent = "Permisos";
+
+    const select = document.getElementById("statusOverride");
+    if (select) {
+      const legacy = select.querySelector('option[value="justificada"]');
+      if (legacy) legacy.remove();
+      const permission = select.querySelector('option[value="permiso"]');
+      if (permission) permission.textContent = "Permiso / incidencia justificada";
+    }
   }
 
   function decorateSeptember() {
@@ -70,9 +85,10 @@
     if (period) period.append(make("span", "sep-ribbon"));
 
     home.querySelectorAll(":scope > .stats-grid .stat-card").forEach((card, index) => {
-      const flower = make("span", `sep-stat-flower sep-stat-flower-${index + 1}`);
-      const sprinkle = make("span", `sep-stat-sprinkle sep-stat-sprinkle-${index + 1}`);
-      card.append(flower, sprinkle);
+      card.append(
+        make("span", `sep-stat-flower sep-stat-flower-${index + 1}`),
+        make("span", `sep-stat-sprinkle sep-stat-sprinkle-${index + 1}`)
+      );
     });
 
     const progress = home.querySelector(":scope > .progress-card");
@@ -89,6 +105,7 @@
     document.documentElement.style.setProperty("--theme-symbol", `"${symbol}"`);
     document.documentElement.style.setProperty("--theme-label", `"${label}"`);
     ensureSeasonalStyles(id);
+    normalizePermissionLabels();
 
     const header = document.querySelector(".topbar");
     if (header && !header.querySelector(".month-decoration")) {
