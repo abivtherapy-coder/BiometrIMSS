@@ -1,10 +1,10 @@
-const CACHE_NAME = "biometrimss-v5.4.0";
+const CACHE_NAME = "biometrimss-v5.5.0";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./style.css?v=4.9.0",
   "./themes/monthly-theme.css?v=4.9.0",
-  "./themes/monthly-theme.js?v=4.9.0",
+  "./themes/monthly-theme.js?v=5.5.0",
   "./logic.js?v=4.9.0",
   "./report-image.js?v=4.9.0",
   "./app.js?v=4.9.0",
@@ -19,6 +19,8 @@ const APP_SHELL = [
   "./assets/abit-ai-states-sticker-sheet-v1.png",
   "./assets/biometrimss-avatar-icon-v3.png",
   "./assets/biometrimss-logo-transparent-v1.png?v=4.9.0",
+  "./assets/DD8ADD59-010C-4F1A-8763-448A17FC021B.png",
+  "./assets/F226F542-3898-4479-8A6A-7C0837ED127C.png",
   "./vendor/pdfjs/pdf.min.mjs",
   "./vendor/pdfjs/pdf.worker.min.mjs",
   "./vendor/pdf-lib/pdf-lib.min.js"
@@ -48,7 +50,9 @@ self.addEventListener("fetch", (event) => {
 
   if (url.pathname.endsWith("/report-image.js") ||
       url.pathname.endsWith("/themes/monthly-theme.js") ||
-      url.pathname.endsWith("/themes/september-viva.css")) {
+      url.pathname.endsWith("/themes/september-viva.css") ||
+      url.pathname.endsWith("/assets/DD8ADD59-010C-4F1A-8763-448A17FC021B.png") ||
+      url.pathname.endsWith("/assets/F226F542-3898-4479-8A6A-7C0837ED127C.png")) {
     event.respondWith(
       fetch(event.request).then((response) => {
         if (response.ok) caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
