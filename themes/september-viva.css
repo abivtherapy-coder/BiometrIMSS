@@ -103,7 +103,7 @@ html[data-month-theme="septiembre"] .sep-character{
   filter:drop-shadow(0 12px 10px rgba(0,0,0,.2));
 }
 html[data-month-theme="septiembre"] .hero-card h1{
-  max-width:54%;
+  max-width:60%;
   letter-spacing:-.025em;
 }
 html[data-month-theme="septiembre"] .hero-card .hero-message{
@@ -123,14 +123,16 @@ html[data-month-theme="septiembre"] #view-home>.period-card{
     radial-gradient(circle at 94% 78%,transparent 0 18px,rgba(206,17,38,.09) 19px 21px,transparent 22px);
 }
 html[data-month-theme="septiembre"] #view-home>.period-card:after{
-  content:"◠";
+  content:"";
   position:absolute;
   right:13%;
   bottom:12px;
-  color:rgba(0,104,71,.16);
-  font-size:70px;
-  font-weight:900;
-  transform:rotate(9deg) scaleX(1.45);
+  width:86px;
+  height:34px;
+  border:7px double rgba(0,104,71,.14);
+  border-bottom:0;
+  border-radius:90px 90px 0 0;
+  transform:rotate(9deg);
   pointer-events:none;
 }
 html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{

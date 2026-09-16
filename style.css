@@ -1263,8 +1263,31 @@ h2 {
 }
 
 .history-record-body {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 11px;
   min-width: 0;
   padding: 13px;
+}
+
+.history-record-copy { min-width: 0; }
+
+.record-state-avatar,
+.report-state-avatar {
+  overflow: hidden;
+  flex: 0 0 auto;
+  background-color: #f5faf8;
+  background-image: url("assets/8F8128EE-95A3-40A1-9F22-F895C79C4976.png");
+  background-repeat: no-repeat;
+  background-size: 413% 551%;
+  box-shadow: inset 0 0 0 1px rgba(8,116,90,.12), 0 3px 8px rgba(6,61,52,.08);
+}
+
+.record-state-avatar {
+  display: block;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
 }
 
 .history-record .record-note {
@@ -1577,22 +1600,19 @@ h2 {
   border-radius: 9px;
   vertical-align: middle;
   background-color: #effbf7;
-  background-repeat: no-repeat;
-  box-shadow: inset 0 0 0 1px rgba(8, 116, 90, .12);
 }
 
-.report-state-avatar { display: inline-grid; place-items: center; font-weight: 900; }
-.report-state-avatar::after { font-size: 1rem; line-height: 1; }
-.report-state-avatar.avatar-complete { color: var(--green-800); background: var(--green-100); }
-.report-state-avatar.avatar-complete::after { content: "✓"; }
-.report-state-avatar.avatar-schedule { color: #627873; background: #edf2f0; }
-.report-state-avatar.avatar-schedule::after { content: "•"; font-size: 1.8rem; }
-.report-state-avatar.avatar-vacation { color: #9a5d0b; background: #fff2d9; }
-.report-state-avatar.avatar-vacation::after { content: "☀"; }
-.report-state-avatar.avatar-care { color: #8d3d85; background: #fae8f7; }
-.report-state-avatar.avatar-care::after { content: "+"; font-size: 1.4rem; }
-.report-state-avatar.avatar-alert { background-image: url("assets/abisai-pase-entrada.png"); background-position: center; background-size: 135%; }
-.report-state-avatar.avatar-exit { background-image: url("assets/abisai-pase-salida.png"); background-position: center; background-size: 135%; }
+.avatar-tolerancia{background-position:1.8% 41.5%}
+.avatar-pase-entrada{background-position:34.8% 41.5%}
+.avatar-pase-salida{background-position:66.8% 41.5%}
+.avatar-omision-entrada{background-position:98.8% 41.5%}
+.avatar-omision-salida{background-position:1.8% 63.2%}
+.avatar-permiso{background-position:34.8% 63.2%}
+.avatar-incapacidad{background-position:66.8% 63.2%}
+.avatar-convenio{background-position:98.8% 63.2%}
+.avatar-vacaciones{background-position:1.8% 86.2%}
+.avatar-festivo{background-position:34.8% 86.2%}
+.avatar-falta{background-position:66.8% 86.2%}
 .digital-report-footer { padding: 13px 18px; border-top: 1px solid var(--line); color: var(--muted); background: #f8fcfa; font-size: .65rem; line-height: 1.45; }
 
 .assistant-hero {

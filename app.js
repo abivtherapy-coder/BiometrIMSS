@@ -3,7 +3,7 @@
 
   const L = window.BiometrLogic;
   const R = window.BiometrReport;
-  const APP_VERSION = "2.9.0";
+  const APP_VERSION = "2.10.0";
   const STORAGE = {
     settings: "biometrimss:v2:settings",
     records: "biometrimss:v2:records",
@@ -780,15 +780,18 @@
       <article class="history-record">
         <div class="history-date"><strong>${date.getDate()}</strong><span>${shortMonth(date)}</span></div>
         <div class="history-record-body">
-          <div class="record-main">
-            <strong>${capitalize(weekday(date))}</strong>
-            <span class="record-status status-${evaluation.category} status-code-${evaluation.status}">${evaluation.label}</span>
-          </div>
-          ${recordTimes(record)}
-          ${record.notes ? `<p class="record-note">${escapeHtml(record.notes)}</p>` : ""}
-          <div class="record-actions">
-            <button class="button button-secondary" type="button" data-edit="${record.id}">Editar</button>
-            <button class="button button-secondary delete-record" type="button" data-delete="${record.id}">Eliminar</button>
+          <span class="record-state-avatar avatar-${reportAvatarName(evaluation.status)}" role="img" aria-label="Avatar: ${escapeHtml(evaluation.label)}"></span>
+          <div class="history-record-copy">
+            <div class="record-main">
+              <strong>${capitalize(weekday(date))}</strong>
+              <span class="record-status status-${evaluation.category} status-code-${evaluation.status}">${evaluation.status === "justificada" ? "Permiso" : evaluation.label}</span>
+            </div>
+            ${recordTimes(record)}
+            ${record.notes ? `<p class="record-note">${escapeHtml(record.notes)}</p>` : ""}
+            <div class="record-actions">
+              <button class="button button-secondary" type="button" data-edit="${record.id}">Editar</button>
+              <button class="button button-secondary delete-record" type="button" data-delete="${record.id}">Eliminar</button>
+            </div>
           </div>
         </div>
       </article>`;
@@ -1006,7 +1009,7 @@
       <section class="digital-report-summary" aria-label="Resumen del periodo">
         ${summaryButton("all", "Guardias", total)}
         ${summaryButton("efectiva", "Efectivas", effective)}
-        ${summaryButton("justified", "Justificadas", justified)}
+        ${summaryButton("justified", "Permisos", justified)}
         ${summaryButton("falta", "Faltas reales", absences, "report-total-absence")}
         ${summaryButton("pendiente", "Pendientes", pending)}
         ${summaryButton("incident", "Incidencias", incidents)}
@@ -1021,12 +1024,15 @@
   }
 
   function reportAvatarName(status) {
-    if (status === "vacaciones") return "vacation";
-    if (status === "incapacidad") return "care";
-    if (status === "pendiente" || status === "festivo") return "schedule";
-    if (status === "pase-salida" || status === "salida-anticipada") return "exit";
-    if (["retardo", "omision-entrada", "omision-salida", "falta", "fuera-horario"].includes(status)) return "alert";
-    return "complete";
+    const names = {
+      efectiva: "tolerancia", retardo: "pase-entrada", "fuera-horario": "pase-entrada",
+      "pase-salida": "pase-salida", "salida-anticipada": "pase-salida",
+      "omision-entrada": "omision-entrada", "omision-salida": "omision-salida",
+      justificada: "permiso", permiso: "permiso", incapacidad: "incapacidad",
+      convenio: "convenio", vacaciones: "vacaciones", festivo: "festivo",
+      pendiente: "festivo", falta: "falta"
+    };
+    return names[status] || "tolerancia";
   }
 
   async function exportPdf(event) {
@@ -1059,6 +1065,15 @@
   async function createDigitalPdf(model) {
     const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
     const pdf = await PDFDocument.create();
+    const pdfAvatars = {};
+    for (const status of [...new Set(model.rows.map((row) => row.status))]) {
+      try {
+        const avatarBlob = await R.renderStatusAvatarBlob(status, 96);
+        pdfAvatars[status] = await pdf.embedPng(new Uint8Array(await avatarBlob.arrayBuffer()));
+      } catch (error) {
+        console.warn("No se pudo incrustar un avatar en el PDF.", status, error);
+      }
+    }
     const regular = await pdf.embedFont(StandardFonts.Helvetica);
     const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
     const pageSize = [595.28, 841.89];
@@ -1092,7 +1107,7 @@
     const summary = model.summary;
     const justified = (summary.justificada || 0) + (summary.incapacidad || 0) + (summary.permiso || 0) + (summary.convenio || 0) + (summary.vacaciones || 0) + (summary.festivo || 0);
     const incidents = model.incidentCount;
-    const summaryItems = [["Guardias", model.rows.length], ["Efectivas", summary.efectiva || 0], ["Justificadas", justified], ["Faltas reales", summary.falta || 0], ["Pendientes", summary.pendiente || 0], ["Incidencias", incidents], ["Asistencia", `${model.attendanceRate}%`]];
+    const summaryItems = [["Guardias", model.rows.length], ["Efectivas", summary.efectiva || 0], ["Permisos", justified], ["Faltas reales", summary.falta || 0], ["Pendientes", summary.pendiente || 0], ["Incidencias", incidents], ["Asistencia", `${model.attendanceRate}%`]];
     const summaryWidth = (pageSize[0] - margin * 2) / 4;
     summaryItems.forEach(([label, value], index) => {
       const column = index % 4;
@@ -1117,9 +1132,10 @@
       }
       const y = cursorY - 18;
       page.drawRectangle({ x: margin, y, width: pageSize[0] - margin * 2, height: 22, color: index % 2 ? rgb(0.98, 0.99, 0.985) : rgb(1, 1, 1) });
+      if (pdfAvatars[row.status]) page.drawImage(pdfAvatars[row.status], { x: margin + 221, y: y + 2, width: 18, height: 18 });
       const values = [shorten(row.date, 16), shorten(row.entry, 10), shorten(`${row.exitDate} ${row.exit}`, 16), shorten(row.statusLabel, 18), shorten(row.typeLabel, 34)];
       const offsets = [0, 86, 142, 218, 303];
-      values.forEach((value, valueIndex) => page.drawText(value, { x: margin + offsets[valueIndex] + 5, y: cursorY - 11, size: 6.5, font: valueIndex === 3 ? bold : regular, color: rgb(0.09, 0.20, 0.18) }));
+      values.forEach((value, valueIndex) => page.drawText(value, { x: margin + offsets[valueIndex] + (valueIndex === 3 ? 25 : 5), y: cursorY - 11, size: 6.5, font: valueIndex === 3 ? bold : regular, color: rgb(0.09, 0.20, 0.18) }));
       cursorY -= 22;
     });
     return pdf.save();

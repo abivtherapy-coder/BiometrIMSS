@@ -25,7 +25,7 @@
     "omision-entrada": { label: "Omisión de entrada", category: "incident", description: "Hay salida, pero no se registró la entrada." },
     "omision-salida": { label: "Omisión de salida", category: "incident", description: "Hay entrada, pero no se registró la salida." },
     "salida-anticipada": { label: "Salida anticipada", category: "incident", description: "La salida fue anterior a la hora configurada." },
-    justificada: { label: "Justificada", category: "justified", description: "Registro marcado como justificado." },
+    justificada: { label: "Permiso", category: "justified", description: "Registro anterior marcado como permiso." },
     incapacidad: { label: "Incapacidad", category: "justified", description: "Guardia justificada por incapacidad." },
     permiso: { label: "Permiso", category: "justified", description: "Guardia justificada por permiso." },
     convenio: { label: "Convenio", category: "agreement", description: "Guardia cubierta mediante convenio." },

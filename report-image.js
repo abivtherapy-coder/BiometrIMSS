@@ -29,9 +29,13 @@
 
   const ILLUSTRATIONS = Object.freeze({
     logo:"assets/biometrimss-logo-transparent-v1.png",
-    retardo:"assets/abisai-pase-entrada.png",
-    "pase-salida":"assets/abisai-pase-salida.png",
-    vacaciones:"assets/abisai-vacaciones.png"
+    states:"assets/8F8128EE-95A3-40A1-9F22-F895C79C4976.png"
+  });
+  const STATUS_ART_CROPS = Object.freeze({
+    tolerancia:[15,493,263,210], "pase-entrada":[286,493,263,210], "pase-salida":[550,493,263,210],
+    "omision-entrada":[813,493,263,210], "omision-salida":[15,750,263,210], permiso:[286,750,263,210],
+    incapacidad:[550,750,263,210], convenio:[813,750,263,210], vacaciones:[15,1021,263,210],
+    festivo:[286,1021,263,210], falta:[550,1021,263,210]
   });
   const REPORT_SIZE = Object.freeze({ width:1080, height:1920, aspectRatio:"9:16" });
 
@@ -45,6 +49,14 @@
   function timeLabel(value){ if(!value)return"—"; const d=new Date(value); return Number.isNaN(d.getTime())?"—":new Intl.DateTimeFormat("es-MX",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(d); }
   function exitDateLabel(record,logic){ if(record.exitAt){const d=new Date(record.exitAt);if(!Number.isNaN(d.getTime()))return dateLabel(logic.formatDateKey(d),logic,true);} return dateLabel(logic.formatDateKey(logic.addDays(record.shiftDate,1)),logic,true); }
   function visualStatus(status){ return status==="justificada"?"permiso":status; }
+  function statusArtKey(status){
+    status=visualStatus(status);
+    if(status==="efectiva")return"tolerancia";
+    if(["retardo","fuera-horario"].includes(status))return"pase-entrada";
+    if(["pase-salida","salida-anticipada"].includes(status))return"pase-salida";
+    if(status==="pendiente")return"festivo";
+    return STATUS_ART_CROPS[status]?status:"tolerancia";
+  }
   function broadStatus(status,hasExit){ status=visualStatus(status); if(["efectiva","retardo","omision-entrada"].includes(status)&&hasExit)return"EN TOLERANCIA"; const m={falta:"FALTA REAL","omision-salida":"SIN SALIDA","pase-salida":"FUERA DE TOLERANCIA","salida-anticipada":"SALIDA ANTICIPADA","fuera-horario":"FUERA DE HORARIO",permiso:"PERMISO"}; return m[status]||status.toUpperCase(); }
 
   function buildReportModel(records,settings,start,end,logic,nowValue){
@@ -66,6 +78,24 @@
   function tint(hex,a){const v=hex.replace("#","");return`rgba(${parseInt(v.slice(0,2),16)},${parseInt(v.slice(2,4),16)},${parseInt(v.slice(4,6),16)},${a})`;}
   function drawContain(ctx,img,x,y,w,h){if(!img)return;const s=Math.min(w/img.width,h/img.height),dw=img.width*s,dh=img.height*s;ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);}
   function loadIllustrations(){return Promise.all(Object.entries(ILLUSTRATIONS).map(([k,src])=>new Promise(resolve=>{const i=new Image();i.onload=()=>resolve([k,i]);i.onerror=()=>resolve([k,null]);i.src=src;}))).then(Object.fromEntries);}
+  function drawStatusArt(ctx,img,status,x,y,w,h){
+    if(!img){drawAvatar(ctx,status,x,y,w,h);return;}
+    const crop=STATUS_ART_CROPS[statusArtKey(status)];
+    ctx.save();roundedRect(ctx,x,y,w,h,Math.min(14,w*.2));ctx.clip();
+    ctx.drawImage(img,crop[0],crop[1],crop[2],crop[3],x,y,w,h);
+    ctx.restore();
+  }
+
+  function loadStatusSheet(){
+    return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error("No se pudo cargar la lámina de avatares."));img.src=ILLUSTRATIONS.states;});
+  }
+
+  async function renderStatusAvatarBlob(status,size=96){
+    if(typeof document==="undefined")throw new Error("Se necesita un navegador para dibujar el avatar.");
+    const canvas=document.createElement("canvas");canvas.width=size;canvas.height=size;
+    drawStatusArt(canvas.getContext("2d"),await loadStatusSheet(),status,0,0,size,size);
+    return canvasToBlob(canvas);
+  }
 
   function drawSymbol(ctx,status,x,y,r=16){status=visualStatus(status);const c=COLORS[status]||COLORS.muted;ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#fff";ctx.lineWidth=Math.max(2,r*.22);ctx.lineCap="round";ctx.beginPath();if(status==="efectiva"){ctx.moveTo(x-r*.45,y);ctx.lineTo(x-r*.08,y+r*.38);ctx.lineTo(x+r*.55,y-r*.45);}else if(status==="falta"){ctx.moveTo(x-r*.4,y-r*.4);ctx.lineTo(x+r*.4,y+r*.4);ctx.moveTo(x+r*.4,y-r*.4);ctx.lineTo(x-r*.4,y+r*.4);}else if(["omision-entrada","omision-salida"].includes(status)){text(ctx,"?",x,y+r*.1,{size:r*1.35,weight:900,color:"#fff",align:"center",baseline:"middle"});return;}else{ctx.moveTo(x-r*.42,y);ctx.lineTo(x+r*.42,y);}ctx.stroke();}
 
@@ -96,6 +126,7 @@
     const m=Number(String(start||"").slice(5,7));
     if(m===9)return{label:"VIVA MÉXICO · VIVA BIOMETRIMSS",colors:["#08745a","#ffffff","#b5222b"],icon:"★"};
     if(m===10)return{label:"OCTUBRE · HALLOWEEN BIOMETRIMSS",colors:["#e87518","#2b1838","#111111"],icon:"☾"};
+    if(m===11)return{label:"NOVIEMBRE · DÍA DE MUERTOS",colors:["#7a2a78","#ff8b00","#3d153f"],icon:"✿"};
     if(m===12)return{label:"DICIEMBRE · BIOMETRIMSS",colors:["#08745a","#b5222b","#d6ad3b"],icon:"★"};
     if(m===1)return{label:"AÑO NUEVO · BIOMETRIMSS",colors:["#08745a","#d6ad3b","#f5f5f5"],icon:"✦"};
     return{label:"BIOMETRIMSS · TU CONTROL, TU TIEMPO",colors:[COLORS.green,"#dcebe6",COLORS.dark],icon:"●"};
@@ -109,7 +140,7 @@
     text(ctx,model.profile.name.toUpperCase(),width/2,86,{size:29,weight:900,color:COLORS.green,align:"center",maxWidth:720});
     text(ctx,`Matrícula: ${model.profile.employeeId}`,width/2,116,{size:18,weight:750,color:COLORS.muted,align:"center"});
     text(ctx,model.profile.unit,width/2,142,{size:16,weight:650,color:COLORS.muted,align:"center",maxWidth:720});
-    drawAvatar(ctx,"efectiva",width-margin-118,18,118,135);
+    drawStatusArt(ctx,images.states,"efectiva",width-margin-118,18,118,135);
     drawThemeRibbon(ctx,theme,margin,154,width-margin*2);
     const y=202,cardW=width-margin*2;ctx.fillStyle="#f5faf8";roundedRect(ctx,margin,y,cardW,100,14);ctx.fill();line(ctx,width/2,y+12,width/2,y+88,"#d7e3df",2);
     text(ctx,"PERIODO",margin+24,y+28,{size:15,weight:900,color:COLORS.green});text(ctx,model.period,margin+24,y+58,{size:20,weight:850});text(ctx,"TURNO 3 · NOCTURNO",margin+24,y+84,{size:15,weight:850,color:COLORS.green});text(ctx,`${model.schedule.startTime} a ${model.schedule.exitTime}`,margin+245,y+84,{size:16,weight:800});
@@ -119,12 +150,12 @@
   function drawPortraitTable(ctx,model,x,y,width,rowHeight){
     const columns=[0,145,275,425,555,755,width],headers=["GUARDIA","ENTRADA","SALIDA","HORA","ESTATUS","TIPO"],hh=58;ctx.fillStyle=COLORS.dark;ctx.fillRect(x,y,width,hh);headers.forEach((h,i)=>text(ctx,h,x+(columns[i]+columns[i+1])/2,y+hh/2,{size:14,weight:900,color:"#fff",align:"center",baseline:"middle"}));
     const rows=model.rows.length?model.rows:[{date:"—",entry:"—",exitDate:"—",exit:"—",status:"pendiente",statusLabel:"SIN REGISTROS",typeLabel:"SIN REGISTROS"}],regular=Math.max(12,Math.min(17,rowHeight*.31)),ss=Math.max(10,Math.min(13,rowHeight*.24));
-    rows.forEach((r,i)=>{const top=y+hh+i*rowHeight,c=COLORS[r.status]||COLORS.muted;ctx.fillStyle=i%2?"#fafcfb":"#fff";ctx.fillRect(x,top,width,rowHeight);ctx.fillStyle=tint(c,.1);ctx.fillRect(x+columns[4],top,width-columns[4],rowHeight);[r.date,r.entry,r.exitDate,r.exit].forEach((v,col)=>text(ctx,v,x+(columns[col]+columns[col+1])/2,top+rowHeight/2,{size:regular,weight:750,color:v==="—"?"#ba2323":COLORS.ink,align:"center",baseline:"middle"}));drawSymbol(ctx,r.status,x+columns[4]+18,top+rowHeight/2,Math.max(8,Math.min(11,rowHeight*.2)));text(ctx,r.statusLabel,x+columns[4]+36,top+rowHeight/2,{size:ss,weight:900,color:c,baseline:"middle",maxWidth:columns[5]-columns[4]-42});drawSymbol(ctx,r.status,x+columns[5]+18,top+rowHeight/2,Math.max(8,Math.min(11,rowHeight*.2)));text(ctx,r.typeLabel,x+columns[5]+36,top+rowHeight/2,{size:ss,weight:900,color:c,baseline:"middle",maxWidth:columns[6]-columns[5]-42});line(ctx,x,top+rowHeight,x+width,top+rowHeight);});columns.forEach(o=>line(ctx,x+o,y,x+o,y+hh+rows.length*rowHeight));ctx.strokeStyle=COLORS.dark;ctx.lineWidth=3;ctx.strokeRect(x,y,width,hh+rows.length*rowHeight);return y+hh+rows.length*rowHeight;
+    rows.forEach((r,i)=>{const top=y+hh+i*rowHeight,c=COLORS[r.status]||COLORS.muted,avatarSize=Math.max(16,Math.min(30,rowHeight-4));ctx.fillStyle=i%2?"#fafcfb":"#fff";ctx.fillRect(x,top,width,rowHeight);ctx.fillStyle=tint(c,.1);ctx.fillRect(x+columns[4],top,width-columns[4],rowHeight);[r.date,r.entry,r.exitDate,r.exit].forEach((v,col)=>text(ctx,v,x+(columns[col]+columns[col+1])/2,top+rowHeight/2,{size:regular,weight:750,color:v==="—"?"#ba2323":COLORS.ink,align:"center",baseline:"middle"}));drawStatusArt(ctx,images.states,r.status,x+columns[4]+5,top+(rowHeight-avatarSize)/2,avatarSize,avatarSize);text(ctx,r.statusLabel,x+columns[4]+40,top+rowHeight/2,{size:ss,weight:900,color:c,baseline:"middle",maxWidth:columns[5]-columns[4]-44});drawSymbol(ctx,r.status,x+columns[5]+18,top+rowHeight/2,Math.max(8,Math.min(11,rowHeight*.2)));text(ctx,r.typeLabel,x+columns[5]+36,top+rowHeight/2,{size:ss,weight:900,color:c,baseline:"middle",maxWidth:columns[6]-columns[5]-42});line(ctx,x,top+rowHeight,x+width,top+rowHeight);});columns.forEach(o=>line(ctx,x+o,y,x+o,y+hh+rows.length*rowHeight));ctx.strokeStyle=COLORS.dark;ctx.lineWidth=3;ctx.strokeRect(x,y,width,hh+rows.length*rowHeight);return y+hh+rows.length*rowHeight;
   }
 
   function drawPortraitLegend(ctx,model,images,x,y,width,height){
     const gap=10,cols=3,rows=Math.ceil(LEGEND.length/cols),cw=(width-gap*(cols-1))/cols,ch=Math.max(58,(height-gap*(rows-1))/rows);
-    LEGEND.forEach(([status,label,detail],i)=>{const col=i%cols,row=Math.floor(i/cols),left=x+col*(cw+gap),top=y+row*(ch+gap),c=COLORS[status];ctx.fillStyle=tint(c,.1);roundedRect(ctx,left,top,cw,ch,12);ctx.fill();ctx.strokeStyle=tint(c,.35);ctx.lineWidth=2;ctx.stroke();const img=images[status];if(img)drawContain(ctx,img,left+5,top+5,72,ch-10);else drawAvatar(ctx,status,left+5,top+5,72,ch-10);const copyX=left+84;text(ctx,label.toUpperCase(),copyX,top+ch/2-10,{size:13,weight:900,color:c,maxWidth:cw-122});text(ctx,detail,copyX,top+ch/2+13,{size:10.5,weight:650,color:COLORS.ink,maxWidth:cw-94});ctx.fillStyle=c;ctx.beginPath();ctx.arc(left+cw-20,top+21,14,0,Math.PI*2);ctx.fill();text(ctx,model.summary[status]||0,left+cw-20,top+21,{size:13,weight:900,color:"#fff",align:"center",baseline:"middle"});});
+    LEGEND.forEach(([status,label,detail],i)=>{const col=i%cols,row=Math.floor(i/cols),left=x+col*(cw+gap),top=y+row*(ch+gap),c=COLORS[status];ctx.fillStyle=tint(c,.1);roundedRect(ctx,left,top,cw,ch,12);ctx.fill();ctx.strokeStyle=tint(c,.35);ctx.lineWidth=2;ctx.stroke();drawStatusArt(ctx,images.states,status,left+5,top+5,72,ch-10);const copyX=left+84;text(ctx,label.toUpperCase(),copyX,top+ch/2-10,{size:13,weight:900,color:c,maxWidth:cw-122});text(ctx,detail,copyX,top+ch/2+13,{size:10.5,weight:650,color:COLORS.ink,maxWidth:cw-94});ctx.fillStyle=c;ctx.beginPath();ctx.arc(left+cw-20,top+21,14,0,Math.PI*2);ctx.fill();text(ctx,model.summary[status]||0,left+cw-20,top+21,{size:13,weight:900,color:"#fff",align:"center",baseline:"middle"});});
   }
   function drawPortraitSummary(ctx,model,x,y,width){const cards=[["TOTAL GUARDIAS",model.rows.length],["EFECTIVAS",model.summary.efectiva||0],["INCIDENCIAS",model.incidentCount],["ASISTENCIA REAL",`${model.attendanceRate}%`]],cw=width/cards.length;ctx.fillStyle=COLORS.dark;roundedRect(ctx,x,y,width,92,12);ctx.fill();cards.forEach(([l,v],i)=>{const c=x+cw*i+cw/2;if(i)line(ctx,x+cw*i,y+15,x+cw*i,y+77,"rgba(255,255,255,.25)",2);text(ctx,l,c,y+30,{size:13,weight:850,color:"#d8ede7",align:"center"});text(ctx,v,c,y+68,{size:29,weight:900,color:"#fff",align:"center"});});}
 
@@ -133,5 +164,5 @@
     const [model,images]=[buildReportModel(records,settings,start,end,logic),await loadIllustrations()];const {width,height}=REPORT_SIZE,margin=36,contentY=318,tableW=width-margin*2,rowCount=Math.max(model.rows.length,1),rowH=Math.max(22,Math.min(64,Math.floor(790/rowCount)));const canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;const ctx=canvas.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,width,height);drawPortraitHeader(ctx,model,images,width,margin);const tableBottom=drawPortraitTable(ctx,model,margin,contentY,tableW,rowH);const legendY=tableBottom+16,reserved=218,legendH=Math.max(300,Math.min(500,height-legendY-reserved));drawPortraitLegend(ctx,model,images,margin,legendY,tableW,legendH);const summaryY=legendY+legendH+14;drawPortraitSummary(ctx,model,margin,summaryY,tableW);const noteY=summaryY+106;ctx.fillStyle="#f5faf8";roundedRect(ctx,margin,noteY,tableW,54,10);ctx.fill();text(ctx,"NOTA:",margin+18,noteY+28,{size:14,weight:900,color:COLORS.green,baseline:"middle"});text(ctx,`Guardia completa: entrada hasta ${model.schedule.entryTolerance} y salida al día siguiente hasta ${model.schedule.exitTolerance}.`,margin+72,noteY+28,{size:14,weight:700,baseline:"middle",maxWidth:tableW-90});text(ctx,"Documento personal de consulta · Generado por BIOMETRIMSS · Formato 9:16",width-margin,height-22,{size:13,color:COLORS.muted,align:"right"});return canvas;
   }
   function canvasToBlob(canvas){return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("No se pudo crear la imagen.")),"image/png",1));}
-  return {COLORS,LEGEND,REPORT_SIZE,buildReportModel,canvasToBlob,renderReport};
+  return {COLORS,LEGEND,REPORT_SIZE,STATUS_ART_CROPS,statusArtKey,renderStatusAvatarBlob,buildReportModel,canvasToBlob,renderReport};
 }));

@@ -1,7 +1,7 @@
 (function initializeMonthlyTheme() {
   "use strict";
 
-  const THEME_VERSION = "5.8.0";
+  const THEME_VERSION = "5.9.0";
   const SEPTEMBER_CHARACTER = "assets/biometrimss-charro-septiembre-v1.png";
   const themes = [
     ["enero", "Año Nuevo", "✦"],
@@ -24,7 +24,7 @@
   }
 
   function ensureSeasonalStyles(id) {
-    if (id !== "septiembre") return;
+    if (!["septiembre", "octubre", "noviembre", "diciembre"].includes(id)) return;
     const previous = document.getElementById("septemberVivaStyles");
     if (previous) previous.remove();
     const link = document.createElement("link");
@@ -32,6 +32,13 @@
     link.rel = "stylesheet";
     link.href = `themes/september-viva.css?v=${THEME_VERSION}&cb=${Date.now()}`;
     document.head.append(link);
+    if (id !== "septiembre") {
+      const q4 = document.createElement("link");
+      q4.id = "q4SeasonalStyles";
+      q4.rel = "stylesheet";
+      q4.href = `themes/q4-seasonal.css?v=${THEME_VERSION}&cb=${Date.now()}`;
+      document.head.append(q4);
+    }
   }
 
   function make(tag, className, text) {
@@ -114,6 +121,40 @@
     }
   }
 
+  const Q4_COPY = Object.freeze({
+    octubre: { header: "Halloween", theme: "¡Halloween!", slogan: "EL COMPROMISO TAMBIÉN DA VIDA" },
+    noviembre: { header: "Día de Muertos", theme: "Día de Muertos", slogan: "HONRAMOS LA VIDA EN CADA GUARDIA" },
+    diciembre: { header: "Feliz Navidad", theme: "¡Feliz Navidad!", slogan: "LA SALUD NOS UNE EN CADA TEMPORADA" }
+  });
+
+  function decorateQ4(id) {
+    const copy = Q4_COPY[id];
+    const home = document.getElementById("view-home");
+    const header = document.querySelector(".topbar");
+    const hero = home && home.querySelector(":scope > .hero-card");
+    if (!copy || !home || !header || !hero || home.dataset.q4Decorated === id) return;
+    home.dataset.q4Decorated = id;
+
+    const headerArt = make("div", `q4-header-art q4-header-art--${id}`);
+    headerArt.append(make("span", "q4-header-title", copy.header));
+    headerArt.append(make("span", "q4-header-detail"));
+    header.append(headerArt);
+
+    const character = make("div", `q4-character q4-character--${id}`);
+    hero.append(character);
+    hero.append(make("div", "q4-theme-label", `Tema del mes: ${copy.theme}`));
+    hero.append(make("div", "q4-scene"));
+
+    const period = home.querySelector(":scope > .period-card");
+    if (period) period.append(make("span", "q4-period-art"));
+    home.querySelectorAll(":scope > .stats-grid .stat-card").forEach((card) => card.append(make("span", "q4-card-art")));
+    const progress = home.querySelector(":scope > .progress-card");
+    if (progress) progress.append(make("span", "q4-progress-art"));
+
+    const nav = document.querySelector(".bottom-nav");
+    if (nav) nav.dataset.seasonSlogan = copy.slogan;
+  }
+
   function applyTheme() {
     const [id, label, symbol] = getTheme();
     document.documentElement.dataset.monthTheme = id;
@@ -131,6 +172,7 @@
     }
 
     if (id === "septiembre") decorateSeptember();
+    else if (Q4_COPY[id]) decorateQ4(id);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", applyTheme, { once: true });
