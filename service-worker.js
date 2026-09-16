@@ -1,10 +1,10 @@
-const CACHE_NAME = "biometrimss-v5.5.0";
+const CACHE_NAME = "biometrimss-v5.6.0";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./style.css?v=4.9.0",
   "./themes/monthly-theme.css?v=4.9.0",
-  "./themes/monthly-theme.js?v=5.5.0",
+  "./themes/monthly-theme.js?v=5.6.0",
   "./logic.js?v=4.9.0",
   "./report-image.js?v=4.9.0",
   "./app.js?v=4.9.0",
@@ -19,8 +19,6 @@ const APP_SHELL = [
   "./assets/abit-ai-states-sticker-sheet-v1.png",
   "./assets/biometrimss-avatar-icon-v3.png",
   "./assets/biometrimss-logo-transparent-v1.png?v=4.9.0",
-  "./assets/DD8ADD59-010C-4F1A-8763-448A17FC021B.png",
-  "./assets/F226F542-3898-4479-8A6A-7C0837ED127C.png",
   "./vendor/pdfjs/pdf.min.mjs",
   "./vendor/pdfjs/pdf.worker.min.mjs",
   "./vendor/pdf-lib/pdf-lib.min.js"
@@ -38,23 +36,37 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+function freshRequest(request) {
+  return new Request(request, { cache: "no-store" });
+}
+
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
 
   if (event.request.mode === "navigate") {
-    event.respondWith(fetch(event.request).catch(() => caches.match("./index.html")));
+    event.respondWith(
+      fetch(freshRequest(event.request)).catch(() => caches.match("./index.html"))
+    );
     return;
   }
 
-  if (url.pathname.endsWith("/report-image.js") ||
-      url.pathname.endsWith("/themes/monthly-theme.js") ||
-      url.pathname.endsWith("/themes/september-viva.css") ||
-      url.pathname.endsWith("/assets/DD8ADD59-010C-4F1A-8763-448A17FC021B.png") ||
-      url.pathname.endsWith("/assets/F226F542-3898-4479-8A6A-7C0837ED127C.png")) {
+  const freshPaths = [
+    "/report-image.js",
+    "/themes/monthly-theme.js",
+    "/themes/september-viva.css",
+    "/assets/7AA47CC3-1646-484E-A630-9E70E523A486.png",
+    "/assets/881D4859-FEF3-45D9-AEE1-892678FEEAA2.png",
+    "/assets/A5BD8F79-366E-46CA-AAC1-43AD5E48DC52.png",
+    "/assets/BCF6ADEE-FFFA-4572-811F-BB8EB423AD02.png",
+    "/assets/DD8ADD59-010C-4F1A-8763-448A17FC021B.png",
+    "/assets/F226F542-3898-4479-8A6A-7C0837ED127C.png"
+  ];
+
+  if (freshPaths.some((path) => url.pathname.endsWith(path))) {
     event.respondWith(
-      fetch(event.request).then((response) => {
+      fetch(freshRequest(event.request)).then((response) => {
         if (response.ok) caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
         return response;
       }).catch(() => caches.match(event.request))
@@ -64,10 +76,7 @@ self.addEventListener("fetch", (event) => {
 
   event.respondWith(
     caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {
-      if (response.ok) {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-      }
+      if (response.ok) caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
       return response;
     }))
   );
