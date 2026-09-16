@@ -47,7 +47,10 @@
     const select = document.getElementById("statusOverride");
     if (select) {
       const legacy = select.querySelector('option[value="justificada"]');
-      if (legacy) legacy.remove();
+      if (legacy) {
+        legacy.textContent = "Permiso (registro anterior)";
+        legacy.hidden = true;
+      }
       const permission = select.querySelector('option[value="permiso"]');
       if (permission) permission.textContent = "Permiso / incidencia justificada";
     }
