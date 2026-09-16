@@ -1,6 +1,7 @@
 (function initializeMonthlyTheme() {
   "use strict";
 
+  const THEME_VERSION = "5.6.0";
   const themes = [
     ["enero", "Año Nuevo", "✦"],
     ["febrero", "Amor y amistad", "♥"],
@@ -16,17 +17,26 @@
     ["diciembre", "Navidad", "✦"]
   ];
 
+  const septemberCandidates = [
+    "assets/7AA47CC3-1646-484E-A630-9E70E523A486.png",
+    "assets/881D4859-FEF3-45D9-AEE1-892678FEEAA2.png",
+    "assets/A5BD8F79-366E-46CA-AAC1-43AD5E48DC52.png",
+    "assets/BCF6ADEE-FFFA-4572-811F-BB8EB423AD02.png"
+  ];
+
   function getTheme() {
     const requested = new URLSearchParams(window.location.search).get("theme");
     return themes.find(([id]) => id === String(requested || "").toLowerCase()) || themes[new Date().getMonth()];
   }
 
   function ensureSeasonalStyles(id) {
-    if (id !== "septiembre" || document.getElementById("septemberVivaStyles")) return;
+    if (id !== "septiembre") return;
+    const previous = document.getElementById("septemberVivaStyles");
+    if (previous) previous.remove();
     const link = document.createElement("link");
     link.id = "septemberVivaStyles";
     link.rel = "stylesheet";
-    link.href = "themes/september-viva.css?v=5.5.0";
+    link.href = `themes/september-viva.css?v=${THEME_VERSION}&cb=${Date.now()}`;
     document.head.append(link);
   }
 
@@ -45,15 +55,64 @@
     if (justifiedLabel) justifiedLabel.textContent = "Permisos";
 
     const select = document.getElementById("statusOverride");
-    if (select) {
-      const legacy = select.querySelector('option[value="justificada"]');
-      if (legacy) {
-        legacy.textContent = "Permiso (registro anterior)";
-        legacy.hidden = true;
-      }
-      const permission = select.querySelector('option[value="permiso"]');
-      if (permission) permission.textContent = "Permiso / incidencia justificada";
+    if (!select) return;
+    const legacy = select.querySelector('option[value="justificada"]');
+    if (legacy) {
+      legacy.textContent = "Permiso (registro anterior)";
+      legacy.hidden = true;
     }
+    const permission = select.querySelector('option[value="permiso"]');
+    if (permission) permission.textContent = "Permiso / incidencia justificada";
+  }
+
+  function scoreImage(img) {
+    try {
+      const canvas = document.createElement("canvas");
+      canvas.width = 72;
+      canvas.height = 96;
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      let transparent = 0, dark = 0, gold = 0, red = 0, green = 0, visible = 0;
+      for (let i = 0; i < pixels.length; i += 4) {
+        const r = pixels[i], g = pixels[i + 1], b = pixels[i + 2], a = pixels[i + 3];
+        if (a < 220) { transparent += 1; continue; }
+        visible += 1;
+        if (r < 95 && g < 95 && b < 95) dark += 1;
+        if (r > 145 && g > 95 && g < 190 && b < 85) gold += 1;
+        if (r > 145 && g < 105 && b < 105) red += 1;
+        if (g > 90 && g > r * 1.12 && g > b * 1.12) green += 1;
+      }
+      const total = canvas.width * canvas.height;
+      const alphaRatio = transparent / total;
+      if (alphaRatio < 0.08 || visible < total * 0.18) return -1;
+      return alphaRatio * 2.2 + (dark / total) * 2.5 + (gold / total) * 2.2 + (red / total) * 1.1 + (green / total) * 0.45;
+    } catch (error) {
+      return -1;
+    }
+  }
+
+  function loadCandidate(src) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.decoding = "async";
+      img.onload = () => resolve({ src, img, score: scoreImage(img) });
+      img.onerror = () => resolve({ src, img: null, score: -1 });
+      img.src = `${src}?v=${THEME_VERSION}`;
+    });
+  }
+
+  async function chooseSeptemberCharacter(target) {
+    const results = await Promise.all(septemberCandidates.map(loadCandidate));
+    const best = results.sort((a, b) => b.score - a.score)[0];
+    if (best && best.score >= 0) {
+      target.src = `${best.src}?v=${THEME_VERSION}`;
+      target.classList.add("is-cutout");
+      return;
+    }
+    target.src = `assets/DD8ADD59-010C-4F1A-8763-448A17FC021B.png?v=${THEME_VERSION}`;
+    target.classList.add("is-reference-fallback");
   }
 
   function decorateSeptember() {
@@ -80,7 +139,14 @@
     for (let i = 0; i < 12; i += 1) confetti.append(make("i", "sep-confetti-piece"));
     hero.append(confetti);
 
-    hero.append(make("div", "sep-character"));
+    const character = document.createElement("img");
+    character.className = "sep-character";
+    character.alt = "";
+    character.setAttribute("aria-hidden", "true");
+    character.loading = "eager";
+    hero.append(character);
+    chooseSeptemberCharacter(character);
+
     hero.append(make("div", "sep-theme-label", "Tema del mes: ¡Viva México!"));
     hero.append(make("div", "sep-architecture"));
 
@@ -88,10 +154,7 @@
     if (period) period.append(make("span", "sep-ribbon"));
 
     home.querySelectorAll(":scope > .stats-grid .stat-card").forEach((card, index) => {
-      card.append(
-        make("span", `sep-stat-flower sep-stat-flower-${index + 1}`),
-        make("span", `sep-stat-sprinkle sep-stat-sprinkle-${index + 1}`)
-      );
+      card.append(make("span", `sep-stat-flower sep-stat-flower-${index + 1}`));
     });
 
     const progress = home.querySelector(":scope > .progress-card");
