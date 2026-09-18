@@ -1,0 +1,462 @@
+/* BIOMETRIMSS · Enero–agosto · experiencia visual unificada · v6.0
+   Capa exclusivamente presentacional. No modifica datos, cálculos ni reportes. */
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) {
+  --first-eight-glow: color-mix(in srgb, var(--theme-secondary) 26%, transparent);
+  --first-eight-line: color-mix(in srgb, var(--theme-primary) 17%, transparent);
+  --first-eight-paper: color-mix(in srgb, var(--theme-background) 82%, #fff);
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) body {
+  background:
+    radial-gradient(circle at 92% 3%, var(--first-eight-glow), transparent 26rem),
+    var(--theme-background);
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) .app-shell {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--theme-background) 88%, #fff), #fff 55%, var(--theme-background));
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) .topbar {
+  min-height: 90px;
+  border: 0;
+  border-radius: 0 0 24px 24px;
+  box-shadow:
+    0 4px 0 color-mix(in srgb, var(--theme-accent) 58%, #fff),
+    0 12px 28px color-mix(in srgb, var(--theme-primary) 18%, transparent);
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) .topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 82% 12%, rgba(255,255,255,.19) 0 3px, transparent 4px),
+    radial-gradient(circle at 90% 35%, rgba(255,255,255,.12) 0 2px, transparent 3px);
+  background-size: 34px 34px, 46px 46px;
+  pointer-events: none;
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) .month-decoration {
+  z-index: 3;
+  top: 20px;
+  right: 18px;
+  width: 104px;
+  transform: rotate(-3deg);
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) #view-home {
+  padding-top: 22px;
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) #view-home > .hero-card {
+  min-height: 330px;
+  padding: 66px 22px 112px;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 88% 14%, rgba(255,255,255,.18), transparent 9rem),
+    var(--theme-hero-gradient);
+  box-shadow: 0 15px 34px color-mix(in srgb, var(--theme-primary) 24%, transparent);
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) #view-home > .hero-card::before {
+  content: "Tema del mes · " var(--theme-label);
+  position: absolute;
+  z-index: 4;
+  top: 18px;
+  left: 20px;
+  max-width: calc(100% - 130px);
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(255,255,255,.13);
+  backdrop-filter: blur(8px);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) #view-home > .hero-card::after {
+  content: var(--theme-symbol);
+  right: 18px;
+  bottom: 88px;
+  display: grid;
+  place-items: center;
+  width: 94px;
+  height: 94px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 30px;
+  color: #fff;
+  background: rgba(255,255,255,.08);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 58px;
+  line-height: 1;
+  opacity: .5;
+  transform: rotate(7deg);
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) .hero-topline,
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) .hero-message {
+  position: relative;
+  z-index: 3;
+  max-width: calc(100% - 92px);
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) .quick-actions {
+  position: absolute;
+  z-index: 5;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) .quick-actions .button {
+  min-height: 66px;
+  border-radius: 18px;
+  font-weight: 850;
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) #view-home > :is(.period-card,.progress-card,.upcoming-card),
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) #view-home > .stats-grid .stat-card {
+  position: relative;
+  overflow: hidden;
+  border-color: var(--first-eight-line);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 103% 105%, var(--first-eight-glow), transparent 5.5rem),
+    rgba(255,255,255,.96);
+  box-shadow: 0 9px 22px color-mix(in srgb, var(--theme-primary) 8%, transparent);
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) #view-home > .stats-grid .stat-card::after {
+  content: "✦";
+  position: absolute;
+  right: 9px;
+  bottom: 5px;
+  color: var(--theme-accent);
+  font-size: 22px;
+  opacity: .34;
+  transform: rotate(15deg);
+}
+
+html[data-month-theme="febrero"] #view-home > .stats-grid .stat-card::after { content: "♥"; }
+html[data-month-theme="marzo"] #view-home > .stats-grid .stat-card::after { content: "✿"; }
+html[data-month-theme="abril"] #view-home > .stats-grid .stat-card::after { content: "★"; }
+html[data-month-theme="mayo"] #view-home > .stats-grid .stat-card::after { content: "✿"; }
+html[data-month-theme="junio"] #view-home > .stats-grid .stat-card::after { content: "●"; }
+html[data-month-theme="julio"] #view-home > .stats-grid .stat-card::after { content: "$"; }
+html[data-month-theme="agosto"] #view-home > .stats-grid .stat-card::after { content: "✎"; }
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) .date-range input {
+  border-color: var(--first-eight-line);
+  border-radius: 14px;
+  background: var(--first-eight-paper);
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) .progress-track > span {
+  background: linear-gradient(90deg, var(--theme-secondary), var(--theme-primary), var(--theme-accent));
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) .nav-item.is-active {
+  border-radius: 16px;
+  color: var(--theme-primary);
+  background: color-mix(in srgb, var(--theme-primary) 10%, #fff);
+}
+
+html:is(
+  [data-month-theme="enero"],
+  [data-month-theme="febrero"],
+  [data-month-theme="marzo"],
+  [data-month-theme="abril"],
+  [data-month-theme="mayo"],
+  [data-month-theme="junio"],
+  [data-month-theme="julio"],
+  [data-month-theme="agosto"]
+) .bottom-nav {
+  border-top-color: var(--first-eight-line);
+  box-shadow: 0 -9px 24px color-mix(in srgb, var(--theme-primary) 8%, transparent);
+}
+
+@media (max-width: 420px) {
+  html:is(
+    [data-month-theme="enero"],
+    [data-month-theme="febrero"],
+    [data-month-theme="marzo"],
+    [data-month-theme="abril"],
+    [data-month-theme="mayo"],
+    [data-month-theme="junio"],
+    [data-month-theme="julio"],
+    [data-month-theme="agosto"]
+  ) #view-home > .hero-card {
+    min-height: 348px;
+    padding: 66px 18px 116px;
+  }
+
+  html:is(
+    [data-month-theme="enero"],
+    [data-month-theme="febrero"],
+    [data-month-theme="marzo"],
+    [data-month-theme="abril"],
+    [data-month-theme="mayo"],
+    [data-month-theme="junio"],
+    [data-month-theme="julio"],
+    [data-month-theme="agosto"]
+  ) #view-home > .hero-card::after {
+    right: 12px;
+    bottom: 92px;
+    width: 76px;
+    height: 76px;
+    font-size: 47px;
+  }
+
+  html:is(
+    [data-month-theme="enero"],
+    [data-month-theme="febrero"],
+    [data-month-theme="marzo"],
+    [data-month-theme="abril"],
+    [data-month-theme="mayo"],
+    [data-month-theme="junio"],
+    [data-month-theme="julio"],
+    [data-month-theme="agosto"]
+  ) .hero-topline,
+  html:is(
+    [data-month-theme="enero"],
+    [data-month-theme="febrero"],
+    [data-month-theme="marzo"],
+    [data-month-theme="abril"],
+    [data-month-theme="mayo"],
+    [data-month-theme="junio"],
+    [data-month-theme="julio"],
+    [data-month-theme="agosto"]
+  ) .hero-message {
+    max-width: calc(100% - 70px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:is(
+    [data-month-theme="enero"],
+    [data-month-theme="febrero"],
+    [data-month-theme="marzo"],
+    [data-month-theme="abril"],
+    [data-month-theme="mayo"],
+    [data-month-theme="junio"],
+    [data-month-theme="julio"],
+    [data-month-theme="agosto"]
+  ) .month-decoration {
+    animation: none;
+  }
+}
+
+@media print {
+  html:is(
+    [data-month-theme="enero"],
+    [data-month-theme="febrero"],
+    [data-month-theme="marzo"],
+    [data-month-theme="abril"],
+    [data-month-theme="mayo"],
+    [data-month-theme="junio"],
+    [data-month-theme="julio"],
+    [data-month-theme="agosto"]
+  ) #view-home > .hero-card::before,
+  html:is(
+    [data-month-theme="enero"],
+    [data-month-theme="febrero"],
+    [data-month-theme="marzo"],
+    [data-month-theme="abril"],
+    [data-month-theme="mayo"],
+    [data-month-theme="junio"],
+    [data-month-theme="julio"],
+    [data-month-theme="agosto"]
+  ) #view-home > .hero-card::after {
+    display: none !important;
+  }
+}
