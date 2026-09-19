@@ -2040,3 +2040,22 @@ h2 {
   .digital-report { border: 0; box-shadow: none; }
   .history-record { break-inside: avoid; }
 }
+
+/* Calendario 2026 · festivos y pagos BBVA (solo visual) */
+.calendar-day.is-holiday:not(.is-selected){border-color:#e0b900;background:#fff8c9;font-weight:850}
+.calendar-day.is-payday:not(.is-selected){box-shadow:inset 0 -3px 0 #16a9c7}
+.calendar-day .holiday-mark{position:absolute;right:3px;top:2px;font-style:normal;font-size:.57rem;line-height:1}
+.calendar-day .payday-mark{position:absolute;right:4px;bottom:3px;display:grid;width:12px;height:12px;place-items:center;border-radius:50%;background:#16a9c7;color:#fff;font-size:.48rem;font-style:normal;font-weight:950;line-height:1}
+.calendar-day.is-selected .holiday-mark,.calendar-day.is-selected .payday-mark{filter:saturate(.9) brightness(1.2)}
+.legend-dot.holiday{background:#f4d21f;border:1px solid #d5b600}
+.legend-dot.payday{background:#16a9c7}
+.calendar-special-stack{display:grid;gap:8px;margin:0 0 12px}
+.calendar-special{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1px solid var(--line);border-radius:15px;background:#fff}
+.calendar-special strong,.calendar-special span{display:block}
+.calendar-special>div:last-child span{margin-top:2px;color:var(--muted);font-size:.72rem}
+.calendar-special-holiday{border-color:#eadc87;background:#fffcef}
+.calendar-special-payday{border-color:#aee5ef;background:#effbfe}
+.calendar-special-avatar-wrap{position:relative;width:48px;height:48px;flex:0 0 48px;overflow:hidden;border-radius:14px;background:#fff}
+.calendar-special-avatar{width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+.calendar-special-symbol{position:absolute!important;right:-1px;bottom:-1px;display:grid!important;width:22px;height:22px;place-items:center;border-radius:50%;background:#fff;font-size:.9rem;box-shadow:0 2px 7px rgba(0,0,0,.12)}
+.calendar-pay-icon{display:grid!important;width:42px;height:42px;flex:0 0 42px;place-items:center;border-radius:13px;background:#16a9c7;color:#fff;font-size:1.25rem;font-weight:950}
