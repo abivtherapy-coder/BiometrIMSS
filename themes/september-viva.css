@@ -267,3 +267,154 @@ html[data-month-theme="septiembre"] .bottom-nav:after{
     font-size:11px;
   }
 }
+
+
+/* ==========================================================
+   SEPTIEMBRE · MAESTRO MÓVIL VERTICAL 9:16 · v6.1
+   El móvil vertical manda; horizontal/tablet/PC son adaptaciones.
+   ========================================================== */
+@media (max-width:600px) and (orientation:portrait){
+  html[data-month-theme="septiembre"] body{background:#dcefeb}
+  html[data-month-theme="septiembre"] .app-shell{max-width:430px;margin:0 auto;background:linear-gradient(180deg,#d8ede8 0,#f8fbfa 50%,#edf7f4 100%)}
+
+  html[data-month-theme="septiembre"] .topbar{
+    min-height:112px;
+    padding:18px 14px 20px;
+    border-radius:0 0 22px 22px;
+  }
+  html[data-month-theme="septiembre"] .brand{max-width:58%}
+  html[data-month-theme="septiembre"] .brand-mark{width:50px;height:50px;border-radius:16px}
+  html[data-month-theme="septiembre"] .brand strong{font-size:19px;line-height:1.05}
+  html[data-month-theme="septiembre"] .brand small{font-size:7px;letter-spacing:.17em}
+  html[data-month-theme="septiembre"] .sep-header-art{right:2%;top:3px;width:45%;height:100px}
+  html[data-month-theme="septiembre"] .sep-viva{right:14%;top:15px;width:92px;font-size:21px;line-height:.78}
+  html[data-month-theme="septiembre"] .sep-month{right:8%;top:66px;font-size:5.5px;letter-spacing:.24em}
+  html[data-month-theme="septiembre"] .sep-flag{right:0;top:1px;font-size:21px}
+
+  html[data-month-theme="septiembre"] #view-home{
+    padding:24px 12px 110px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.hero-card{
+    min-height:470px;
+    padding:56px 18px 118px;
+    border-radius:24px;
+    background:
+      radial-gradient(circle at 14% 108%,rgba(0,57,46,.78),transparent 43%),
+      radial-gradient(circle at 89% 110%,rgba(0,54,43,.60),transparent 44%),
+      linear-gradient(112deg,#079477 0%,#07846b 48%,#056653 100%);
+  }
+  html[data-month-theme="septiembre"] .hero-topline{
+    width:57%;
+    min-height:106px;
+  }
+  html[data-month-theme="septiembre"] .hero-card .eyebrow{font-size:10px;letter-spacing:.11em}
+  html[data-month-theme="septiembre"] .hero-card h1{
+    max-width:100%;
+    margin-top:4px;
+    font-size:30px;
+    line-height:1.02;
+  }
+  html[data-month-theme="septiembre"] .hero-card .hero-message{
+    position:relative;
+    z-index:8;
+    width:55%;
+    max-width:55%;
+    margin-top:8px;
+    font-size:13px;
+    line-height:1.35;
+  }
+  html[data-month-theme="septiembre"] .shift-badge{
+    right:12px;
+    top:16px;
+    padding:8px 12px;
+    font-size:11px;
+  }
+
+  html[data-month-theme="septiembre"] .sep-papel{left:16px;top:0}
+  html[data-month-theme="septiembre"] .sep-papel span{width:39px;height:34px}
+
+  html[data-month-theme="septiembre"] .sep-character{
+    right:-9px;
+    top:44px;
+    width:48%;
+    height:315px;
+    object-fit:contain;
+    object-position:right bottom;
+  }
+  html[data-month-theme="septiembre"] .sep-theme-label{
+    left:16px;
+    bottom:103px;
+    max-width:58%;
+    padding:8px 9px 8px 31px;
+    font-size:10.5px;
+    line-height:1.15;
+  }
+  html[data-month-theme="septiembre"] .sep-theme-label:before{left:10px;top:4px;font-size:20px}
+
+  html[data-month-theme="septiembre"] .quick-actions{
+    left:14px;
+    right:14px;
+    bottom:15px;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+  }
+  html[data-month-theme="septiembre"] .quick-actions .button{
+    min-height:66px;
+    padding:10px 8px;
+    border-radius:17px;
+    font-size:14px;
+    line-height:1.15;
+  }
+
+  html[data-month-theme="septiembre"] #view-home>.period-card{
+    margin-top:14px;
+    padding:20px 17px;
+    border-radius:20px;
+  }
+  html[data-month-theme="septiembre"] .date-range{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+
+  html[data-month-theme="septiembre"] #view-home>.stats-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px;
+    margin-top:12px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{
+    min-height:108px;
+    padding:14px 12px;
+    border-radius:18px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card strong{font-size:30px}
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card>span:last-child{font-size:11px}
+
+  html[data-month-theme="septiembre"] #view-home>.progress-card{
+    margin-top:12px;
+    padding:18px;
+    border-radius:20px;
+  }
+  html[data-month-theme="septiembre"] .progress-value{font-size:30px}
+  html[data-month-theme="septiembre"] #view-home>.upcoming-card{margin-top:12px;border-radius:20px}
+
+  html[data-month-theme="septiembre"] .bottom-nav{
+    padding-bottom:max(30px,env(safe-area-inset-bottom));
+  }
+}
+
+/* Adaptación secundaria: móvil horizontal */
+@media (max-width:950px) and (orientation:landscape){
+  html[data-month-theme="septiembre"] #view-home{padding-top:18px}
+  html[data-month-theme="septiembre"] #view-home>.hero-card{
+    min-height:360px;
+    padding:52px 43% 92px 24px;
+  }
+  html[data-month-theme="septiembre"] .sep-character{height:265px;width:43%;top:39px}
+  html[data-month-theme="septiembre"] .quick-actions .button{min-height:58px}
+  html[data-month-theme="septiembre"] #view-home>.stats-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+
+/* Adaptación secundaria: tablet y escritorio */
+@media (min-width:601px){
+  html[data-month-theme="septiembre"] .app-shell{max-width:1180px;margin:0 auto}
+}
