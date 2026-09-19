@@ -1,12 +1,12 @@
-const CACHE_NAME = "biometrimss-v6.1.0";
+const CACHE_NAME = "biometrimss-v6.2.0";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./style.css?v=6.0.0",
   "./themes/monthly-theme.css?v=4.9.0",
-  "./themes/september-viva.css?v=6.1.0",
+  "./themes/september-viva.css?v=6.2.0",
   "./themes/q4-seasonal.css?v=5.9.0",
-  "./themes/monthly-theme.js?v=6.1.0",
+  "./themes/monthly-theme.js?v=6.2.0",
   "./logic.js?v=5.9.0",
   "./report-image.js?v=5.9.0",
   "./app.js?v=6.0.0",
