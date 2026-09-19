@@ -91,7 +91,7 @@
       button.id = "downloadAnimatedPdf";
       button.className = "button button-primary";
       button.type = "button";
-      button.textContent = "Descargar informe animado";
+      button.textContent = "Descargar formato animado PDF";
       normalPdfButton.insertAdjacentElement("afterend", button);
     }
 
@@ -102,7 +102,7 @@
       const label = button.textContent;
       try {
         button.disabled = true;
-        button.textContent = "Generando informe…";
+        button.textContent = "Generando PDF animado…";
         await buildAnimatedPdf();
         button.textContent = "Informe generado";
         window.setTimeout(() => { button.textContent = label; }, 1400);
