@@ -3,7 +3,7 @@
 
   const L = window.BiometrLogic;
   const R = window.BiometrReport;
-  const APP_VERSION = "2.10.0";
+  const APP_VERSION = "2.11.0";
   const STORAGE = {
     settings: "biometrimss:v2:settings",
     records: "biometrimss:v2:records",
@@ -13,6 +13,59 @@
   };
 
   const $ = (id) => document.getElementById(id);
+  // Calendario institucional 2026: solo presentación/detección.
+  // No modifica cálculos de asistencia, guardias, incidencias ni reportes.
+  const HOLIDAYS_2026 = {
+    "2026-01-01": { name: "Año Nuevo", symbol: "🎆", source: "Oficial" },
+    "2026-02-02": { name: "Conmemoración de la Constitución", symbol: "🇲🇽", source: "Oficial" },
+    "2026-03-16": { name: "Natalicio de Benito Juárez", symbol: "🇲🇽", source: "Oficial" },
+    "2026-04-02": { name: "Jueves Santo", symbol: "✝️", source: "Calendario IMSS" },
+    "2026-04-03": { name: "Viernes Santo", symbol: "✝️", source: "Calendario IMSS" },
+    "2026-04-04": { name: "Sábado de Gloria", symbol: "🕊️", source: "Calendario IMSS" },
+    "2026-05-01": { name: "Día del Trabajo", symbol: "🛠️", source: "Oficial" },
+    "2026-05-10": { name: "Día de las Madres", symbol: "🌷", source: "Calendario IMSS" },
+    "2026-09-15": { name: "Conmemoración de Independencia", symbol: "🇲🇽", source: "Calendario IMSS" },
+    "2026-09-16": { name: "Día de la Independencia", symbol: "🇲🇽", source: "Oficial" },
+    "2026-11-16": { name: "Conmemoración de la Revolución Mexicana", symbol: "🇲🇽", source: "Oficial" },
+    "2026-12-25": { name: "Navidad", symbol: "🎄", source: "Calendario IMSS" }
+  };
+
+  const BBVA_PAYDAYS_2026 = new Set([
+    "2026-01-13","2026-01-28","2026-02-11","2026-02-25",
+    "2026-03-11","2026-03-26","2026-04-13","2026-04-28",
+    "2026-05-13","2026-05-27","2026-06-11","2026-06-26",
+    "2026-07-13","2026-07-28","2026-08-12","2026-08-26",
+    "2026-09-10","2026-09-28","2026-10-13","2026-10-28",
+    "2026-11-11","2026-11-26","2026-12-11","2026-12-28"
+  ]);
+
+  function calendarSpecialForDate(key) {
+    return {
+      holiday: HOLIDAYS_2026[key] || null,
+      payday: BBVA_PAYDAYS_2026.has(key)
+        ? { bank: "BBVA", time: "01:00", label: "Día de pago" }
+        : null
+    };
+  }
+
+  function renderCalendarSpecial(meta) {
+    if (!meta.holiday && !meta.payday) return "";
+    const holiday = meta.holiday ? `
+      <article class="calendar-special calendar-special-holiday">
+        <div class="calendar-special-avatar-wrap">
+          <img class="calendar-special-avatar" src="assets/F226F542-3898-4479-8A6A-7C0837ED127C.png" alt="">
+          <span class="calendar-special-symbol" aria-hidden="true">${meta.holiday.symbol}</span>
+        </div>
+        <div><strong>${escapeHtml(meta.holiday.name)}</strong><span>Festivo · ${escapeHtml(meta.holiday.source)}</span></div>
+      </article>` : "";
+    const payday = meta.payday ? `
+      <article class="calendar-special calendar-special-payday">
+        <span class="calendar-pay-icon" aria-hidden="true">$</span>
+        <div><strong>Pago BBVA · 01:00 h</strong><span>Pago disponible a la 1:00 a. m. del día marcado.</span></div>
+      </article>` : "";
+    return `<div class="calendar-special-stack">${holiday}${payday}</div>`;
+  }
+
   const now = new Date();
   const initialMonth = new Date(now.getFullYear(), now.getMonth(), 1, 12);
   const state = {
@@ -699,14 +752,22 @@
       const record = state.records.find((item) => item.shiftDate === key);
       const evaluation = record ? L.evaluateRecord(record, state.settings) : null;
       const scheduled = L.isScheduledDate(key, state.settings);
+      const special = calendarSpecialForDate(key);
       const classes = ["calendar-day"];
       if (date.getMonth() !== month.getMonth()) classes.push("is-outside");
       if (key === today) classes.push("is-today");
       if (key === state.selectedDate) classes.push("is-selected");
+      if (special.holiday) classes.push("is-holiday");
+      if (special.payday) classes.push("is-payday");
       if (evaluation) classes.push(`has-${evaluation.category}`, `has-status-${evaluation.status}`);
       else if (scheduled) classes.push("is-scheduled");
-      const label = `${formatFriendlyDate(key)}${evaluation ? `, ${evaluation.label}` : scheduled ? ", guardia programada" : ""}`;
-      cells.push(`<button class="${classes.join(" ")}" type="button" data-date="${key}" aria-label="${escapeHtml(label)}"><span>${date.getDate()}</span>${scheduled ? '<i class="guard-dot"></i>' : ""}</button>`);
+      const extras = [
+        special.holiday ? `festivo: ${special.holiday.name}` : "",
+        special.payday ? "pago BBVA a la 01:00" : ""
+      ].filter(Boolean).join(", ");
+      const label = `${formatFriendlyDate(key)}${evaluation ? `, ${evaluation.label}` : scheduled ? ", guardia programada" : ""}${extras ? `, ${extras}` : ""}`;
+      const markers = `${special.holiday ? `<i class="holiday-mark" aria-hidden="true">${special.holiday.symbol}</i>` : ""}${special.payday ? '<i class="payday-mark" aria-hidden="true">$</i>' : ""}${scheduled ? '<i class="guard-dot"></i>' : ""}`;
+      cells.push(`<button class="${classes.join(" ")}" type="button" data-date="${key}" aria-label="${escapeHtml(label)}"><span>${date.getDate()}</span>${markers}</button>`);
     }
     $("calendarGrid").innerHTML = cells.join("");
     renderSelectedDay();
@@ -719,14 +780,16 @@
       weekday: "long", day: "numeric", month: "long", year: "numeric"
     }).format(date));
     const record = state.records.find((item) => item.shiftDate === state.selectedDate);
+    const special = calendarSpecialForDate(state.selectedDate);
+    const specialHtml = renderCalendarSpecial(special);
     $("addSelectedDay").hidden = Boolean(record);
     if (!record) {
       const scheduled = L.isScheduledDate(state.selectedDate, state.settings);
       const vacation = L.vacationPeriodForDate(state.selectedDate, state.settings);
-      $("selectedDayContent").innerHTML = `<div class="empty-state compact-empty"><p>${vacation ? `Vacaciones programadas${vacation.notes ? ` · ${escapeHtml(vacation.notes)}` : ""}.` : scheduled ? "Guardia programada todavía sin captura." : "No hay un registro en esta fecha."}</p></div>`;
+      $("selectedDayContent").innerHTML = specialHtml + `<div class="empty-state compact-empty"><p>${vacation ? `Vacaciones programadas${vacation.notes ? ` · ${escapeHtml(vacation.notes)}` : ""}.` : scheduled ? "Guardia programada todavía sin captura." : "No hay un registro en esta fecha."}</p></div>`;
       return;
     }
-    $("selectedDayContent").innerHTML = recordCard(record, true);
+    $("selectedDayContent").innerHTML = specialHtml + recordCard(record, true);
   }
 
   function renderHistory() {
