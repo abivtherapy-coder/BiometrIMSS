@@ -2068,3 +2068,192 @@ main > .view:not(.is-active){
 main > .view.is-active{
   display:block;
 }
+
+
+/* ==========================================================
+   BIOMETRIMSS · AJUSTE RESPONSIVO AUTOMÁTICO · v6.6
+   Mantiene cada módulo aislado y ordena el portal por tamaño.
+   ========================================================== */
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.app-shell {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.topbar,
+main,
+.bottom-nav {
+  width: 100%;
+}
+
+main {
+  max-width: 760px;
+  padding-left: clamp(10px, 4vw, 18px);
+  padding-right: clamp(10px, 4vw, 18px);
+}
+
+main > .view,
+main > .view > *,
+.card,
+.period-card,
+.digital-report,
+.form-card,
+.calendar-card {
+  min-width: 0;
+  max-width: 100%;
+}
+
+img,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+.button,
+.chip-button,
+.text-button,
+.nav-item {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.bottom-nav {
+  right: auto;
+  left: 50%;
+  max-width: 760px;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 600px) {
+  main {
+    padding-top: 14px;
+    padding-bottom: calc(92px + var(--safe-bottom));
+  }
+
+  .page-heading,
+  .page-heading-row,
+  .report-page-heading {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+
+  .page-heading-row,
+  .report-page-heading,
+  .section-heading {
+    align-items: flex-start;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stat-card {
+    min-height: 102px;
+    padding: 12px 10px;
+  }
+
+  .stat-card > span:last-child {
+    white-space: normal;
+    font-size: .68rem;
+  }
+
+  .form-grid,
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-field {
+    grid-column: 1;
+  }
+
+  .date-range {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .date-range > span {
+    display: none;
+  }
+
+  .date-range input {
+    font-size: .76rem;
+  }
+
+  .report-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .report-actions .button {
+    min-height: 48px;
+    padding: 10px 8px;
+    font-size: .74rem;
+    line-height: 1.15;
+  }
+
+  .digital-report-profile {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .digital-report-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bottom-nav {
+    max-width: 430px;
+  }
+
+  .nav-item {
+    font-size: .49rem;
+  }
+
+  .nav-item svg {
+    width: 21px;
+    height: 21px;
+  }
+}
+
+@media (max-width: 380px) {
+  main {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .date-range {
+    grid-template-columns: 1fr;
+  }
+
+  .report-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .digital-report-profile,
+  .digital-report-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-nav {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+
+  .nav-item {
+    font-size: .45rem;
+  }
+}
+
+@media (min-width: 761px) {
+  main {
+    padding-top: 24px;
+  }
+
+  .bottom-nav {
+    border-radius: 18px 18px 0 0;
+  }
+}
