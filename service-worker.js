@@ -4,6 +4,7 @@ const APP_SHELL = [
   "./index.html",
   "./style.css?v=6.0.0",
   "./themes/monthly-theme.css?v=4.9.0",
+  "./themes/monthly-theme-first-eight.css?v=6.0.0",
   "./themes/september-viva.css?v=5.9.0",
   "./themes/q4-seasonal.css?v=5.9.0",
   "./themes/monthly-theme.js?v=5.9.0",
