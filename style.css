@@ -2059,3 +2059,12 @@ h2 {
 .calendar-special-avatar{width:100%;height:100%;object-fit:cover;object-position:50% 18%}
 .calendar-special-symbol{position:absolute!important;right:-1px;bottom:-1px;display:grid!important;width:22px;height:22px;place-items:center;border-radius:50%;background:#fff;font-size:.9rem;box-shadow:0 2px 7px rgba(0,0,0,.12)}
 .calendar-pay-icon{display:grid!important;width:42px;height:42px;flex:0 0 42px;place-items:center;border-radius:13px;background:#16a9c7;color:#fff;font-size:1.25rem;font-weight:950}
+
+
+/* Navegación: una sola vista visible a la vez · v6.5 */
+main > .view:not(.is-active){
+  display:none !important;
+}
+main > .view.is-active{
+  display:block;
+}
