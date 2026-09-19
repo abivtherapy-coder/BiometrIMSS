@@ -614,3 +614,81 @@ html[data-month-theme="septiembre"] .bottom-nav{
     height:276px;
   }
 }
+
+
+/* ==========================================================
+   SEPTIEMBRE · PULIDO VISUAL FINAL · v6.7
+   ========================================================== */
+@media(max-width:600px) and (orientation:portrait){
+  html[data-month-theme="septiembre"] #view-home>.hero-card{
+    min-height:422px;
+    padding:54px 16px 106px;
+    border-radius:26px;
+    box-shadow:0 15px 34px rgba(0,75,55,.17);
+  }
+  html[data-month-theme="septiembre"] .hero-topline{
+    width:56%;
+    min-height:94px;
+  }
+  html[data-month-theme="septiembre"] .hero-card h1{
+    font-size:clamp(28px,8vw,33px);
+    line-height:1.01;
+  }
+  html[data-month-theme="septiembre"] .hero-card .hero-message{
+    width:52%;
+    max-width:52%;
+    margin-top:7px;
+    font-size:12.5px;
+    line-height:1.34;
+  }
+  html[data-month-theme="septiembre"] .sep-character{
+    top:47px;
+    right:-3px;
+    width:46%;
+    height:282px;
+    object-position:center bottom;
+  }
+  html[data-month-theme="septiembre"] .sep-theme-label{
+    left:16px;
+    bottom:94px;
+    max-width:62%;
+    border-radius:11px;
+    box-shadow:0 3px 9px rgba(0,0,0,.10);
+  }
+  html[data-month-theme="septiembre"] .quick-actions{
+    left:14px;
+    right:14px;
+    bottom:14px;
+  }
+  html[data-month-theme="septiembre"] .quick-actions .button{
+    min-height:60px;
+    border-radius:18px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.period-card{
+    padding:21px 18px;
+    border-radius:22px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.period-card:after{
+    right:11%;
+    bottom:9px;
+    opacity:.65;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{
+    min-height:104px;
+    border-radius:19px;
+  }
+  html[data-month-theme="septiembre"] .bottom-nav{
+    height:calc(78px + var(--safe-bottom));
+    padding-top:7px;
+    padding-bottom:max(30px,env(safe-area-inset-bottom));
+  }
+  html[data-month-theme="septiembre"] .bottom-nav:after{
+    bottom:13px;
+    font-size:7px;
+    letter-spacing:.17em;
+  }
+  html[data-month-theme="septiembre"] .bottom-nav:before{
+    height:13px;
+    opacity:.86;
+  }
+}
