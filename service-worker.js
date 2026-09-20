@@ -1,16 +1,16 @@
-const CACHE_NAME = "biometrimss-v6.8.0";
+const CACHE_NAME = "biometrimss-v6.9.0";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./style.css?v=6.8.0",
+  "./style.css?v=6.9.0",
   "./themes/monthly-theme.css?v=4.9.0",
-  "./themes/september-viva.css?v=6.8.0",
+  "./themes/september-viva.css?v=6.9.0",
   "./themes/q4-seasonal.css?v=5.9.0",
-  "./themes/monthly-theme.js?v=6.8.0",
-  "./logic.js?v=6.8.0",
-  "./report-image.js?v=6.8.0",
-  "./animated-report.js?v=6.8.0",
-  "./app.js?v=6.8.0",
+  "./themes/monthly-theme.js?v=6.9.0",
+  "./logic.js?v=6.9.0",
+  "./report-image.js?v=6.9.0",
+  "./animated-report.js?v=6.9.0",
+  "./app.js?v=6.9.0",
   "./manifest.webmanifest?v=4.9.0",
   "./icons/icon-180.png?v=4.9.0",
   "./icons/icon-192.png?v=4.9.0",
@@ -59,6 +59,7 @@ self.addEventListener("fetch", (event) => {
   }
 
   const freshPaths = [
+    "/style.css",
     "/app.js",
     "/animated-report.js",
     "/logic.js",
