@@ -18,12 +18,19 @@ test("el informe muestra únicamente las dos descargas aprobadas", () => {
 
 test("la versión visible y la caché cargan los scripts corregidos", () => {
   for (const file of ["app.js", "animated-report.js", "logic.js", "report-image.js", "themes/monthly-theme.js"]) {
-    assert.match(html, new RegExp(file.replace(".", "\\.") + "\\?v=6\\.9\\.0"));
+    assert.match(html, new RegExp(file.replace(".", "\\.") + "\\?v=7\\.0\\.0"));
   }
-  assert.match(html, /style\.css\?v=6\.9\.0/);
-  assert.match(worker, /biometrimss-v6\.9\.0/);
-  assert.match(worker, /.\/app\.js\?v=6\.9\.0/);
-  assert.match(worker, /.\/animated-report\.js\?v=6\.9\.0/);
+  assert.match(html, /style\.css\?v=7\.0\.0/);
+  assert.match(worker, /biometrimss-v7\.0\.0/);
+  assert.match(worker, /.\/app\.js\?v=7\.0\.0/);
+  assert.match(worker, /.\/animated-report\.js\?v=7\.0\.0/);
+});
+
+test("el intro usa el video circular completo y abre el portal al terminar", () => {
+  assert.match(html, /<video id="brandIntroLogo"[^>]*muted[^>]*playsinline/);
+  assert.match(html, /biometrimss-intro-circle-v1\.mp4\?v=7\.0\.0/);
+  assert.match(html, /video\.addEventListener\("ended", finishIntro/);
+  assert.match(worker, /biometrimss-intro-circle-v1\.mp4\?v=7\.0\.0/);
 });
 
 test("la portada móvil conserva los cuatro indicadores en una fila", () => {

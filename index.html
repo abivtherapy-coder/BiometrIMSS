@@ -14,7 +14,7 @@
   <link rel="manifest" href="manifest.webmanifest?v=4.9.0">
   <link rel="apple-touch-icon" href="icons/icon-180.png?v=4.9.0">
   <link rel="icon" href="icons/icon-192.png?v=4.9.0" type="image/png">
-  <link rel="stylesheet" href="style.css?v=6.9.0">
+  <link rel="stylesheet" href="style.css?v=7.0.0">
   <link rel="stylesheet" href="themes/monthly-theme.css?v=4.9.0">
 </head>
 
@@ -22,24 +22,48 @@
   <div id="brandIntro" class="brand-intro" aria-hidden="true">
     <div class="brand-intro-stage">
       <div class="brand-intro-orbit"></div>
-      <img id="brandIntroLogo" class="brand-intro-logo" src="assets/biometrimss-logo-transparent-v1.png?v=4.9.0" alt="">
+      <video id="brandIntroLogo" class="brand-intro-logo" muted playsinline preload="auto">
+        <source src="assets/biometrimss-intro-circle-v1.mp4?v=7.0.0" type="video/mp4">
+      </video>
       <span class="brand-intro-scan"></span>
     </div>
-    <p>BIOMETRIMSS</p>
   </div>
   <script>
     (() => {
       const intro = document.getElementById("brandIntro");
-      const logo = document.getElementById("brandIntroLogo");
+      const video = document.getElementById("brandIntroLogo");
+      const root = document.documentElement;
       let started = false;
+      let finished = false;
+      root.classList.add("intro-active");
+
+      const finishIntro = () => {
+        if (finished) return;
+        finished = true;
+        intro.classList.add("is-complete");
+        root.classList.add("intro-complete");
+        window.setTimeout(() => {
+          intro.remove();
+          root.classList.remove("intro-active", "intro-complete");
+        }, 1100);
+      };
+
       const startIntro = () => {
         if (started) return;
         started = true;
-        requestAnimationFrame(() => intro.classList.add("is-ready"));
+        requestAnimationFrame(() => {
+          intro.classList.add("is-ready");
+          const playback = video.play();
+          if (playback && typeof playback.catch === "function") playback.catch(() => window.setTimeout(finishIntro, 2600));
+        });
       };
-      if (logo.complete && logo.naturalWidth) startIntro();
-      else logo.addEventListener("load", startIntro, { once: true });
-      window.setTimeout(startIntro, 1500);
+
+      video.addEventListener("canplay", startIntro, { once: true });
+      video.addEventListener("ended", finishIntro, { once: true });
+      video.addEventListener("error", finishIntro, { once: true });
+      if (video.readyState >= 3) startIntro();
+      window.setTimeout(startIntro, 1400);
+      window.setTimeout(finishIntro, 11000);
     })();
   </script>
   <div class="app-shell">
@@ -601,12 +625,12 @@
     </form>
   </dialog>
 
-  <script src="logic.js?v=6.9.0"></script>
-  <script src="report-image.js?v=6.9.0"></script>
+  <script src="logic.js?v=7.0.0"></script>
+  <script src="report-image.js?v=7.0.0"></script>
   <script src="vendor/pdf-lib/pdf-lib.min.js"></script>
-  <script src="app.js?v=6.9.0"></script>
-  <script src="themes/monthly-theme.js?v=6.9.0"></script>
-  <script src="animated-report.js?v=6.9.0"></script>
+  <script src="app.js?v=7.0.0"></script>
+  <script src="themes/monthly-theme.js?v=7.0.0"></script>
+  <script src="animated-report.js?v=7.0.0"></script>
 
 </body>
 </html>

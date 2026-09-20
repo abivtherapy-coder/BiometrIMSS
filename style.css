@@ -72,15 +72,25 @@ body {
   place-content: center;
   justify-items: center;
   overflow: hidden;
-  background: radial-gradient(circle at 50% 43%, #087f68 0, #034c40 34%, #012c27 72%, #001d1a 100%);
+  background: #002b27;
 }
 
-.brand-intro.is-ready { animation: brand-intro-exit .9s cubic-bezier(.4, 0, .2, 1) 5.1s forwards; }
+.brand-intro.is-complete { animation: brand-intro-exit 1s cubic-bezier(.4, 0, .2, 1) forwards; }
+
+html.intro-active,
+html.intro-active body { overflow: hidden; }
+
+html.intro-active .app-shell {
+  opacity: 0;
+  transform: scale(.985);
+}
+
+html.intro-complete .app-shell { animation: portal-reveal 1s cubic-bezier(.22, .8, .28, 1) forwards; }
 
 .brand-intro-stage {
   position: relative;
   display: grid;
-  width: min(78vw, 360px);
+  width: min(82vw, 390px);
   aspect-ratio: 1;
   place-items: center;
 }
@@ -89,17 +99,21 @@ body {
   grid-area: 1 / 1;
   position: relative;
   z-index: 2;
-  width: 82%;
+  width: 86%;
+  height: 86%;
   aspect-ratio: 1;
-  border-radius: 28%;
+  border-radius: 50%;
   object-fit: cover;
-  filter: drop-shadow(0 0 18px rgba(22, 255, 211, .38)) drop-shadow(0 0 25px rgba(255, 203, 74, .2));
-  clip-path: inset(100% 0 0);
+  object-position: center;
+  opacity: 0;
+  transform: scale(.86);
+  -webkit-mask-image: radial-gradient(circle, #000 0 66%, rgba(0,0,0,.96) 69%, transparent 73%);
+  mask-image: radial-gradient(circle, #000 0 66%, rgba(0,0,0,.96) 69%, transparent 73%);
+  filter: drop-shadow(0 0 22px rgba(22, 255, 211, .28)) drop-shadow(0 0 30px rgba(255, 203, 74, .2));
 }
 
 .brand-intro.is-ready .brand-intro-logo {
-  animation: biometric-lines 2.6s cubic-bezier(.22, .8, .28, 1) .7s forwards,
-    biometric-pulse .8s ease 3.45s 2 alternate;
+  animation: intro-logo-reveal .85s cubic-bezier(.22, .8, .28, 1) forwards;
 }
 
 .brand-intro-orbit {
@@ -133,17 +147,10 @@ body {
 
 .brand-intro.is-ready .brand-intro-scan { animation: scan-line 2.45s ease .65s forwards; }
 
-.brand-intro p {
-  z-index: 2;
-  margin: 18px 0 0;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 800;
-  letter-spacing: .24em;
-  opacity: 0;
-}
 
-.brand-intro.is-ready p { animation: intro-name .9s ease 3.65s forwards; }
+@keyframes intro-logo-reveal {
+  to { opacity: 1; transform: scale(1); }
+}
 
 @keyframes biometric-lines {
   0% { clip-path: inset(100% 0 0); opacity: .25; transform: scale(.92); }
@@ -165,11 +172,14 @@ body {
   100% { opacity: 0; transform: translateY(-132px) scaleX(1); }
 }
 
-@keyframes intro-name { to { opacity: 1; transform: translateY(-2px); } }
-
 @keyframes brand-intro-exit {
   0% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.045); }
+}
+
+@keyframes portal-reveal {
+  0% { opacity: 0; transform: scale(.985); filter: blur(8px); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); }
 }
 
 button,
@@ -2010,11 +2020,9 @@ h2 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .brand-intro.is-ready { animation-delay: 1.2s; }
-  .brand-intro-logo { clip-path: inset(0); }
+  .brand-intro-logo { opacity: 1; transform: none; }
   .brand-intro-orbit,
   .brand-intro-scan { display: none; }
-  .brand-intro p { opacity: 1; }
   *,
   *::before,
   *::after {
