@@ -3,7 +3,7 @@
 
   const L = window.BiometrLogic;
   const R = window.BiometrReport;
-  const APP_VERSION = "2.11.0";
+  const APP_VERSION = "2.12.0";
   const STORAGE = {
     settings: "biometrimss:v2:settings",
     records: "biometrimss:v2:records",
@@ -379,7 +379,6 @@
     $("openDigitalReport").addEventListener("click", () => navigate("report"));
     $("exportPdf").addEventListener("click", exportPdf);
     $("downloadDigitalPdf").addEventListener("click", exportPdf);
-    $("printDigitalReport").addEventListener("click", () => window.print());
     ["reportStart", "reportEnd"].forEach((id) => $(id).addEventListener("change", () => {
       $(id === "reportStart" ? "historyStart" : "historyEnd").value = $(id).value;
       state.reportFilter = "all";
