@@ -1,7 +1,7 @@
 (function initializeMonthlyTheme() {
   "use strict";
 
-  const THEME_VERSION = "7.0.0";
+  const THEME_VERSION = "7.1.0";
   const SEPTEMBER_CHARACTER = "assets/biometrimss-charro-septiembre-v1.png";
   const themes = [
     ["enero", "Año Nuevo", "✦"],
@@ -142,6 +142,11 @@
 
     const character = make("div", `q4-character q4-character--${id}`);
     hero.append(character);
+    if (id === "octubre") {
+      const ghosts = make("div", "q4-ghosts");
+      for (let i = 0; i < 9; i += 1) ghosts.append(make("span", "q4-ghost", "👻"));
+      hero.append(ghosts);
+    }
     hero.append(make("div", "q4-theme-label", `Tema del mes: ${copy.theme}`));
     hero.append(make("div", "q4-scene"));
 

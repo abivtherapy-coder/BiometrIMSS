@@ -18,19 +18,28 @@ test("el informe muestra únicamente las dos descargas aprobadas", () => {
 
 test("la versión visible y la caché cargan los scripts corregidos", () => {
   for (const file of ["app.js", "animated-report.js", "logic.js", "report-image.js", "themes/monthly-theme.js"]) {
-    assert.match(html, new RegExp(file.replace(".", "\\.") + "\\?v=7\\.0\\.0"));
+    assert.match(html, new RegExp(file.replace(".", "\\.") + "\\?v=7\\.1\\.0"));
   }
-  assert.match(html, /style\.css\?v=7\.0\.0/);
-  assert.match(worker, /biometrimss-v7\.0\.0/);
-  assert.match(worker, /.\/app\.js\?v=7\.0\.0/);
-  assert.match(worker, /.\/animated-report\.js\?v=7\.0\.0/);
+  assert.match(html, /style\.css\?v=7\.1\.0/);
+  assert.match(worker, /biometrimss-v7\.1\.0/);
+  assert.match(worker, /.\/app\.js\?v=7\.1\.0/);
+  assert.match(worker, /.\/animated-report\.js\?v=7\.1\.0/);
 });
 
 test("el intro usa el video circular completo y abre el portal al terminar", () => {
   assert.match(html, /<video id="brandIntroLogo"[^>]*muted[^>]*playsinline/);
-  assert.match(html, /biometrimss-intro-circle-v1\.mp4\?v=7\.0\.0/);
+  assert.match(html, /biometrimss-intro-circle-v1\.mp4\?v=7\.1\.0/);
   assert.match(html, /video\.addEventListener\("ended", finishIntro/);
-  assert.match(worker, /biometrimss-intro-circle-v1\.mp4\?v=7\.0\.0/);
+  assert.match(worker, /biometrimss-intro-circle-v1\.mp4\?v=7\.1\.0/);
+});
+
+test("octubre usa el avatar zombi oficial y nueve fantasmas", () => {
+  const theme = fs.readFileSync(path.join(root, "themes/monthly-theme.js"), "utf8");
+  const q4 = fs.readFileSync(path.join(root, "themes/q4-seasonal.css"), "utf8");
+  assert.match(theme, /i < 9/);
+  assert.match(theme, /q4-ghost/);
+  assert.match(q4, /biometrimss-zombie-octubre-v1\.png/);
+  assert.match(worker, /biometrimss-zombie-octubre-v1\.png\?v=7\.1\.0/);
 });
 
 test("la portada móvil conserva los cuatro indicadores en una fila", () => {
