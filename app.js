@@ -3,7 +3,7 @@
 
   const L = window.BiometrLogic;
   const R = window.BiometrReport;
-  const APP_VERSION = "2.15.0";
+  const APP_VERSION = "2.16.0";
   const STORAGE = {
     settings: "biometrimss:v2:settings",
     records: "biometrimss:v2:records",
@@ -1127,6 +1127,18 @@
   async function createDigitalPdf(model) {
     const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
     const pdf = await PDFDocument.create();
+    const reportMonth = Number(String(model.start || $("reportStart").value || "").slice(5, 7));
+    const pdfTheme = reportMonth === 10
+      ? { label: "OCTUBRE - HALLOWEEN", primary: "#5a1973", dark: "#24102f", soft: "#f6eafa" }
+      : reportMonth === 11
+        ? { label: "NOVIEMBRE - DIA DE MUERTOS", primary: "#7a2a78", dark: "#3d153f", soft: "#fff0df" }
+        : reportMonth === 12
+          ? { label: "DICIEMBRE - FELIZ NAVIDAD", primary: "#007a58", dark: "#064b3e", soft: "#eaf7f2" }
+          : { label: "BIOMETRIMSS", primary: "#08745a", dark: "#063d34", soft: "#f0faf6" };
+    const pdfColor = (hex) => {
+      const value = hex.replace("#", "");
+      return rgb(parseInt(value.slice(0, 2), 16) / 255, parseInt(value.slice(2, 4), 16) / 255, parseInt(value.slice(4, 6), 16) / 255);
+    };
     const pdfAvatars = {};
     for (const status of [...new Set(model.rows.map((row) => row.status))]) {
       try {
@@ -1151,14 +1163,14 @@
     const newPage = (continued = false) => {
       page = pdf.addPage(pageSize);
       pageNumber += 1;
-      page.drawRectangle({ x: 0, y: pageSize[1] - 92, width: pageSize[0], height: 92, color: rgb(0.024, 0.24, 0.20) });
-      page.drawText(continued ? "INFORME DE GUARDIAS - CONTINUACION" : "BIOMETRIMSS - INFORME DE GUARDIAS", { x: margin, y: pageSize[1] - 43, size: 15, font: bold, color: rgb(1, 1, 1) });
+      page.drawRectangle({ x: 0, y: pageSize[1] - 92, width: pageSize[0], height: 92, color: pdfColor(pdfTheme.dark) });
+      page.drawText(continued ? "INFORME DE GUARDIAS - CONTINUACION" : `${pdfTheme.label} - INFORME DE GUARDIAS`, { x: margin, y: pageSize[1] - 43, size: 15, font: bold, color: rgb(1, 1, 1) });
       page.drawText(safeText(model.period), { x: margin, y: pageSize[1] - 66, size: 9, font: regular, color: rgb(0.86, 0.96, 0.92) });
       page.drawText(`Pagina ${pageNumber}`, { x: pageSize[0] - margin - 45, y: 25, size: 8, font: regular, color: rgb(0.37, 0.48, 0.45) });
       cursorY = pageSize[1] - 118;
     };
     const labelValue = (label, value, x, width) => {
-      page.drawText(label.toUpperCase(), { x, y: cursorY, size: 7, font: bold, color: rgb(0.04, 0.46, 0.35) });
+      page.drawText(label.toUpperCase(), { x, y: cursorY, size: 7, font: bold, color: pdfColor(pdfTheme.primary) });
       page.drawText(shorten(value, Math.floor(width / 5.2)), { x, y: cursorY - 14, size: 9, font: bold, color: rgb(0.09, 0.20, 0.18) });
     };
     newPage();
@@ -1176,13 +1188,13 @@
       const row = Math.floor(index / 4);
       const x = margin + column * summaryWidth;
       const y = cursorY - row * 45;
-      page.drawRectangle({ x, y: y - 39, width: summaryWidth - 5, height: 38, color: rgb(0.94, 0.98, 0.96) });
-      page.drawText(label.toUpperCase(), { x: x + 8, y: y - 16, size: 6.5, font: bold, color: rgb(0.04, 0.46, 0.35) });
-      page.drawText(String(value), { x: x + 8, y: y - 32, size: 13, font: bold, color: rgb(0.02, 0.24, 0.20) });
+      page.drawRectangle({ x, y: y - 39, width: summaryWidth - 5, height: 38, color: pdfColor(pdfTheme.soft) });
+      page.drawText(label.toUpperCase(), { x: x + 8, y: y - 16, size: 6.5, font: bold, color: pdfColor(pdfTheme.primary) });
+      page.drawText(String(value), { x: x + 8, y: y - 32, size: 13, font: bold, color: pdfColor(pdfTheme.dark) });
     });
     cursorY -= 113;
     const drawTableHeader = () => {
-      page.drawRectangle({ x: margin, y: cursorY - 18, width: pageSize[0] - margin * 2, height: 22, color: rgb(0.024, 0.24, 0.20) });
+      page.drawRectangle({ x: margin, y: cursorY - 18, width: pageSize[0] - margin * 2, height: 22, color: pdfColor(pdfTheme.dark) });
       [["GUARDIA", 0], ["ENTRADA", 86], ["SALIDA", 142], ["ESTATUS", 218], ["DETALLE", 303]].forEach(([label, offset]) => page.drawText(label, { x: margin + offset + 5, y: cursorY - 10, size: 6.5, font: bold, color: rgb(1, 1, 1) }));
       cursorY -= 22;
     };
@@ -1193,7 +1205,7 @@
         drawTableHeader();
       }
       const y = cursorY - 18;
-      page.drawRectangle({ x: margin, y, width: pageSize[0] - margin * 2, height: 22, color: index % 2 ? rgb(0.98, 0.99, 0.985) : rgb(1, 1, 1) });
+      page.drawRectangle({ x: margin, y, width: pageSize[0] - margin * 2, height: 22, color: index % 2 ? pdfColor(pdfTheme.soft) : rgb(1, 1, 1) });
       if (pdfAvatars[row.status]) page.drawImage(pdfAvatars[row.status], { x: margin + 221, y: y + 2, width: 18, height: 18 });
       const values = [shorten(row.date, 16), shorten(row.entry, 10), shorten(`${row.exitDate} ${row.exit}`, 16), shorten(row.statusLabel, 18), shorten(row.typeLabel, 34)];
       const offsets = [0, 86, 142, 218, 303];

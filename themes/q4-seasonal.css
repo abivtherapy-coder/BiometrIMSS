@@ -1,4 +1,4 @@
-/* BIOMETRIMSS · Octubre, noviembre y diciembre · v5.9 */
+/* BIOMETRIMSS · Octubre, noviembre y diciembre · v7.2 */
 html[data-month-theme="octubre"]{--q4-main:#5a1973;--q4-dark:#24102f;--q4-accent:#ff7a00;--q4-soft:#f6eafa;--q4-art:url("../assets/8F8128EE-95A3-40A1-9F22-F895C79C4976.png")}
 html[data-month-theme="noviembre"]{--q4-main:#7a2a78;--q4-dark:#3d153f;--q4-accent:#ff8b00;--q4-soft:#fff0df;--q4-art:url("../assets/BCF6ADEE-FFFA-4572-811F-BB8EB423AD02.png")}
 html[data-month-theme="diciembre"]{--q4-main:#007a58;--q4-dark:#064b3e;--q4-accent:#d51d2f;--q4-soft:#eaf7f2;--q4-art:url("../assets/8F8128EE-95A3-40A1-9F22-F895C79C4976.png")}
@@ -59,5 +59,49 @@ html[data-month-theme="octubre"] .digital-report-footer,html[data-month-theme="n
 html[data-month-theme="octubre"] .nav-item.is-active,html[data-month-theme="noviembre"] .nav-item.is-active,html[data-month-theme="diciembre"] .nav-item.is-active{color:var(--q4-main);background:var(--q4-soft);border-radius:16px}
 html[data-month-theme="octubre"] .bottom-nav,html[data-month-theme="noviembre"] .bottom-nav,html[data-month-theme="diciembre"] .bottom-nav{position:relative;padding-bottom:31px;background:#fff}
 html[data-month-theme="octubre"] .bottom-nav:after,html[data-month-theme="noviembre"] .bottom-nav:after,html[data-month-theme="diciembre"] .bottom-nav:after{content:attr(data-season-slogan);position:absolute;left:50%;bottom:5px;transform:translateX(-50%);width:100%;color:var(--q4-main);font-size:7px;font-weight:900;letter-spacing:.16em;text-align:center}
-@media(max-width:390px){.q4-header-title{font-size:19px}.q4-character{right:-14px;top:82px;width:50%}.q4-character--octubre{right:-16px;top:58px;width:57%;height:300px}html[data-month-theme="octubre"] .hero-card h1,html[data-month-theme="noviembre"] .hero-card h1,html[data-month-theme="diciembre"] .hero-card h1{font-size:33px}.q4-theme-label{font-size:10px}}
-@media print{.q4-header-art,.q4-character,.q4-ghosts,.q4-theme-label,.q4-scene,.q4-period-art,.q4-card-art,.q4-progress-art{display:none!important}}
+
+/* Tema mensual también en Historial, Ver informe e informe digital */
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #openDigitalReport{position:relative;overflow:hidden;color:#fff;border-color:var(--q4-accent);background:linear-gradient(135deg,var(--q4-dark),var(--q4-main) 76%);box-shadow:0 8px 18px color-mix(in srgb,var(--q4-main) 24%,transparent)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #openDigitalReport svg{stroke:color-mix(in srgb,var(--q4-accent) 82%,#fff)}
+html[data-month-theme="octubre"] #openDigitalReport:after{content:"🎃"}
+html[data-month-theme="noviembre"] #openDigitalReport:after{content:"✿"}
+html[data-month-theme="diciembre"] #openDigitalReport:after{content:"🎄"}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #openDigitalReport:after{font-size:16px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.25))}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report{position:relative}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .report-page-heading{position:relative;isolation:isolate;overflow:hidden;min-height:124px;padding:22px 118px 20px 20px;border:1px solid color-mix(in srgb,var(--q4-accent) 60%,transparent);border-radius:24px;color:#fff;background:radial-gradient(circle at 82% 28%,color-mix(in srgb,var(--q4-accent) 62%,#fff) 0 11%,transparent 12%),linear-gradient(135deg,var(--q4-dark) 0%,var(--q4-main) 72%,color-mix(in srgb,var(--q4-main) 70%,var(--q4-accent)));box-shadow:0 13px 28px color-mix(in srgb,var(--q4-main) 24%,transparent)}
+html[data-month-theme="octubre"] #view-report .report-page-heading:before{content:"🦇  🦇"}
+html[data-month-theme="noviembre"] #view-report .report-page-heading:before{content:"✿  ✿"}
+html[data-month-theme="diciembre"] #view-report .report-page-heading:before{content:"❄️  ❄️"}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .report-page-heading:before{position:absolute;z-index:-1;right:16px;top:12px;font-size:17px;letter-spacing:5px;transform:rotate(-7deg)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .report-page-heading .eyebrow{color:color-mix(in srgb,var(--q4-accent) 72%,#fff)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .report-page-heading h1{color:#fff;text-shadow:0 3px 8px rgba(0,0,0,.24)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .report-page-heading p:last-child{color:rgba(255,255,255,.86)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .report-page-heading .button{position:absolute;z-index:3;right:16px;bottom:14px;color:var(--q4-dark);border-color:rgba(255,255,255,.8);background:#fff}
+.q4-report-icons{position:absolute;z-index:-1;right:20px;top:45px;font-size:22px;letter-spacing:4px;filter:drop-shadow(0 4px 5px rgba(0,0,0,.25));animation:q4-ghost-float 3.4s ease-in-out infinite alternate;pointer-events:none}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .report-period-picker{border-color:color-mix(in srgb,var(--q4-main) 28%,transparent);background:linear-gradient(145deg,#fff 0 68%,var(--q4-soft));box-shadow:0 10px 26px color-mix(in srgb,var(--q4-main) 12%,transparent)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .report-period-picker:before{height:5px;background:linear-gradient(90deg,var(--q4-dark) 0 25%,var(--q4-accent) 25% 50%,var(--q4-main) 50% 75%,color-mix(in srgb,var(--q4-accent) 55%,#fff) 75%)}
+html[data-month-theme="octubre"] #view-report .report-period-picker:after{content:"👻"}
+html[data-month-theme="noviembre"] #view-report .report-period-picker:after{content:"🕯️"}
+html[data-month-theme="diciembre"] #view-report .report-period-picker:after{content:"🎁"}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .report-period-picker:after{position:absolute;right:16px;top:14px;font-size:24px;opacity:.9;transform:rotate(8deg)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .report-period-picker .eyebrow{color:var(--q4-main)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .report-period-picker input{border-color:color-mix(in srgb,var(--q4-main) 30%,#ddd);background:#fff}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report #downloadDigitalPdf{color:var(--q4-dark);border-color:color-mix(in srgb,var(--q4-main) 45%,#fff);background:#fff;box-shadow:0 7px 16px color-mix(in srgb,var(--q4-main) 12%,transparent)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report #downloadAnimatedPdf{color:#fff;border-color:var(--q4-accent);background:linear-gradient(135deg,var(--q4-dark),var(--q4-main) 72%,var(--q4-accent));box-shadow:0 9px 20px color-mix(in srgb,var(--q4-main) 26%,transparent)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .digital-report{overflow:hidden;border-color:color-mix(in srgb,var(--q4-main) 30%,transparent);box-shadow:0 13px 30px color-mix(in srgb,var(--q4-main) 15%,transparent)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .digital-report-header{background:radial-gradient(circle at 88% 30%,color-mix(in srgb,var(--q4-accent) 26%,transparent) 0 12%,transparent 13%),linear-gradient(135deg,var(--q4-dark),var(--q4-main) 76%)}
+html[data-month-theme="octubre"] #view-report .digital-report-header:before{content:"🦇   👻"}
+html[data-month-theme="noviembre"] #view-report .digital-report-header:before{content:"✿   🕯️"}
+html[data-month-theme="diciembre"] #view-report .digital-report-header:before{content:"❄️   🎄"}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .digital-report-header:before{position:absolute;right:18px;bottom:13px;font-size:17px;letter-spacing:5px;opacity:.9}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .digital-report-header:after{background:linear-gradient(90deg,var(--q4-dark) 0 25%,var(--q4-accent) 25% 50%,var(--q4-main) 50% 75%,color-mix(in srgb,var(--q4-accent) 55%,#fff) 75%)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .digital-report-profile>div{background:color-mix(in srgb,var(--q4-soft) 45%,#fff)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .digital-report-summary{background:color-mix(in srgb,var(--q4-soft) 70%,#fff)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .digital-report-summary>button{background:color-mix(in srgb,var(--q4-soft) 86%,#fff)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .digital-report-summary>button.is-selected{border-color:var(--q4-main);box-shadow:0 0 0 2px color-mix(in srgb,var(--q4-main) 14%,transparent)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .digital-report-summary strong{color:var(--q4-main)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .digital-report-table-wrap{border-color:color-mix(in srgb,var(--q4-main) 30%,#ddd)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .digital-report tr:nth-child(even) td{background:color-mix(in srgb,var(--q4-soft) 34%,#fff)}
+html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .digital-report-footer{color:var(--q4-dark);background:var(--q4-soft)}
+@media(max-width:390px){.q4-header-title{font-size:19px}.q4-character{right:-14px;top:82px;width:50%}.q4-character--octubre{right:-16px;top:58px;width:57%;height:300px}html[data-month-theme="octubre"] .hero-card h1,html[data-month-theme="noviembre"] .hero-card h1,html[data-month-theme="diciembre"] .hero-card h1{font-size:33px}.q4-theme-label{font-size:10px}html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .report-page-heading{min-height:146px;padding:20px 16px 58px}html:is([data-month-theme="octubre"],[data-month-theme="noviembre"],[data-month-theme="diciembre"]) #view-report .report-page-heading .button{left:16px;right:auto;bottom:12px}.q4-report-icons{right:12px;top:52px;font-size:18px}}
+@media print{.q4-header-art,.q4-character,.q4-ghosts,.q4-theme-label,.q4-scene,.q4-period-art,.q4-card-art,.q4-progress-art,.q4-report-icons{display:none!important}}

@@ -1,7 +1,7 @@
 (function initializeMonthlyTheme() {
   "use strict";
 
-  const THEME_VERSION = "7.1.0";
+  const THEME_VERSION = "7.2.0";
   const SEPTEMBER_CHARACTER = "assets/biometrimss-charro-septiembre-v1.png";
   const themes = [
     ["enero", "Año Nuevo", "✦"],
@@ -158,6 +158,16 @@
 
     const nav = document.querySelector(".bottom-nav");
     if (nav) nav.dataset.seasonSlogan = copy.slogan;
+
+    const reportLabel = document.getElementById("openDigitalReportLabel");
+    const reportTitle = document.getElementById("digitalReportTitle");
+    const reportHeading = document.querySelector("#view-report .report-page-heading");
+    if (reportLabel) reportLabel.textContent = `Ver informe · ${copy.header}`;
+    if (reportTitle) reportTitle.textContent = `Informe · ${copy.header}`;
+    if (reportHeading && !reportHeading.querySelector(".q4-report-icons")) {
+      const icons = id === "octubre" ? "👻  🎃  👻" : id === "noviembre" ? "✿  🕯️  ✿" : "❄️  🎄  🎁";
+      reportHeading.append(make("span", "q4-report-icons", icons));
+    }
   }
 
   function applyTheme() {
