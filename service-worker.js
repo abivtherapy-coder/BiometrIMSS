@@ -1,4 +1,4 @@
-const CACHE_NAME = "biometrimss-v7.2.0-avatar1";
+const CACHE_NAME = "biometrimss-v7.2.0-avatar2";
 const APP_SHELL = [
   "./usage.js?v=usage1",
   "./",
