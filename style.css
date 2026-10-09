@@ -1618,7 +1618,7 @@ h2 {
 .avatar-omision-entrada{background-position:98.8% 41.5%}
 .avatar-omision-salida{background-position:1.8% 63.2%}
 .avatar-permiso{background-position:34.8% 63.2%}
-.avatar-incapacidad{background-position:66.8% 63.2%}
+.avatar-incapacidad{background-image:url("assets/abisai-incapacidad-v2.png");background-position:center;background-size:contain}
 .avatar-convenio{background-position:98.8% 63.2%}
 .avatar-vacaciones{background-position:1.8% 86.2%}
 .avatar-festivo{background-position:34.8% 86.2%}

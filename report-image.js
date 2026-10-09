@@ -29,7 +29,8 @@
 
   const ILLUSTRATIONS = Object.freeze({
     logo:"assets/biometrimss-logo-transparent-v1.png",
-    states:"assets/8F8128EE-95A3-40A1-9F22-F895C79C4976.png"
+    states:"assets/8F8128EE-95A3-40A1-9F22-F895C79C4976.png",
+    incapacidad:"assets/abisai-incapacidad-v2.png"
   });
   const STATUS_ART_CROPS = Object.freeze({
     tolerancia:[15,493,263,210], "pase-entrada":[286,493,263,210], "pase-salida":[550,493,263,210],
@@ -93,6 +94,11 @@
   async function renderStatusAvatarBlob(status,size=96){
     if(typeof document==="undefined")throw new Error("Se necesita un navegador para dibujar el avatar.");
     const canvas=document.createElement("canvas");canvas.width=size;canvas.height=size;
+    if(visualStatus(status)==="incapacidad"){
+      const image=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=ILLUSTRATIONS.incapacidad;});
+      drawContain(canvas.getContext("2d"),image,0,0,size,size);
+      return canvasToBlob(canvas);
+    }
     drawStatusArt(canvas.getContext("2d"),await loadStatusSheet(),status,0,0,size,size);
     return canvasToBlob(canvas);
   }
@@ -150,12 +156,12 @@
   function drawPortraitTable(ctx,model,images,x,y,width,rowHeight,theme){
     const columns=[0,145,275,425,555,755,width],headers=["GUARDIA","ENTRADA","SALIDA","HORA","ESTATUS","TIPO"],hh=58;ctx.fillStyle=theme.dark;ctx.fillRect(x,y,width,hh);headers.forEach((h,i)=>text(ctx,h,x+(columns[i]+columns[i+1])/2,y+hh/2,{size:14,weight:900,color:"#fff",align:"center",baseline:"middle"}));
     const rows=model.rows.length?model.rows:[{date:"—",entry:"—",exitDate:"—",exit:"—",status:"pendiente",statusLabel:"SIN REGISTROS",typeLabel:"SIN REGISTROS"}],regular=Math.max(12,Math.min(17,rowHeight*.31)),ss=Math.max(10,Math.min(13,rowHeight*.24));
-    rows.forEach((r,i)=>{const top=y+hh+i*rowHeight,c=COLORS[r.status]||COLORS.muted,avatarSize=Math.max(16,Math.min(30,rowHeight-4));ctx.fillStyle=i%2?theme.soft:"#fff";ctx.fillRect(x,top,width,rowHeight);ctx.fillStyle=tint(c,.1);ctx.fillRect(x+columns[4],top,width-columns[4],rowHeight);[r.date,r.entry,r.exitDate,r.exit].forEach((v,col)=>text(ctx,v,x+(columns[col]+columns[col+1])/2,top+rowHeight/2,{size:regular,weight:750,color:v==="—"?"#ba2323":COLORS.ink,align:"center",baseline:"middle"}));drawStatusArt(ctx,images.states,r.status,x+columns[4]+5,top+(rowHeight-avatarSize)/2,avatarSize,avatarSize);text(ctx,r.statusLabel,x+columns[4]+40,top+rowHeight/2,{size:ss,weight:900,color:c,baseline:"middle",maxWidth:columns[5]-columns[4]-44});drawSymbol(ctx,r.status,x+columns[5]+18,top+rowHeight/2,Math.max(8,Math.min(11,rowHeight*.2)));text(ctx,r.typeLabel,x+columns[5]+36,top+rowHeight/2,{size:ss,weight:900,color:c,baseline:"middle",maxWidth:columns[6]-columns[5]-42});line(ctx,x,top+rowHeight,x+width,top+rowHeight,tint(theme.primary,.2));});columns.forEach(o=>line(ctx,x+o,y,x+o,y+hh+rows.length*rowHeight,tint(theme.primary,.2)));ctx.strokeStyle=theme.dark;ctx.lineWidth=3;ctx.strokeRect(x,y,width,hh+rows.length*rowHeight);return y+hh+rows.length*rowHeight;
+    rows.forEach((r,i)=>{const top=y+hh+i*rowHeight,c=COLORS[r.status]||COLORS.muted,avatarSize=Math.max(16,Math.min(30,rowHeight-4));ctx.fillStyle=i%2?theme.soft:"#fff";ctx.fillRect(x,top,width,rowHeight);ctx.fillStyle=tint(c,.1);ctx.fillRect(x+columns[4],top,width-columns[4],rowHeight);[r.date,r.entry,r.exitDate,r.exit].forEach((v,col)=>text(ctx,v,x+(columns[col]+columns[col+1])/2,top+rowHeight/2,{size:regular,weight:750,color:v==="—"?"#ba2323":COLORS.ink,align:"center",baseline:"middle"}));if(r.status==="incapacidad")drawContain(ctx,images.incapacidad,x+columns[4]+5,top+(rowHeight-avatarSize)/2,avatarSize,avatarSize);else drawStatusArt(ctx,images.states,r.status,x+columns[4]+5,top+(rowHeight-avatarSize)/2,avatarSize,avatarSize);text(ctx,r.statusLabel,x+columns[4]+40,top+rowHeight/2,{size:ss,weight:900,color:c,baseline:"middle",maxWidth:columns[5]-columns[4]-44});drawSymbol(ctx,r.status,x+columns[5]+18,top+rowHeight/2,Math.max(8,Math.min(11,rowHeight*.2)));text(ctx,r.typeLabel,x+columns[5]+36,top+rowHeight/2,{size:ss,weight:900,color:c,baseline:"middle",maxWidth:columns[6]-columns[5]-42});line(ctx,x,top+rowHeight,x+width,top+rowHeight,tint(theme.primary,.2));});columns.forEach(o=>line(ctx,x+o,y,x+o,y+hh+rows.length*rowHeight,tint(theme.primary,.2)));ctx.strokeStyle=theme.dark;ctx.lineWidth=3;ctx.strokeRect(x,y,width,hh+rows.length*rowHeight);return y+hh+rows.length*rowHeight;
   }
 
   function drawPortraitLegend(ctx,model,images,x,y,width,height){
     const gap=10,cols=3,rows=Math.ceil(LEGEND.length/cols),cw=(width-gap*(cols-1))/cols,ch=Math.max(58,(height-gap*(rows-1))/rows);
-    LEGEND.forEach(([status,label,detail],i)=>{const col=i%cols,row=Math.floor(i/cols),left=x+col*(cw+gap),top=y+row*(ch+gap),c=COLORS[status];ctx.fillStyle=tint(c,.1);roundedRect(ctx,left,top,cw,ch,12);ctx.fill();ctx.strokeStyle=tint(c,.35);ctx.lineWidth=2;ctx.stroke();drawStatusArt(ctx,images.states,status,left+5,top+5,72,ch-10);const copyX=left+84;text(ctx,label.toUpperCase(),copyX,top+ch/2-10,{size:13,weight:900,color:c,maxWidth:cw-122});text(ctx,detail,copyX,top+ch/2+13,{size:10.5,weight:650,color:COLORS.ink,maxWidth:cw-94});ctx.fillStyle=c;ctx.beginPath();ctx.arc(left+cw-20,top+21,14,0,Math.PI*2);ctx.fill();text(ctx,model.summary[status]||0,left+cw-20,top+21,{size:13,weight:900,color:"#fff",align:"center",baseline:"middle"});});
+    LEGEND.forEach(([status,label,detail],i)=>{const col=i%cols,row=Math.floor(i/cols),left=x+col*(cw+gap),top=y+row*(ch+gap),c=COLORS[status];ctx.fillStyle=tint(c,.1);roundedRect(ctx,left,top,cw,ch,12);ctx.fill();ctx.strokeStyle=tint(c,.35);ctx.lineWidth=2;ctx.stroke();if(status==="incapacidad")drawContain(ctx,images.incapacidad,left+5,top+5,72,ch-10);else drawStatusArt(ctx,images.states,status,left+5,top+5,72,ch-10);const copyX=left+84;text(ctx,label.toUpperCase(),copyX,top+ch/2-10,{size:13,weight:900,color:c,maxWidth:cw-122});text(ctx,detail,copyX,top+ch/2+13,{size:10.5,weight:650,color:COLORS.ink,maxWidth:cw-94});ctx.fillStyle=c;ctx.beginPath();ctx.arc(left+cw-20,top+21,14,0,Math.PI*2);ctx.fill();text(ctx,model.summary[status]||0,left+cw-20,top+21,{size:13,weight:900,color:"#fff",align:"center",baseline:"middle"});});
   }
   function drawPortraitSummary(ctx,model,x,y,width,theme){const cards=[["TOTAL GUARDIAS",model.rows.length],["EFECTIVAS",model.summary.efectiva||0],["INCIDENCIAS",model.incidentCount],["ASISTENCIA REAL",`${model.attendanceRate}%`]],cw=width/cards.length;ctx.fillStyle=theme.dark;roundedRect(ctx,x,y,width,92,12);ctx.fill();cards.forEach(([l,v],i)=>{const c=x+cw*i+cw/2;if(i)line(ctx,x+cw*i,y+15,x+cw*i,y+77,"rgba(255,255,255,.25)",2);text(ctx,l,c,y+30,{size:13,weight:850,color:"#f7edf9",align:"center"});text(ctx,v,c,y+68,{size:29,weight:900,color:"#fff",align:"center"});});}
 

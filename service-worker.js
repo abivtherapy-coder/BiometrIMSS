@@ -1,4 +1,4 @@
-const CACHE_NAME = "biometrimss-v7.2.0-usage1";
+const CACHE_NAME = "biometrimss-v7.2.0-avatar1";
 const APP_SHELL = [
   "./usage.js?v=usage1",
   "./",
@@ -21,6 +21,7 @@ const APP_SHELL = [
   "./icons/icon-maskable-512.png?v=4.9.0",
   "./assets/abisai-pase-entrada.png",
   "./assets/abisai-pase-salida.png",
+  "./assets/abisai-incapacidad-v2.png",
   "./assets/abisai-vacaciones.png",
   "./assets/abit-ai-states-sticker-sheet-v1.png",
   "./assets/biometrimss-avatar-icon-v3.png",
@@ -75,7 +76,8 @@ self.addEventListener("fetch", (event) => {
     "/assets/A5BD8F79-366E-46CA-AAC1-43AD5E48DC52.png",
     "/assets/BCF6ADEE-FFFA-4572-811F-BB8EB423AD02.png",
     "/assets/DD8ADD59-010C-4F1A-8763-448A17FC021B.png",
-    "/assets/F226F542-3898-4479-8A6A-7C0837ED127C.png"
+    "/assets/F226F542-3898-4479-8A6A-7C0837ED127C.png",
+    "/assets/abisai-incapacidad-v2.png"
   ];
 
   if (freshPaths.some((path) => url.pathname.endsWith(path))) {
