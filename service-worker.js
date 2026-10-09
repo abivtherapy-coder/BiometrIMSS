@@ -1,4 +1,4 @@
-const CACHE_NAME = "biometrimss-v7.2.0-avatar2";
+const CACHE_NAME = "biometrimss-v7.2.0-avatar3";
 const APP_SHELL = [
   "./usage.js?v=usage1",
   "./",
@@ -13,7 +13,7 @@ const APP_SHELL = [
   "./animated-report.js?v=7.2.0",
   "./app.js?v=7.2.0",
   "./assets/biometrimss-intro-circle-v1.mp4?v=7.2.0",
-  "./assets/biometrimss-zombie-octubre-v1.png?v=7.2.0",
+  "./assets/biometrimss-zombie-octubre-v2.png?v=7.2.0",
   "./manifest.webmanifest?v=4.9.0",
   "./icons/icon-180.png?v=4.9.0",
   "./icons/icon-192.png?v=4.9.0",
