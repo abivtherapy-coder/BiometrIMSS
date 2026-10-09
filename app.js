@@ -545,6 +545,7 @@
     persistRecords();
     clearRecordDraft();
     renderAll();
+    window.AppUsage?.capture("action_completed", type === "entry" ? "entry_saved" : "exit_saved");
     showToast(`${type === "entry" ? "Entrada" : "Salida"} guardada a las ${formatTime(record[field])}.`);
   }
 
@@ -613,6 +614,7 @@
     state.selectedDate = saved.shiftDate;
     resetRecordForm(L.currentShiftDate(new Date(), state.settings));
     renderAll();
+    window.AppUsage?.capture("action_completed", "record_saved");
     showToast(index >= 0 ? "Registro actualizado correctamente." : "Guardia guardada correctamente.");
     navigate("calendar");
   }
