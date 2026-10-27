@@ -1,13 +1,13 @@
-const CACHE_NAME = "biometrimss-v7.2.0-avatar3";
+const CACHE_NAME = "biometrimss-v7.3.0-halloween";
 const APP_SHELL = [
   "./usage.js?v=usage1",
   "./",
   "./index.html",
-  "./style.css?v=7.2.0",
+  "./style.css?v=7.3.0",
   "./themes/monthly-theme.css?v=4.9.0",
   "./themes/september-viva.css?v=7.2.0",
-  "./themes/q4-seasonal.css?v=7.2.0",
-  "./themes/monthly-theme.js?v=7.2.0",
+  "./themes/q4-seasonal.css?v=7.3.0",
+  "./themes/monthly-theme.js?v=7.3.0",
   "./logic.js?v=7.2.0",
   "./report-image.js?v=7.2.0",
   "./animated-report.js?v=7.2.0",
