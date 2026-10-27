@@ -1,7 +1,7 @@
 (function initializeMonthlyTheme() {
   "use strict";
 
-  const THEME_VERSION = "7.2.0";
+  const THEME_VERSION = "7.3.0";
   const SEPTEMBER_CHARACTER = "assets/biometrimss-charro-septiembre-v1.png";
   const themes = [
     ["enero", "Año Nuevo", "✦"],
@@ -144,7 +144,7 @@
     hero.append(character);
     if (id === "octubre") {
       const ghosts = make("div", "q4-ghosts");
-      for (let i = 0; i < 9; i += 1) ghosts.append(make("span", "q4-ghost", "👻"));
+      for (let i = 0; i < 14; i += 1) ghosts.append(make("span", "q4-ghost", "👻"));
       hero.append(ghosts);
     }
     hero.append(make("div", "q4-theme-label", `Tema del mes: ${copy.theme}`));
@@ -170,6 +170,59 @@
     }
   }
 
+
+  function decorateOctoberFinale() {
+    const home = document.getElementById("view-home");
+    const hero = home && home.querySelector(":scope > .hero-card");
+    if (!home || !hero || home.dataset.octoberFinale === "true") return;
+
+    const now = new Date();
+    const requested = new URLSearchParams(window.location.search).get("theme");
+    const octoberPreview = String(requested || "").toLowerCase() === "octubre";
+    const isLateOctober = now.getMonth() === 9 && now.getDate() >= 27;
+    if (!isLateOctober && !octoberPreview) return;
+
+    home.dataset.octoberFinale = "true";
+
+    const handoff = document.createElement("aside");
+    handoff.className = "q4-handoff";
+    handoff.setAttribute("aria-label", "Transición de Halloween a noviembre");
+
+    const kicker = document.createElement("span");
+    kicker.className = "q4-handoff-kicker";
+    kicker.textContent = "ÚLTIMAS GUARDIAS DE OCTUBRE";
+
+    const stage = document.createElement("div");
+    stage.className = "q4-handoff-stage";
+    stage.setAttribute("aria-hidden", "true");
+
+    const zombie = make("span", "q4-handoff-zombie");
+    const baton = make("span", "q4-handoff-baton");
+
+    const next = document.createElement("div");
+    next.className = "q4-handoff-next";
+
+    const zapata = document.createElement("span");
+    zapata.className = "q4-next-figure q4-next-zapata";
+    zapata.innerHTML = '<i class="q4-zapata-face"></i><b>Zapata</b>';
+
+    const catrin = document.createElement("span");
+    catrin.className = "q4-next-figure q4-next-catrin";
+    catrin.innerHTML = '<i class="q4-catrin-face">☠</i><b>Catrín</b>';
+
+    next.append(zapata, catrin);
+    stage.append(zombie, baton, next);
+
+    const title = document.createElement("strong");
+    title.textContent = "El zombi entrega la estafeta a Zapata y al Catrín";
+
+    const copy = document.createElement("small");
+    copy.textContent = "Noviembre se acerca: Día de Muertos y Revolución, sin abandonar Halloween todavía.";
+
+    handoff.append(kicker, stage, title, copy);
+    hero.insertAdjacentElement("afterend", handoff);
+  }
+
   function applyTheme() {
     const [id, label, symbol] = getTheme();
     document.documentElement.dataset.monthTheme = id;
@@ -187,7 +240,7 @@
     }
 
     if (id === "septiembre") decorateSeptember();
-    else if (Q4_COPY[id]) decorateQ4(id);
+    else if (Q4_COPY[id]) { decorateQ4(id); if (id === "octubre") decorateOctoberFinale(); }
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", applyTheme, { once: true });
