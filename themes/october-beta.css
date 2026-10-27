@@ -1,0 +1,340 @@
+/* BIOMETRIMSS BETA · HALLOWEEN REFINADO · octubre 2026
+   Sólo en beta-halloween-2026. No afecta main. */
+html[data-month-theme="octubre"]{
+  --q4-main:#55216e;
+  --q4-dark:#120c22;
+  --q4-accent:#ff9344;
+  --q4-soft:#f6f1fa;
+  --halloween-lime:#c4f18b;
+  --halloween-ink:#271334;
+}
+html[data-month-theme="octubre"] body{
+  color:#271334;
+  background:
+    radial-gradient(circle at 9% 5%,rgba(211,145,255,.15),transparent 25rem),
+    radial-gradient(circle at 94% 45%,rgba(255,155,72,.11),transparent 21rem),
+    #f6f1fa;
+}
+html[data-month-theme="octubre"] body:before{display:none}
+html[data-month-theme="octubre"] .app-shell{
+  background:linear-gradient(180deg,#f6f1fa 0%,#fff9f2 54%,#f5eff9 100%);
+}
+html[data-month-theme="octubre"] .topbar{
+  min-height:122px;
+  isolation:isolate;
+  border-bottom:3px solid #fa9950;
+  border-radius:0 0 24px 24px;
+  background:
+    radial-gradient(circle at 79% 36%,rgba(255,228,164,.85) 0 21px,transparent 23px),
+    radial-gradient(circle at 75% 32%,rgba(255,185,103,.19) 0 50px,transparent 53px),
+    linear-gradient(117deg,#110b1d,#291330 54%,#572369);
+  box-shadow:0 12px 30px rgba(37,13,49,.2);
+}
+html[data-month-theme="octubre"] .topbar:before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  top:auto;bottom:0;left:0;right:0;
+  height:26px;width:auto;
+  opacity:.5;
+  background:linear-gradient(160deg,transparent 48%,#130d20 50%) left bottom/52% 100% no-repeat,
+             linear-gradient(200deg,transparent 52%,#130d20 54%) right bottom/52% 100% no-repeat;
+  pointer-events:none;
+}
+html[data-month-theme="octubre"] .brand{z-index:3}
+html[data-month-theme="octubre"] .q4-header-art{z-index:2}
+html[data-month-theme="octubre"] .q4-header-title{
+  top:23px;
+  right:0;
+  color:#fff4da;
+  font-family:Georgia,serif;
+  font-style:normal;
+  font-size:25px;
+  letter-spacing:-.035em;
+  text-shadow:0 3px 9px rgba(0,0,0,.5);
+}
+html[data-month-theme="octubre"] .q4-header-detail:before{content:""}
+html[data-month-theme="octubre"] .q4-header-detail{
+  width:77px;
+  height:27px;
+  opacity:.8;
+  bottom:6px;
+  background:#110b1d;
+  clip-path:polygon(0 49%,14% 36%,22% 50%,31% 13%,39% 44%,48% 31%,55% 51%,66% 9%,74% 43%,84% 36%,100% 50%,78% 63%,70% 85%,56% 58%,44% 83%,32% 60%,18% 67%);
+}
+
+html[data-month-theme="octubre"] #view-home>.hero-card{
+  min-height:466px;
+  isolation:isolate;
+  overflow:hidden;
+  border:1px solid rgba(255,164,85,.37);
+  border-radius:26px;
+  background:
+    radial-gradient(circle at 82% 18%,#ffe6ae 0 34px,transparent 35px),
+    radial-gradient(circle at 82% 18%,rgba(255,186,99,.25) 0 68px,transparent 71px),
+    linear-gradient(135deg,#110b1f 0%,#2c163c 55%,#63247b 100%);
+  box-shadow:0 17px 35px rgba(54,18,68,.25);
+}
+html[data-month-theme="octubre"] #view-home>.hero-card:before{
+  content:"";
+  position:absolute;
+  z-index:1;
+  left:0;right:0;bottom:0;
+  height:112px;
+  background:
+    linear-gradient(174deg,transparent 49%,#140e20 50%) left bottom/55% 100% no-repeat,
+    linear-gradient(190deg,transparent 46%,#150e22 47%) right bottom/55% 100% no-repeat;
+  opacity:.85;
+  pointer-events:none;
+}
+html[data-month-theme="octubre"] #view-home>.hero-card:after{
+  content:"";
+  position:absolute;
+  z-index:1;
+  right:14%;bottom:94px;
+  width:86px;height:45px;
+  border:0;border-radius:0;
+  background:linear-gradient(transparent,#130d1f);
+  clip-path:polygon(0 100%,0 62%,12% 62%,12% 22%,25% 22%,25% 0,48% 0,48% 28%,58% 28%,58% 60%,68% 60%,68% 14%,80% 14%,80% 52%,100% 52%,100% 100%);
+  opacity:.63;
+  pointer-events:none;
+}
+html[data-month-theme="octubre"] .q4-scene{
+  z-index:1;
+  opacity:1;
+  background:radial-gradient(ellipse at 70% 85%,rgba(187,111,223,.2),transparent 57%);
+}
+html[data-month-theme="octubre"] .q4-scene:before{
+  content:"";
+  position:absolute;
+  top:9%;right:15%;
+  width:80px;height:43px;
+  background:#190f23;
+  opacity:.78;
+  clip-path:polygon(0 49%,14% 31%,24% 52%,36% 0,45% 36%,50% 47%,55% 36%,64% 0,76% 52%,86% 31%,100% 49%,78% 69%,63% 83%,51% 64%,37% 83%,22% 69%);
+  transform:rotate(-12deg);
+}
+html[data-month-theme="octubre"] .q4-scene:after{
+  content:"";
+  position:absolute;
+  inset:auto 0 18% 0;
+  height:42px;
+  background:linear-gradient(180deg,transparent,rgba(243,198,255,.12));
+  filter:blur(12px);
+}
+html[data-month-theme="octubre"] .q4-character--octubre{
+  z-index:5;
+  right:-8px;top:55px;
+  width:57%;height:317px;
+  border-radius:0;
+  background:url("../assets/biometrimss-zombie-octubre-v2.png") center bottom / contain no-repeat;
+  filter:drop-shadow(0 13px 12px rgba(0,0,0,.38));
+}
+html[data-month-theme="octubre"] .q4-ghosts{z-index:2}
+html[data-month-theme="octubre"] .q4-ghost{
+  width:26px;height:31px;
+  font-size:0!important;
+  line-height:0;
+  color:transparent;
+  opacity:.64;
+  border:1px solid rgba(255,255,255,.44);
+  border-radius:49% 49% 8px 8px;
+  background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(198,180,235,.8));
+  clip-path:polygon(0 43%,5% 24%,23% 7%,47% 0,73% 6%,95% 24%,100% 45%,100% 100%,79% 85%,61% 100%,42% 87%,20% 100%,0 87%);
+  filter:drop-shadow(0 3px 7px rgba(0,0,0,.12));
+}
+html[data-month-theme="octubre"] .q4-ghost:before{
+  content:"";
+  display:block;
+  width:6px;height:6px;
+  margin:12px 0 0 6px;
+  border-radius:50%;
+  background:#432d5c;
+  box-shadow:9px 0 0 #432d5c;
+}
+html[data-month-theme="octubre"] .q4-ghost:nth-child(2n){scale:.7}
+html[data-month-theme="octubre"] .q4-ghost:nth-child(3n){scale:.85;opacity:.46}
+html[data-month-theme="octubre"] .q4-ghost:nth-child(6),
+html[data-month-theme="octubre"] .q4-ghost:nth-child(8),
+html[data-month-theme="octubre"] .q4-ghost:nth-child(12){opacity:.28}
+html[data-month-theme="octubre"] .q4-theme-label{
+  z-index:7;
+  color:#442254;
+  border:1px solid rgba(255,166,91,.5);
+  background:linear-gradient(145deg,#fff4dd,#ffe1bb);
+  font-family:inherit;font-style:normal;font-weight:900;
+  box-shadow:0 7px 16px rgba(13,6,20,.15);
+}
+html[data-month-theme="octubre"] .shift-badge{
+  background:#fff4e4;
+  border-color:#ffd3a0;
+  color:#2b1839;
+}
+html[data-month-theme="octubre"] .quick-actions .button{
+  border-radius:16px;
+  box-shadow:0 7px 18px rgba(10,4,18,.22);
+}
+
+/* Decoración global sobria: sin emojis grandes, con acentos controlados. */
+html[data-month-theme="octubre"] :is(#view-register,#view-calendar,#view-history,#view-report,#view-settings,#view-manual,#view-assistant) .page-heading,
+html[data-month-theme="octubre"] :is(#view-register,#view-calendar,#view-history,#view-report,#view-settings,#view-manual,#view-assistant) .page-heading-row{
+  border:1px solid rgba(92,37,115,.16);
+  border-radius:20px;
+  background:linear-gradient(135deg,#fff 0%,#f6eefa 90%);
+  box-shadow:0 8px 20px rgba(76,27,97,.07);
+}
+html[data-month-theme="octubre"] :is(#view-register,#view-calendar,#view-history,#view-settings,#view-manual,#view-assistant) .page-heading:after,
+html[data-month-theme="octubre"] :is(#view-register,#view-calendar,#view-history,#view-settings,#view-manual,#view-assistant) .page-heading-row:after{
+  content:"";
+  width:34px;height:18px;
+  background:#6f347b;
+  clip-path:polygon(0 50%,12% 23%,23% 48%,35% 0,45% 39%,50% 48%,55% 39%,65% 0,77% 48%,88% 23%,100% 50%,78% 66%,63% 82%,50% 65%,37% 82%,22% 66%);
+  opacity:.45;
+}
+html[data-month-theme="octubre"] :is(.card,.period-card,.stat-card,.progress-card){
+  border-color:rgba(101,49,122,.14);
+  box-shadow:0 8px 21px rgba(63,20,81,.07);
+}
+html[data-month-theme="octubre"] .q4-period-art:after{content:""}
+html[data-month-theme="octubre"] :is(.q4-period-art,.q4-card-art,.q4-progress-art){
+  width:40px;height:40px;
+  border:2px solid rgba(115,61,138,.12);
+  opacity:.65;
+  background:radial-gradient(circle at center,transparent 0 37%,rgba(255,148,69,.12) 39% 45%,transparent 47%);
+}
+html[data-month-theme="octubre"] .button-primary{
+  background:linear-gradient(135deg,#37144b,#6b2984);
+  border-color:#6b2984;
+}
+html[data-month-theme="octubre"] .calendar-day[data-date$="-31"]:before{
+  content:"";
+  left:4px;top:4px;
+  width:7px;height:7px;
+  border-radius:50%;
+  background:#ff9a49;
+  box-shadow:0 0 0 3px rgba(255,154,73,.15);
+}
+html[data-month-theme="octubre"] .bottom-nav{
+  position:fixed;
+  z-index:60;
+  left:50%;right:auto;bottom:0;
+  transform:translateX(-50%);
+  width:min(100%,760px);
+  border-top:3px solid #e58b4b;
+  background:rgba(255,251,255,.97);
+  backdrop-filter:blur(16px);
+  box-shadow:0 -9px 23px rgba(45,18,56,.12);
+}
+html[data-month-theme="octubre"] .bottom-nav:before{height:0;background:none}
+html[data-month-theme="octubre"] .nav-item.is-active{
+  color:#5d226f;
+  background:linear-gradient(180deg,#f4e6fa,#fff0e2);
+}
+html[data-month-theme="octubre"] :is(#view-register,#view-calendar,#view-history,#view-report,#view-settings,#view-manual,#view-assistant){
+  padding-bottom:calc(116px + env(safe-area-inset-bottom));
+}
+
+/* Mejor aspecto para la estafeta. Figuras = ilustraciones estilizadas,
+   sin simular archivos de avatar inexistentes. */
+html[data-month-theme="octubre"] .q4-handoff{
+  border-color:#bb7d4e;
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 88% 16%,rgba(255,200,119,.22),transparent 36%),
+    linear-gradient(135deg,#170f26,#3c1e51 65%,#55236e);
+}
+html[data-month-theme="octubre"] .q4-handoff:after{content:""}
+html[data-month-theme="octubre"] .q4-handoff-kicker{color:#ffc78a}
+html[data-month-theme="octubre"] .q4-next-figure{
+  border:1px solid rgba(255,201,137,.24);
+  background:rgba(255,255,255,.08);
+}
+html[data-month-theme="octubre"] .q4-zapata-face:before{background:#271c21}
+html[data-month-theme="octubre"] .q4-handoff-baton{box-shadow:0 0 13px rgba(255,194,111,.25)}
+html[data-month-theme="octubre"] .q4-handoff>strong{font-size:14px}
+html[data-month-theme="octubre"] .q4-handoff>small{line-height:1.5}
+
+/* Selector de temas: aislado de los datos laborales */
+.month-theme-picker{
+  margin:0 0 14px;
+  padding:18px;
+  border:1px solid #d9c4e5;
+  border-radius:21px;
+  background:linear-gradient(142deg,#fff 0 67%,#f2e6f7);
+  box-shadow:0 9px 24px rgba(85,33,110,.07);
+}
+.month-theme-picker h2{
+  margin:0 0 6px;
+  font-size:1.05rem;
+  color:#4c1e65;
+}
+.month-theme-picker .theme-picker-intro{
+  margin:0 0 12px;
+  color:#675673;
+  font-size:.8rem;
+  line-height:1.5;
+}
+.month-theme-picker label{
+  display:grid;
+  gap:6px;
+  font-weight:800;
+  font-size:.78rem;
+}
+.month-theme-picker select{
+  width:100%;
+  min-height:48px;
+  padding:10px 12px;
+  border:1px solid #b998c9;
+  border-radius:13px;
+  color:#352044;
+  background:#fff;
+  font:inherit;
+}
+.month-theme-picker .theme-picker-notice{
+  display:block;
+  margin-top:10px;
+  color:#72657c;
+  font-size:.7rem;
+}
+
+@media (max-width:600px){
+  html[data-month-theme="octubre"] #view-home>.hero-card{
+    min-height:454px;
+    padding:56px 43% 112px 17px;
+  }
+  html[data-month-theme="octubre"] .hero-card h1{
+    font-size:clamp(28px,8vw,35px);
+    line-height:1.05;
+  }
+  html[data-month-theme="octubre"] .hero-message{
+    max-width:100%;
+    font-size:12px;
+    line-height:1.33;
+  }
+  html[data-month-theme="octubre"] .q4-character--octubre{
+    right:-10px;top:68px;
+    width:54%;height:286px;
+  }
+  html[data-month-theme="octubre"] .q4-theme-label{
+    left:14px;bottom:102px;
+    max-width:66%;
+    font-size:11px;
+  }
+  html[data-month-theme="octubre"] .quick-actions{left:12px;right:12px;bottom:13px;gap:9px}
+  html[data-month-theme="octubre"] .quick-actions .button{min-height:62px;font-size:14px}
+  html[data-month-theme="octubre"] #view-home>.period-card{margin-top:12px}
+  html[data-month-theme="octubre"] .bottom-nav{width:min(100%,430px)}
+}
+@media (max-width:375px){
+  html[data-month-theme="octubre"] .q4-character--octubre{right:-11px;width:55%;height:272px}
+  html[data-month-theme="octubre"] #view-home>.hero-card{min-height:438px}
+  html[data-month-theme="octubre"] .hero-card h1{font-size:28px}
+  html[data-month-theme="octubre"] .hero-message{font-size:11px}
+  .q4-handoff-stage{grid-template-columns:67px 1fr 128px;gap:5px}
+}
+@media (prefers-reduced-motion:reduce){
+  html[data-month-theme="octubre"] .q4-ghost,
+  html[data-month-theme="octubre"] .q4-report-icons{
+    animation:none!important;
+  }
+}
