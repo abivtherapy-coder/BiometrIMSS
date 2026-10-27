@@ -1,7 +1,8 @@
 (function initializeMonthlyTheme() {
   "use strict";
 
-  const THEME_VERSION = "7.3.0";
+  const THEME_VERSION = "7.4.0-beta";
+  const USER_THEME_KEY = "biometrimss:ui:manual-month-theme";
   const SEPTEMBER_CHARACTER = "assets/biometrimss-charro-septiembre-v1.png";
   const themes = [
     ["enero", "Año Nuevo", "✦"],
@@ -20,7 +21,10 @@
 
   function getTheme() {
     const requested = new URLSearchParams(window.location.search).get("theme");
-    return themes.find(([id]) => id === String(requested || "").toLowerCase()) || themes[new Date().getMonth()];
+    let stored = "";
+    try { stored = localStorage.getItem(USER_THEME_KEY) || ""; } catch (_) {}
+    const value = String(requested || stored || "").toLowerCase();
+    return themes.find(([id]) => id === value) || themes[new Date().getMonth()];
   }
 
   function ensureSeasonalStyles(id) {
@@ -38,6 +42,13 @@
       q4.rel = "stylesheet";
       q4.href = `themes/q4-seasonal.css?v=${THEME_VERSION}&cb=${Date.now()}`;
       document.head.append(q4);
+      if (id === "octubre") {
+        const betaStyles = document.createElement("link");
+        betaStyles.id = "octoberBetaStyles";
+        betaStyles.rel = "stylesheet";
+        betaStyles.href = `themes/october-beta.css?v=${THEME_VERSION}`;
+        document.head.append(betaStyles);
+      }
     }
   }
 
@@ -223,6 +234,41 @@
     hero.insertAdjacentElement("afterend", handoff);
   }
 
+
+  function initMonthThemePicker() {
+    const select = document.getElementById("monthlyThemeSelect");
+    if (!select || select.dataset.bound === "true") return;
+    select.dataset.bound = "true";
+
+    const explicit = new URLSearchParams(window.location.search).get("theme") || "";
+    let stored = "";
+    try { stored = localStorage.getItem(USER_THEME_KEY) || ""; } catch (_) {}
+
+    const initial = String(explicit || stored || "").toLowerCase();
+    select.value = themes.some(([id]) => id === initial) ? initial : "auto";
+
+    const status = document.getElementById("monthlyThemeStatus");
+    if (status) status.textContent = select.value === "auto"
+      ? "Automático: muestra la temática del mes actual."
+      : "Manual: sólo cambia el diseño, no tus registros.";
+
+    select.addEventListener("change", () => {
+      const value = select.value;
+      const url = new URL(window.location.href);
+
+      if (value === "auto") {
+        try { localStorage.removeItem(USER_THEME_KEY); } catch (_) {}
+        url.searchParams.delete("theme");
+      } else if (themes.some(([id]) => id === value)) {
+        try { localStorage.setItem(USER_THEME_KEY, value); } catch (_) {}
+        url.searchParams.set("theme", value);
+      } else return;
+
+      url.searchParams.set("v", THEME_VERSION);
+      window.location.assign(url.pathname + url.search + (url.hash || "#settings"));
+    });
+  }
+
   function applyTheme() {
     const [id, label, symbol] = getTheme();
     document.documentElement.dataset.monthTheme = id;
@@ -230,6 +276,7 @@
     document.documentElement.style.setProperty("--theme-label", `"${label}"`);
     ensureSeasonalStyles(id);
     normalizePermissionLabels();
+    initMonthThemePicker();
 
     const header = document.querySelector(".topbar");
     if (header && !header.querySelector(".month-decoration")) {
