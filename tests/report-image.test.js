@@ -20,6 +20,24 @@ test("prepara un informe de imagen ordenado y con resumen", () => {
   assert.equal(model.profile.unit, "HGZ 42");
 });
 
+test("recorta los avatares sin deformarlos al colocarlos en cajas verticales o cuadradas", () => {
+  const source = [15, 493, 263, 210];
+  const square = R.coverCropRect(source, 30, 30);
+  const portrait = R.coverCropRect(source, 118, 135);
+
+  assert.equal(square[2] / square[3], 1);
+  assert.ok(Math.abs((portrait[2] / portrait[3]) - (118 / 135)) < 1e-12);
+  assert.ok(square[0] >= source[0] && square[0] + square[2] <= source[0] + source[2]);
+  assert.ok(portrait[1] >= source[1] && portrait[1] + portrait[3] <= source[1] + source[3]);
+});
+
+test("permite forzar noviembre en el informe animado", () => {
+  const theme = R.monthTheme("2026-03-01", "noviembre");
+  assert.equal(theme.id, "noviembre");
+  assert.equal(theme.label, "NOVIEMBRE · CATRÍN Y ABI ZAPATA");
+  assert.equal(theme.primary, "#7a2a78");
+});
+
 test("usa las mismas reglas para incidencias y asistencia en todos los informes", () => {
   const settings = L.normalizeSettings({
     guardDays: [2],

@@ -14,7 +14,7 @@
   <link rel="manifest" href="manifest.webmanifest?v=4.9.0">
   <link rel="apple-touch-icon" href="icons/icon-180.png?v=4.9.0">
   <link rel="icon" href="icons/icon-192.png?v=4.9.0" type="image/png">
-  <link rel="stylesheet" href="style.css?v=7.2.0">
+  <link rel="stylesheet" href="style.css?v=7.3.1">
   <link rel="stylesheet" href="themes/monthly-theme.css?v=4.9.0">
 </head>
 
@@ -93,6 +93,13 @@
             <span id="todayShiftBadge" class="shift-badge">Día libre</span>
           </div>
           <p id="nextShiftText" class="hero-message">Configura tus datos para comenzar.</p>
+          <div id="vacationPortal" class="vacation-portal" hidden>
+            <img src="assets/abisai-vacaciones.png" alt="" aria-hidden="true">
+            <div>
+              <strong>Guardia en vacaciones</strong>
+              <span id="vacationPortalText">Esta guardia coincide con tus vacaciones programadas.</span>
+            </div>
+          </div>
           <div class="quick-actions">
             <button id="quickEntry" class="button button-light" type="button">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 20h14"/></svg>
@@ -396,6 +403,32 @@
             </div>
           </section>
 
+          <section class="card form-card settings-section monthly-theme-settings">
+            <div class="settings-title">
+              <span class="settings-icon monthly-theme-icon" aria-hidden="true">✦</span>
+              <div><h2>Temática mensual</h2><p>Usa el mes actual o elige una temática para verla cuando quieras.</p></div>
+            </div>
+            <label class="field full-field" for="monthlyThemePreference">
+              <span>Temática de la aplicación</span>
+              <select id="monthlyThemePreference">
+                <option value="auto">Automática · mes actual</option>
+                <option value="enero">Enero · Año Nuevo</option>
+                <option value="febrero">Febrero · Amor y amistad</option>
+                <option value="marzo">Marzo · Primavera</option>
+                <option value="abril">Abril · Día del Niño</option>
+                <option value="mayo">Mayo · Día de las Madres</option>
+                <option value="junio">Junio · Día del Papá</option>
+                <option value="julio">Julio · Nómina y fondo de ahorro</option>
+                <option value="agosto">Agosto · Regreso a clases</option>
+                <option value="septiembre">Septiembre · ¡Viva México!</option>
+                <option value="octubre">Octubre · Halloween</option>
+                <option value="noviembre">Noviembre · Catrín y Abi Zapata</option>
+                <option value="diciembre">Diciembre · Navidad</option>
+              </select>
+            </label>
+            <p id="monthlyThemeHelp" class="field-note" aria-live="polite">La selección cambia únicamente los adornos, colores e informes; tus registros no se modifican.</p>
+          </section>
+
           <section class="card form-card settings-section">
             <div class="settings-title">
               <span class="settings-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
@@ -625,12 +658,12 @@
     </form>
   </dialog>
 
-  <script src="logic.js?v=7.2.0"></script>
-  <script src="report-image.js?v=7.2.0"></script>
+  <script src="logic.js?v=7.2.2"></script>
+  <script src="report-image.js?v=7.3.0"></script>
   <script src="vendor/pdf-lib/pdf-lib.min.js"></script>
-  <script src="app.js?v=7.2.0"></script>
-  <script src="themes/monthly-theme.js?v=7.2.0"></script>
-  <script src="animated-report.js?v=7.2.0"></script>
+  <script src="app.js?v=7.3.1"></script>
+  <script src="themes/monthly-theme.js?v=7.3.0"></script>
+  <script src="animated-report.js?v=7.2.2"></script>
 
 <script src="usage.js?v=usage1" data-app="BiometrIMSS" data-endpoint="https://abitimss.abisaij030.chatgpt.site/api/analytics"></script>
 </body>

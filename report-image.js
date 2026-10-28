@@ -30,7 +30,8 @@
   const ILLUSTRATIONS = Object.freeze({
     logo:"assets/biometrimss-logo-transparent-v1.png",
     states:"assets/8F8128EE-95A3-40A1-9F22-F895C79C4976.png",
-    incapacidad:"assets/abisai-incapacidad-v2.png"
+    incapacidad:"assets/abisai-incapacidad-v2.png",
+    november:"assets/biometrimss-noviembre-catrin-zapata-v1.png"
   });
   const STATUS_ART_CROPS = Object.freeze({
     tolerancia:[15,493,263,210], "pase-entrada":[286,493,263,210], "pase-salida":[550,493,263,210],
@@ -78,10 +79,17 @@
   function line(ctx,x1,y1,x2,y2,c=COLORS.line,w=2){ctx.strokeStyle=c;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();}
   function tint(hex,a){const v=hex.replace("#","");return`rgba(${parseInt(v.slice(0,2),16)},${parseInt(v.slice(2,4),16)},${parseInt(v.slice(4,6),16)},${a})`;}
   function drawContain(ctx,img,x,y,w,h){if(!img)return;const s=Math.min(w/img.width,h/img.height),dw=img.width*s,dh=img.height*s;ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);}
+  function coverCropRect(crop,destinationWidth,destinationHeight){
+    let [x,y,width,height]=crop;
+    const sourceRatio=width/height,destinationRatio=destinationWidth/destinationHeight;
+    if(sourceRatio>destinationRatio){const fittedWidth=height*destinationRatio;x+=(width-fittedWidth)/2;width=fittedWidth;}
+    else if(sourceRatio<destinationRatio){const fittedHeight=width/destinationRatio;y+=(height-fittedHeight)/2;height=fittedHeight;}
+    return [x,y,width,height];
+  }
   function loadIllustrations(){return Promise.all(Object.entries(ILLUSTRATIONS).map(([k,src])=>new Promise(resolve=>{const i=new Image();i.onload=()=>resolve([k,i]);i.onerror=()=>resolve([k,null]);i.src=src;}))).then(Object.fromEntries);}
   function drawStatusArt(ctx,img,status,x,y,w,h){
     if(!img){drawAvatar(ctx,status,x,y,w,h);return;}
-    const crop=STATUS_ART_CROPS[statusArtKey(status)];
+    const crop=coverCropRect(STATUS_ART_CROPS[statusArtKey(status)],w,h);
     ctx.save();roundedRect(ctx,x,y,w,h,Math.min(14,w*.2));ctx.clip();
     ctx.drawImage(img,crop[0],crop[1],crop[2],crop[3],x,y,w,h);
     ctx.restore();
@@ -128,25 +136,25 @@
     ctx.restore();
   }
 
-  function monthTheme(start){
-    const m=Number(String(start||"").slice(5,7));
-    if(m===9)return{label:"VIVA MÉXICO · VIVA BIOMETRIMSS",colors:["#08745a","#ffffff","#b5222b"],icon:"★",primary:"#08745a",dark:"#063d34",soft:"#eef8f4"};
-    if(m===10)return{label:"OCTUBRE · HALLOWEEN BIOMETRIMSS",colors:["#ff7a00","#5a1973","#24102f"],icon:"☾",primary:"#5a1973",dark:"#24102f",soft:"#f6eafa"};
-    if(m===11)return{label:"NOVIEMBRE · DÍA DE MUERTOS",colors:["#7a2a78","#ff8b00","#3d153f"],icon:"✿",primary:"#7a2a78",dark:"#3d153f",soft:"#fff0df"};
-    if(m===12)return{label:"DICIEMBRE · FELIZ NAVIDAD",colors:["#007a58","#d51d2f","#d6ad3b"],icon:"★",primary:"#007a58",dark:"#064b3e",soft:"#eaf7f2"};
-    if(m===1)return{label:"AÑO NUEVO · BIOMETRIMSS",colors:["#08745a","#d6ad3b","#f5f5f5"],icon:"✦",primary:"#08745a",dark:"#063d34",soft:"#eef8f4"};
-    return{label:"BIOMETRIMSS · TU CONTROL, TU TIEMPO",colors:[COLORS.green,"#dcebe6",COLORS.dark],icon:"●",primary:COLORS.green,dark:COLORS.dark,soft:"#f5faf8"};
+  function monthTheme(start,overrideId=""){
+    const monthIds=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],m=Number(String(start||"").slice(5,7)),id=overrideId||monthIds[m-1]||"";
+    if(id==="septiembre")return{id,label:"VIVA MÉXICO · VIVA BIOMETRIMSS",colors:["#08745a","#ffffff","#b5222b"],icon:"★",primary:"#08745a",dark:"#063d34",soft:"#eef8f4"};
+    if(id==="octubre")return{id,label:"OCTUBRE · HALLOWEEN BIOMETRIMSS",colors:["#ff7a00","#5a1973","#24102f"],icon:"☾",primary:"#5a1973",dark:"#24102f",soft:"#f6eafa"};
+    if(id==="noviembre")return{id,label:"NOVIEMBRE · CATRÍN Y ABI ZAPATA",colors:["#7a2a78","#ff8b00","#3d153f"],icon:"✿",primary:"#7a2a78",dark:"#3d153f",soft:"#fff0df"};
+    if(id==="diciembre")return{id,label:"DICIEMBRE · FELIZ NAVIDAD",colors:["#007a58","#d51d2f","#d6ad3b"],icon:"★",primary:"#007a58",dark:"#064b3e",soft:"#eaf7f2"};
+    if(id==="enero")return{id,label:"AÑO NUEVO · BIOMETRIMSS",colors:["#08745a","#d6ad3b","#f5f5f5"],icon:"✦",primary:"#08745a",dark:"#063d34",soft:"#eef8f4"};
+    return{id,label:"BIOMETRIMSS · TU CONTROL, TU TIEMPO",colors:[COLORS.green,"#dcebe6",COLORS.dark],icon:"●",primary:COLORS.green,dark:COLORS.dark,soft:"#f5faf8"};
   }
   function drawThemeRibbon(ctx,theme,x,y,w){ctx.save();ctx.fillStyle=theme.soft;roundedRect(ctx,x,y,w,38,10);ctx.fill();const sw=w/theme.colors.length;theme.colors.forEach((c,i)=>{ctx.fillStyle=c;ctx.fillRect(x+i*sw,y,sw,5);});text(ctx,`${theme.icon}  ${theme.label}`,x+w/2,y+24,{size:15,weight:900,color:theme.dark,align:"center"});ctx.restore();}
 
-  function drawPortraitHeader(ctx,model,images,width,margin){
-    const theme=monthTheme(model.start); const logoW=108;
+  function drawPortraitHeader(ctx,model,images,width,margin,theme){
+    const logoW=108;
     if(images.logo) drawContain(ctx,images.logo,margin,20,logoW,125); else {ctx.fillStyle=COLORS.green;roundedRect(ctx,margin,28,82,82,15);ctx.fill();text(ctx,"IMSS",margin+41,78,{size:19,weight:900,color:"#fff",align:"center"});}
     text(ctx,"REPORTE DE GUARDIAS · BIOMÉTRICO",width/2,48,{size:27,weight:900,align:"center"});
     text(ctx,model.profile.name.toUpperCase(),width/2,86,{size:29,weight:900,color:theme.primary,align:"center",maxWidth:720});
     text(ctx,`Matrícula: ${model.profile.employeeId}`,width/2,116,{size:18,weight:750,color:COLORS.muted,align:"center"});
     text(ctx,model.profile.unit,width/2,142,{size:16,weight:650,color:COLORS.muted,align:"center",maxWidth:720});
-    drawStatusArt(ctx,images.states,"efectiva",width-margin-118,18,118,135);
+    if(theme.id==="noviembre"&&images.november)drawContain(ctx,images.november,width-margin-155,10,155,145);else drawStatusArt(ctx,images.states,"efectiva",width-margin-118,18,118,135);
     drawThemeRibbon(ctx,theme,margin,154,width-margin*2);
     const y=202,cardW=width-margin*2;ctx.fillStyle=theme.soft;roundedRect(ctx,margin,y,cardW,100,14);ctx.fill();line(ctx,width/2,y+12,width/2,y+88,tint(theme.primary,.24),2);
     text(ctx,"PERIODO",margin+24,y+28,{size:15,weight:900,color:theme.primary});text(ctx,model.period,margin+24,y+58,{size:20,weight:850});text(ctx,"TURNO 3 · NOCTURNO",margin+24,y+84,{size:15,weight:850,color:theme.primary});text(ctx,`${model.schedule.startTime} a ${model.schedule.exitTime}`,margin+245,y+84,{size:16,weight:800});
@@ -167,8 +175,8 @@
 
   async function renderReport(records,settings,start,end,logic){
     if(typeof document==="undefined")throw new Error("Se necesita un navegador para dibujar el informe.");
-    const [model,images]=[buildReportModel(records,settings,start,end,logic),await loadIllustrations()];const theme=monthTheme(model.start);const {width,height}=REPORT_SIZE,margin=36,contentY=318,tableW=width-margin*2,rowCount=Math.max(model.rows.length,1),rowH=Math.max(22,Math.min(64,Math.floor(790/rowCount)));const canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;const ctx=canvas.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,width,height);drawPortraitHeader(ctx,model,images,width,margin);const tableBottom=drawPortraitTable(ctx,model,images,margin,contentY,tableW,rowH,theme);const legendY=tableBottom+16,reserved=218,legendH=Math.max(300,Math.min(500,height-legendY-reserved));drawPortraitLegend(ctx,model,images,margin,legendY,tableW,legendH);const summaryY=legendY+legendH+14;drawPortraitSummary(ctx,model,margin,summaryY,tableW,theme);const noteY=summaryY+106;ctx.fillStyle=theme.soft;roundedRect(ctx,margin,noteY,tableW,54,10);ctx.fill();text(ctx,"NOTA:",margin+18,noteY+28,{size:14,weight:900,color:theme.primary,baseline:"middle"});text(ctx,`Guardia completa: entrada hasta ${model.schedule.entryTolerance} y salida al día siguiente hasta ${model.schedule.exitTolerance}.`,margin+72,noteY+28,{size:14,weight:700,baseline:"middle",maxWidth:tableW-90});text(ctx,`${theme.label} · Documento personal de consulta · Formato 9:16`,width-margin,height-22,{size:13,color:COLORS.muted,align:"right"});return canvas;
+    const [model,images]=[buildReportModel(records,settings,start,end,logic),await loadIllustrations()];const root=typeof document!=="undefined"?document.documentElement:null,override=root&&root.dataset.monthThemeSource!=="automatic"?root.dataset.monthTheme:"",theme=monthTheme(model.start,override);const {width,height}=REPORT_SIZE,margin=36,contentY=318,tableW=width-margin*2,rowCount=Math.max(model.rows.length,1),rowH=Math.max(22,Math.min(64,Math.floor(790/rowCount)));const canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;const ctx=canvas.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,width,height);drawPortraitHeader(ctx,model,images,width,margin,theme);const tableBottom=drawPortraitTable(ctx,model,images,margin,contentY,tableW,rowH,theme);const legendY=tableBottom+16,reserved=218,legendH=Math.max(300,Math.min(500,height-legendY-reserved));drawPortraitLegend(ctx,model,images,margin,legendY,tableW,legendH);const summaryY=legendY+legendH+14;drawPortraitSummary(ctx,model,margin,summaryY,tableW,theme);const noteY=summaryY+106;ctx.fillStyle=theme.soft;roundedRect(ctx,margin,noteY,tableW,54,10);ctx.fill();text(ctx,"NOTA:",margin+18,noteY+28,{size:14,weight:900,color:theme.primary,baseline:"middle"});text(ctx,`Guardia completa: entrada hasta ${model.schedule.entryTolerance} y salida al día siguiente hasta ${model.schedule.exitTolerance}.`,margin+72,noteY+28,{size:14,weight:700,baseline:"middle",maxWidth:tableW-90});text(ctx,`${theme.label} · Documento personal de consulta · Formato 9:16`,width-margin,height-22,{size:13,color:COLORS.muted,align:"right"});return canvas;
   }
   function canvasToBlob(canvas){return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("No se pudo crear la imagen.")),"image/png",1));}
-  return {COLORS,LEGEND,REPORT_SIZE,STATUS_ART_CROPS,statusArtKey,renderStatusAvatarBlob,buildReportModel,canvasToBlob,renderReport};
+  return {COLORS,LEGEND,REPORT_SIZE,STATUS_ART_CROPS,statusArtKey,coverCropRect,monthTheme,renderStatusAvatarBlob,buildReportModel,canvasToBlob,renderReport};
 }));

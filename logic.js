@@ -337,6 +337,14 @@
     const config = normalizeSettings(settings);
     const eventPattern = /(?:\b\d{1,3}(?:\.\d{1,3}){3}\s*)?(\d{2}):(\d{2}):(\d{2})\s*(\d{2})\/(\d{2})\/(\d{4})\s*[ES]\b/g;
     const byShiftDate = new Map();
+    const createRecord = (shiftDate, notes = "Importado desde PDF de TuPerfilIMSS") => ({
+      id: `tuperfil-${shiftDate}`,
+      shiftDate,
+      entryAt: "",
+      exitAt: "",
+      statusOverride: "auto",
+      notes
+    });
     let match;
     while ((match = eventPattern.exec(source))) {
       const [, hours, minutes, seconds, day, month, year] = match;
@@ -345,14 +353,7 @@
       const isNightEntry = eventDate.getHours() >= 15;
       const shiftDate = formatDateKey(isNightEntry ? eventDate : addDays(eventDate, -1));
       const eventAt = toDateTimeLocal(eventDate);
-      const record = byShiftDate.get(shiftDate) || {
-        id: `tuperfil-${shiftDate}`,
-        shiftDate,
-        entryAt: "",
-        exitAt: "",
-        statusOverride: "auto",
-        notes: "Importado desde PDF de TuPerfilIMSS"
-      };
+      const record = byShiftDate.get(shiftDate) || createRecord(shiftDate);
       if (isNightEntry) {
         if (!record.entryAt || eventAt < record.entryAt) record.entryAt = eventAt;
       } else if (!record.exitAt || eventAt > record.exitAt) {
@@ -360,8 +361,53 @@
       }
       byShiftDate.set(shiftDate, record);
     }
-    const records = [...byShiftDate.values()].filter((record) => record.entryAt || record.exitAt).sort((a, b) => b.shiftDate.localeCompare(a.shiftDate));
-    if (!records.length) throw new Error("No se encontraron checadas con fecha y hora en el PDF.");
+
+    // TuPerfilIMSS incluye las ausencias como texto (por ejemplo, "No checada")
+    // sin una hora. PDF.js entrega los renglones como una sola secuencia, así que
+    // se vincula cada aviso con la fecha válida más cercana en el texto extraído.
+    const normalizedSource = source.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const dateMatches = [...normalizedSource.matchAll(/\b(\d{2})\/(\d{2})\/(\d{4})\b/g)].map((dateMatch) => ({
+      index: dateMatch.index,
+      end: dateMatch.index + dateMatch[0].length,
+      day: Number(dateMatch[1]),
+      month: Number(dateMatch[2]),
+      year: Number(dateMatch[3])
+    }));
+    const missingPattern = /\b(?:NO\s+(?:HAY\s+)?CHECAD[AO]|SIN\s+CHECADA)\b/gi;
+    for (const missingMatch of normalizedSource.matchAll(missingPattern)) {
+      const missingStart = missingMatch.index;
+      const missingEnd = missingStart + missingMatch[0].length;
+      const nearestDate = dateMatches
+        .map((dateMatch) => ({
+          ...dateMatch,
+          distance: dateMatch.end <= missingStart
+            ? missingStart - dateMatch.end
+            : dateMatch.index >= missingEnd
+              ? dateMatch.index - missingEnd
+              : 0
+        }))
+        .filter((dateMatch) => dateMatch.distance <= 80)
+        .sort((a, b) => a.distance - b.distance)[0];
+      if (!nearestDate) continue;
+
+      const missingDate = new Date(nearestDate.year, nearestDate.month - 1, nearestDate.day, 12);
+      if (missingDate.getFullYear() !== nearestDate.year
+        || missingDate.getMonth() !== nearestDate.month - 1
+        || missingDate.getDate() !== nearestDate.day) continue;
+
+      const sameDay = formatDateKey(missingDate);
+      const previousDay = formatDateKey(addDays(missingDate, -1));
+      const shiftDate = isScheduledDate(sameDay, config)
+        ? sameDay
+        : isScheduledDate(previousDay, config)
+          ? previousDay
+          : "";
+      if (!shiftDate || byShiftDate.has(shiftDate)) continue;
+      byShiftDate.set(shiftDate, createRecord(shiftDate, "No checada en PDF de TuPerfilIMSS"));
+    }
+
+    const records = [...byShiftDate.values()].sort((a, b) => b.shiftDate.localeCompare(a.shiftDate));
+    if (!records.length) throw new Error("No se encontraron checadas ni registros de No checada en el PDF.");
     return records;
   }
 

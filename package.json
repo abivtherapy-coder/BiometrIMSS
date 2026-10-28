@@ -1,6 +1,6 @@
 {
   "name": "biometrimss",
-  "version": "2.16.0",
+  "version": "2.17.1",
   "private": true,
   "description": "Control personal de guardias y registros biométricos.",
   "scripts": {

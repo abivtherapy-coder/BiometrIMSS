@@ -128,6 +128,36 @@ test("lee las checadas nocturnas de un PDF de TuPerfilIMSS", () => {
   assert.deepEqual(records.find((record) => record.shiftDate === "2026-08-04").exitAt, "2026-08-05T08:27");
 });
 
+test("importa las filas No checada del PDF y las marca como faltas", () => {
+  const pdfText = [
+    "BIOMÉTRICO REGISTRO DE EVENTOS",
+    "No checada 06/08/2026 E",
+    "07/08/2026 S No checada"
+  ].join(" ");
+  const records = L.parseTuPerfilImssText(pdfText, settings);
+  const record = records.find((item) => item.shiftDate === "2026-08-06");
+
+  assert.ok(record);
+  assert.equal(record.entryAt, "");
+  assert.equal(record.exitAt, "");
+  assert.equal(L.evaluateRecord(record, settings, "2026-08-08T12:00:00").status, "falta");
+});
+
+test("combina una checada real y una No checada como omisión, no como falta", () => {
+  const pdfText = [
+    "BIOMÉTRICO REGISTRO DE EVENTOS",
+    "11.52.14.103 20:57:33 04/08/2026 E",
+    "05/08/2026 S No checada"
+  ].join(" ");
+  const records = L.parseTuPerfilImssText(pdfText, settings);
+  const record = records.find((item) => item.shiftDate === "2026-08-04");
+
+  assert.equal(records.length, 1);
+  assert.equal(record.entryAt, "2026-08-04T20:57");
+  assert.equal(record.exitAt, "");
+  assert.equal(L.evaluateRecord(record, settings, "2026-08-06T12:00:00").status, "omision-salida");
+});
+
 test("convierte las guardias dentro de un periodo vacacional en vacaciones programadas", () => {
   const vacationSettings = L.normalizeSettings({
     ...settings,

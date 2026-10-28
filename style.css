@@ -477,6 +477,42 @@ h2 {
   font-size: .92rem;
 }
 
+.vacation-portal {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 68px 1fr;
+  align-items: center;
+  gap: 12px;
+  margin: -5px 0 16px;
+  padding: 8px 12px 8px 5px;
+  border: 1px solid rgba(255, 255, 255, .34);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .14);
+  backdrop-filter: blur(7px);
+}
+
+.vacation-portal[hidden] { display: none; }
+
+.vacation-portal img {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .2));
+}
+
+.vacation-portal strong,
+.vacation-portal span { display: block; }
+
+.vacation-portal strong { font-size: .9rem; }
+
+.vacation-portal span {
+  margin-top: 3px;
+  color: rgba(255, 255, 255, .83);
+  font-size: .72rem;
+  line-height: 1.35;
+}
+
 .quick-actions {
   position: relative;
   z-index: 1;
@@ -719,6 +755,7 @@ h2 {
 }
 
 .date-tile {
+  position: relative;
   display: grid;
   width: 46px;
   height: 49px;
@@ -727,6 +764,31 @@ h2 {
   color: var(--green-900);
   background: var(--green-100);
   line-height: 1;
+}
+
+.upcoming-item.is-vacation .date-tile {
+  overflow: hidden;
+  color: #6a401f;
+  background: #f7ecdf;
+}
+
+.upcoming-vacation-avatar {
+  position: absolute;
+  right: -5px;
+  bottom: -3px;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  opacity: .5;
+}
+
+.upcoming-item.is-vacation .date-tile strong,
+.upcoming-item.is-vacation .date-tile small {
+  position: relative;
+  z-index: 1;
+  justify-self: start;
+  margin-left: 7px;
+  text-shadow: 0 1px 0 #fff;
 }
 
 .date-tile strong {
@@ -1075,6 +1137,32 @@ h2 {
 .calendar-day.has-status-justificada:not(.is-selected) { color: #aa2d66; background: #fdeaf3; }
 .calendar-day.is-scheduled:not(.is-selected) { background: #eef3f1; }
 
+.calendar-day.is-vacation-guard:not(.is-selected) {
+  color: #704522;
+  background: #f7ecdf;
+}
+
+.calendar-day.is-vacation-guard > span {
+  position: absolute;
+  z-index: 2;
+  top: 5px;
+  left: 7px;
+  font-weight: 850;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .9);
+}
+
+.calendar-vacation-avatar {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 2px rgba(86, 50, 22, .18));
+}
+
+.calendar-day.is-selected .calendar-vacation-avatar { opacity: .72; }
+
 .calendar-day .guard-dot {
   position: absolute;
   bottom: 5px;
@@ -1129,6 +1217,14 @@ h2 {
 
 .compact-empty {
   padding: 20px 10px 8px;
+}
+
+.selected-vacation-avatar {
+  width: 100%;
+  height: 220px;
+  margin: -12px auto 3px;
+  object-fit: contain;
+  filter: drop-shadow(0 7px 7px rgba(86, 50, 22, .16));
 }
 
 .empty-state svg {
@@ -1343,6 +1439,10 @@ h2 {
   color: var(--muted);
   font-size: .7rem;
 }
+
+.monthly-theme-settings{overflow:hidden;background:linear-gradient(145deg,#fff 0 68%,#fff3df)}
+.monthly-theme-icon{color:#fff;background:linear-gradient(135deg,#7a2a78,#ff8b00)}
+.monthly-theme-settings select{min-height:48px;font-weight:750;background:#fff}
 
 .weekday-picker {
   display: grid;

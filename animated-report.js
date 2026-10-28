@@ -64,10 +64,18 @@
 
     const pngBytes = await pngBlob.arrayBuffer();
     const pdf = await window.PDFLib.PDFDocument.create();
-    const page = pdf.addPage([540, 960]);
     const image = await pdf.embedPng(pngBytes);
+    const pageWidth = 540;
+    const pageHeight = 960;
+    const page = pdf.addPage([pageWidth, pageHeight]);
+    const fitted = image.scaleToFit(pageWidth, pageHeight);
 
-    page.drawImage(image, { x: 0, y: 0, width: 540, height: 960 });
+    page.drawImage(image, {
+      x: (pageWidth - fitted.width) / 2,
+      y: (pageHeight - fitted.height) / 2,
+      width: fitted.width,
+      height: fitted.height
+    });
     pdf.setTitle(`BIOMETRIMSS · Informe visual ${start} a ${end}`);
     pdf.setSubject("Informe visual 9:16 con avatares y clasificación");
     pdf.setCreator("BIOMETRIMSS");

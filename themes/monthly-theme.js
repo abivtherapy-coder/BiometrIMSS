@@ -1,7 +1,8 @@
 (function initializeMonthlyTheme() {
   "use strict";
 
-  const THEME_VERSION = "7.2.0";
+  const THEME_VERSION = "7.3.0";
+  const THEME_STORAGE_KEY = "biometrimss:theme-preference";
   const SEPTEMBER_CHARACTER = "assets/biometrimss-charro-septiembre-v1.png";
   const themes = [
     ["enero", "Año Nuevo", "✦"],
@@ -14,13 +15,29 @@
     ["agosto", "Regreso a clases", "✎"],
     ["septiembre", "¡Viva México!", "✦"],
     ["octubre", "Halloween", "◒"],
-    ["noviembre", "Día de Muertos", "✿"],
+    ["noviembre", "Catrín y Abi Zapata", "✿"],
     ["diciembre", "Navidad", "✦"]
   ];
 
-  function getTheme() {
+  function requestedTheme() {
     const requested = new URLSearchParams(window.location.search).get("theme");
-    return themes.find(([id]) => id === String(requested || "").toLowerCase()) || themes[new Date().getMonth()];
+    return themes.find(([id]) => id === String(requested || "").toLowerCase()) || null;
+  }
+
+  function savedThemeId() {
+    try {
+      const value = localStorage.getItem(THEME_STORAGE_KEY);
+      return themes.some(([id]) => id === value) ? value : "auto";
+    } catch {
+      return "auto";
+    }
+  }
+
+  function getTheme() {
+    const requested = requestedTheme();
+    if (requested) return requested;
+    const saved = savedThemeId();
+    return themes.find(([id]) => id === saved) || themes[new Date().getMonth()];
   }
 
   function ensureSeasonalStyles(id) {
@@ -123,7 +140,7 @@
 
   const Q4_COPY = Object.freeze({
     octubre: { header: "Halloween", theme: "¡Halloween!", slogan: "EL COMPROMISO TAMBIÉN DA VIDA" },
-    noviembre: { header: "Día de Muertos", theme: "Día de Muertos", slogan: "HONRAMOS LA VIDA EN CADA GUARDIA" },
+    noviembre: { header: "Catrín y Abi Zapata", theme: "Catrín y Abi Zapata", slogan: "HONRAMOS LA VIDA EN CADA GUARDIA" },
     diciembre: { header: "Feliz Navidad", theme: "¡Feliz Navidad!", slogan: "LA SALUD NOS UNE EN CADA TEMPORADA" }
   });
 
@@ -165,14 +182,41 @@
     if (reportLabel) reportLabel.textContent = `Ver informe · ${copy.header}`;
     if (reportTitle) reportTitle.textContent = `Informe · ${copy.header}`;
     if (reportHeading && !reportHeading.querySelector(".q4-report-icons")) {
-      const icons = id === "octubre" ? "👻  🎃  👻" : id === "noviembre" ? "✿  🕯️  ✿" : "❄️  🎄  🎁";
+      const icons = id === "octubre" ? "👻  🎃  👻" : id === "noviembre" ? "💀  🌼  🕯️" : "❄️  🎄  🎁";
       reportHeading.append(make("span", "q4-report-icons", icons));
     }
   }
 
+  function bindThemePicker(activeTheme, source) {
+    const picker = document.getElementById("monthlyThemePreference");
+    const help = document.getElementById("monthlyThemeHelp");
+    if (!picker) return;
+    picker.value = source === "automatic" ? "auto" : activeTheme[0];
+    if (help) {
+      help.textContent = source === "automatic"
+        ? `Modo automático activo: ${activeTheme[1]}. Cambia sólo adornos, colores e informes.`
+        : `Vista elegida: ${activeTheme[1]}. La preferencia queda guardada únicamente en este dispositivo.`;
+    }
+    picker.addEventListener("change", () => {
+      try {
+        if (picker.value === "auto") localStorage.removeItem(THEME_STORAGE_KEY);
+        else localStorage.setItem(THEME_STORAGE_KEY, picker.value);
+      } catch {}
+      const url = new URL(window.location.href);
+      url.searchParams.delete("theme");
+      if (url.href === window.location.href) window.location.reload();
+      else window.location.replace(url.href);
+    });
+  }
+
   function applyTheme() {
-    const [id, label, symbol] = getTheme();
+    const requested = requestedTheme();
+    const saved = savedThemeId();
+    const activeTheme = getTheme();
+    const [id, label, symbol] = activeTheme;
+    const source = requested ? "preview" : saved === "auto" ? "automatic" : "selected";
     document.documentElement.dataset.monthTheme = id;
+    document.documentElement.dataset.monthThemeSource = source;
     document.documentElement.style.setProperty("--theme-symbol", `"${symbol}"`);
     document.documentElement.style.setProperty("--theme-label", `"${label}"`);
     ensureSeasonalStyles(id);
@@ -188,6 +232,7 @@
 
     if (id === "septiembre") decorateSeptember();
     else if (Q4_COPY[id]) decorateQ4(id);
+    bindThemePicker(activeTheme, source);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", applyTheme, { once: true });

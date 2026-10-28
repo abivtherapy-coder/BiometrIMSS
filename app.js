@@ -3,7 +3,7 @@
 
   const L = window.BiometrLogic;
   const R = window.BiometrReport;
-  const APP_VERSION = "2.16.0";
+  const APP_VERSION = "2.17.1";
   const STORAGE = {
     settings: "biometrimss:v2:settings",
     records: "biometrimss:v2:records",
@@ -461,13 +461,23 @@
     const todayScheduled = L.isScheduledDate(shiftDate, state.settings);
     const todayVacation = L.vacationPeriodForDate(shiftDate, state.settings);
     const todayRecord = state.records.find((record) => record.shiftDate === shiftDate);
+    const vacationPortal = $("vacationPortal");
+    const isVacationShift = Boolean(todayScheduled && todayVacation);
     const badge = $("todayShiftBadge");
     badge.classList.toggle("is-shift", todayScheduled && !todayVacation);
     badge.textContent = todayVacation ? "Vacaciones" : todayScheduled ? "Día de guardia" : "Día libre";
+    vacationPortal.hidden = !isVacationShift;
+    if (isVacationShift) {
+      $("vacationPortalText").textContent = todayVacation.notes
+        ? `Esta guardia coincide con tus vacaciones: ${todayVacation.notes}.`
+        : "Esta guardia coincide con tus vacaciones programadas.";
+    }
 
     if (todayRecord) {
       const evaluation = L.evaluateRecord(todayRecord, state.settings, current);
       $("nextShiftText").textContent = `${evaluation.label}: ${evaluation.reason}`;
+    } else if (isVacationShift) {
+      $("nextShiftText").textContent = "No tienes que acudir: esta guardia está cubierta por tu periodo vacacional.";
     } else if (todayScheduled) {
       $("nextShiftText").textContent = `Tu guardia está programada de ${state.settings.startTime} a ${state.settings.exitTime} del día siguiente.`;
     } else {
@@ -507,8 +517,11 @@
       const vacation = L.vacationPeriodForDate(dateKey, state.settings);
       const evaluation = record ? L.evaluateRecord(record, state.settings) : vacation ? L.manualEvaluation("vacaciones") : null;
       return `
-        <div class="upcoming-item">
-          <div class="date-tile"><strong>${date.getDate()}</strong><small>${shortMonth(date)}</small></div>
+        <div class="upcoming-item${vacation ? " is-vacation" : ""}">
+          <div class="date-tile">
+            ${vacation ? '<img class="upcoming-vacation-avatar" src="assets/abisai-vacaciones.png" alt="" aria-hidden="true">' : ""}
+            <strong>${date.getDate()}</strong><small>${shortMonth(date)}</small>
+          </div>
           <div class="upcoming-copy"><strong>${capitalize(weekday(date))}</strong><span>${state.settings.startTime} – ${state.settings.exitTime}</span></div>
           ${evaluation
             ? `<span class="record-status status-${evaluation.category} status-code-${evaluation.status}">${evaluation.label}</span>`
@@ -753,6 +766,7 @@
       const record = state.records.find((item) => item.shiftDate === key);
       const evaluation = record ? L.evaluateRecord(record, state.settings) : null;
       const scheduled = L.isScheduledDate(key, state.settings);
+      const vacation = scheduled ? L.vacationPeriodForDate(key, state.settings) : null;
       const special = calendarSpecialForDate(key);
       const classes = ["calendar-day"];
       if (date.getMonth() !== month.getMonth()) classes.push("is-outside");
@@ -760,14 +774,15 @@
       if (key === state.selectedDate) classes.push("is-selected");
       if (special.holiday) classes.push("is-holiday");
       if (special.payday) classes.push("is-payday");
+      if (vacation) classes.push("is-vacation-guard");
       if (evaluation) classes.push(`has-${evaluation.category}`, `has-status-${evaluation.status}`);
       else if (scheduled) classes.push("is-scheduled");
       const extras = [
         special.holiday ? `festivo: ${special.holiday.name}` : "",
         special.payday ? "pago BBVA a la 01:00" : ""
       ].filter(Boolean).join(", ");
-      const label = `${formatFriendlyDate(key)}${evaluation ? `, ${evaluation.label}` : scheduled ? ", guardia programada" : ""}${extras ? `, ${extras}` : ""}`;
-      const markers = `${special.holiday ? `<i class="holiday-mark" aria-hidden="true">${special.holiday.symbol}</i>` : ""}${special.payday ? '<i class="payday-mark" aria-hidden="true">$</i>' : ""}${scheduled ? '<i class="guard-dot"></i>' : ""}`;
+      const label = `${formatFriendlyDate(key)}${vacation ? ", guardia en vacaciones programadas" : evaluation ? `, ${evaluation.label}` : scheduled ? ", guardia programada" : ""}${extras ? `, ${extras}` : ""}`;
+      const markers = `${special.holiday ? `<i class="holiday-mark" aria-hidden="true">${special.holiday.symbol}</i>` : ""}${special.payday ? '<i class="payday-mark" aria-hidden="true">$</i>' : ""}${vacation ? '<img class="calendar-vacation-avatar" src="assets/abisai-vacaciones.png" alt="" aria-hidden="true">' : scheduled ? '<i class="guard-dot"></i>' : ""}`;
       cells.push(`<button class="${classes.join(" ")}" type="button" data-date="${key}" aria-label="${escapeHtml(label)}"><span>${date.getDate()}</span>${markers}</button>`);
     }
     $("calendarGrid").innerHTML = cells.join("");
@@ -787,7 +802,10 @@
     if (!record) {
       const scheduled = L.isScheduledDate(state.selectedDate, state.settings);
       const vacation = L.vacationPeriodForDate(state.selectedDate, state.settings);
-      $("selectedDayContent").innerHTML = specialHtml + `<div class="empty-state compact-empty"><p>${vacation ? `Vacaciones programadas${vacation.notes ? ` · ${escapeHtml(vacation.notes)}` : ""}.` : scheduled ? "Guardia programada todavía sin captura." : "No hay un registro en esta fecha."}</p></div>`;
+      const vacationAvatar = scheduled && vacation
+        ? '<img class="selected-vacation-avatar" src="assets/abisai-vacaciones.png" alt="Avatar de Abi en la playa">'
+        : "";
+      $("selectedDayContent").innerHTML = specialHtml + `<div class="empty-state compact-empty vacation-selected-day">${vacationAvatar}<p>${vacation ? `Vacaciones programadas${vacation.notes ? ` · ${escapeHtml(vacation.notes)}` : ""}.` : scheduled ? "Guardia programada todavía sin captura." : "No hay un registro en esta fecha."}</p></div>`;
       return;
     }
     $("selectedDayContent").innerHTML = specialHtml + recordCard(record, true);
@@ -1129,11 +1147,15 @@
   async function createDigitalPdf(model) {
     const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
     const pdf = await PDFDocument.create();
-    const reportMonth = Number(String(model.start || $("reportStart").value || "").slice(5, 7));
+    const selectedTheme = document.documentElement.dataset.monthThemeSource !== "automatic"
+      ? document.documentElement.dataset.monthTheme
+      : "";
+    const reportMonth = ({ octubre: 10, noviembre: 11, diciembre: 12 })[selectedTheme]
+      || Number(String(model.start || $("reportStart").value || "").slice(5, 7));
     const pdfTheme = reportMonth === 10
       ? { label: "OCTUBRE - HALLOWEEN", primary: "#5a1973", dark: "#24102f", soft: "#f6eafa" }
       : reportMonth === 11
-        ? { label: "NOVIEMBRE - DIA DE MUERTOS", primary: "#7a2a78", dark: "#3d153f", soft: "#fff0df" }
+        ? { label: "NOVIEMBRE - CATRIN Y ABI ZAPATA", primary: "#7a2a78", dark: "#3d153f", soft: "#fff0df" }
         : reportMonth === 12
           ? { label: "DICIEMBRE - FELIZ NAVIDAD", primary: "#007a58", dark: "#064b3e", soft: "#eaf7f2" }
           : { label: "BIOMETRIMSS", primary: "#08745a", dark: "#063d34", soft: "#f0faf6" };
@@ -1245,14 +1267,14 @@
       const preview = L.mergeRecordsByShiftDate(state.records, importedRecords);
       const accepted = await askConfirmation(
         "Importar checadas de TuPerfilIMSS",
-        `Se detectaron ${importedRecords.length} guardias en ${file.name}. Se agregarán ${preview.added}, se completarán ${preview.updated} y se conservarán ${preview.skipped} registros sin cambios.`,
-        "Importar checadas"
+        `Se detectaron ${importedRecords.length} guardias en ${file.name}, incluidas las filas No checada. Se agregarán ${preview.added}, se completarán ${preview.updated} y se conservarán ${preview.skipped} registros sin cambios.`,
+        "Importar registros"
       );
       if (!accepted) return;
       state.records = preview.records;
       persistRecords();
       renderAll();
-      showToast(`Importación terminada: ${preview.added} agregadas, ${preview.updated} completadas y ${preview.skipped} sin cambios.`);
+      showToast(`Importación terminada: ${preview.added} agregadas, ${preview.updated} completadas y ${preview.skipped} sin cambios. Las No checada vencidas se muestran como faltas.`);
     } catch (error) {
       console.error(error);
       showToast(error.message || "No se pudo leer el PDF de TuPerfilIMSS.", "error");
