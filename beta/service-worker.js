@@ -1,0 +1,101 @@
+const CACHE_NAME = "biometrimss-beta-v7.3.2-hospital";
+const APP_SHELL = [
+  "./usage.js?v=usage1",
+  "./",
+  "./index.html",
+  "./style.css?v=7.3.1",
+  "./themes/monthly-theme.css?v=4.9.0",
+  "./themes/september-viva.css?v=7.3.0",
+  "./themes/q4-seasonal.css?v=7.3.0",
+  "./themes/monthly-theme.js?v=7.3.0",
+  "./logic.js?v=7.2.2",
+  "./report-image.js?v=7.3.0",
+  "./animated-report.js?v=7.2.2",
+  "./app.js?v=7.3.1",
+  "./assets/biometrimss-intro-circle-v1.mp4?v=7.2.0",
+  "./assets/biometrimss-zombie-octubre-v2.png?v=7.2.0",
+  "./assets/biometrimss-noviembre-catrin-zapata-v1.png",
+  "./manifest.webmanifest?v=4.9.0",
+  "./icons/icon-180.png?v=4.9.0",
+  "./icons/icon-192.png?v=4.9.0",
+  "./icons/icon-512.png?v=4.9.0",
+  "./icons/icon-maskable-512.png?v=4.9.0",
+  "./assets/abisai-pase-entrada.png",
+  "./assets/abisai-pase-salida.png",
+  "./assets/abisai-incapacidad-v2.png",
+  "./assets/abisai-vacaciones.png",
+  "./assets/octubre-hospital-planchada.png",
+  "./assets/abit-ai-states-sticker-sheet-v1.png",
+  "./assets/biometrimss-avatar-icon-v3.png",
+  "./assets/biometrimss-logo-transparent-v1.png?v=4.9.0",
+  "./assets/8F8128EE-95A3-40A1-9F22-F895C79C4976.png",
+  "./assets/BCF6ADEE-FFFA-4572-811F-BB8EB423AD02.png",
+  "./assets/biometrimss-charro-septiembre-v1.png",
+  "./vendor/pdfjs/pdf.min.mjs",
+  "./vendor/pdfjs/pdf.worker.min.mjs",
+  "./vendor/pdf-lib/pdf-lib.min.js"
+];
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((key) => key.startsWith("biometrimss-beta-") && key !== CACHE_NAME).map((key) => caches.delete(key))))
+      .then(() => self.clients.claim())
+  );
+});
+
+function freshRequest(request) {
+  return new Request(request, { cache: "no-store" });
+}
+
+self.addEventListener("fetch", (event) => {
+  if (event.request.method !== "GET") return;
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
+
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(freshRequest(event.request)).catch(() => caches.match("./index.html"))
+    );
+    return;
+  }
+
+  const freshPaths = [
+    "/style.css",
+    "/app.js",
+    "/animated-report.js",
+    "/logic.js",
+    "/report-image.js",
+    "/themes/monthly-theme.js",
+    "/themes/september-viva.css",
+    "/themes/q4-seasonal.css",
+    "/assets/7AA47CC3-1646-484E-A630-9E70E523A486.png",
+    "/assets/881D4859-FEF3-45D9-AEE1-892678FEEAA2.png",
+    "/assets/A5BD8F79-366E-46CA-AAC1-43AD5E48DC52.png",
+    "/assets/BCF6ADEE-FFFA-4572-811F-BB8EB423AD02.png",
+    "/assets/DD8ADD59-010C-4F1A-8763-448A17FC021B.png",
+    "/assets/F226F542-3898-4479-8A6A-7C0837ED127C.png",
+    "/assets/abisai-incapacidad-v2.png"
+  ];
+
+  if (freshPaths.some((path) => url.pathname.endsWith(path))) {
+    event.respondWith(
+      fetch(freshRequest(event.request)).then((response) => {
+        if (response.ok) caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+        return response;
+      }).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {
+      if (response.ok) caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+      return response;
+    }))
+  );
+});

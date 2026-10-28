@@ -1,0 +1,753 @@
+/* BIOMETRIMSS · SEPTIEMBRE — ¡Viva México! · v5.8 */
+html[data-month-theme="septiembre"]{--sep-green:#006847;--sep-green-2:#008f68;--sep-red:#ce1126;--sep-gold:#d5b04c;--sep-ink:#153c35;--sep-mint:#e7f5f1}
+html[data-month-theme="septiembre"] body{background:#dcefeb;color:var(--sep-ink)}
+html[data-month-theme="septiembre"] .app-shell{background:linear-gradient(180deg,#d8ede8 0,#f7fbfa 52%,#edf7f4 100%)}
+html[data-month-theme="septiembre"] .month-decoration{display:none!important}
+html[data-month-theme="septiembre"] .topbar{position:relative;min-height:126px;padding:24px 20px;overflow:hidden;background:linear-gradient(105deg,#00483d 0,#007b66 57%,#005246 100%);border:0;border-radius:0 0 24px 24px;box-shadow:0 4px 0 #fff,0 8px 0 var(--sep-red),0 12px 0 #fff,0 16px 0 var(--sep-green)}
+html[data-month-theme="septiembre"] .topbar:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 86% 118%,rgba(0,33,28,.38),transparent 37%);pointer-events:none}
+html[data-month-theme="septiembre"] .brand{position:relative;z-index:8;max-width:55%;align-items:center}
+html[data-month-theme="septiembre"] .brand strong{font-size:23px;color:#fff}
+html[data-month-theme="septiembre"] .brand small{color:#fff;font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:850}
+html[data-month-theme="septiembre"] .brand-mark{border:2px solid rgba(255,255,255,.9);border-radius:19px;background:#063f38;box-shadow:0 5px 16px rgba(0,0,0,.22)}
+html[data-month-theme="septiembre"] .sep-header-art{position:absolute;z-index:5;right:3%;top:8px;width:44%;height:104px;color:#fff;pointer-events:none;text-align:center}
+html[data-month-theme="septiembre"] .sep-viva{position:absolute;right:18%;top:17px;font-family:Georgia,"Times New Roman",serif;font-size:27px;font-style:italic;font-weight:900;line-height:.86;transform:rotate(-5deg);text-shadow:0 3px 8px rgba(0,0,0,.22)}
+html[data-month-theme="septiembre"] .sep-month{position:absolute;right:15%;top:69px;font-size:7px;font-weight:900;letter-spacing:.32em;white-space:nowrap}
+html[data-month-theme="septiembre"] .sep-flag{position:absolute;right:0;top:0;font-size:25px}
+html[data-month-theme="septiembre"] .sep-skyline{position:absolute;right:0;bottom:0;width:61%;height:67%;background:#083f36;opacity:.28;clip-path:polygon(0 100%,0 82%,8% 82%,8% 49%,12% 49%,14% 15%,16% 49%,22% 49%,22% 73%,29% 73%,29% 39%,34% 39%,36% 0,38% 39%,46% 39%,46% 74%,54% 74%,54% 46%,59% 46%,61% 13%,63% 46%,70% 46%,70% 71%,77% 71%,77% 58%,83% 58%,83% 77%,100% 77%,100% 100%)}
+html[data-month-theme="septiembre"] .sep-firework{position:absolute;width:34px;height:34px;border-radius:50%;background:repeating-conic-gradient(var(--sep-red) 0 6deg,transparent 6deg 20deg,#fff 20deg 25deg,transparent 25deg 42deg,var(--sep-green-2) 42deg 48deg,transparent 48deg 70deg);-webkit-mask:radial-gradient(circle,transparent 0 24%,#000 26% 50%,transparent 52%);mask:radial-gradient(circle,transparent 0 24%,#000 26% 50%,transparent 52%)}
+html[data-month-theme="septiembre"] .sep-firework-a{left:4%;top:11px}.sep-firework-b{right:43%;top:1px;transform:scale(.72)}
+html[data-month-theme="septiembre"] #view-home{padding-top:24px}
+html[data-month-theme="septiembre"] #view-home>.hero-card{position:relative;min-height:432px;overflow:hidden;padding:62px 47% 113px 27px;border:1px solid rgba(0,86,62,.2);border-radius:28px;background:linear-gradient(105deg,#038f74 0,#087f69 48%,#056a58 100%);box-shadow:0 13px 30px rgba(0,75,55,.18)}
+html[data-month-theme="septiembre"] #view-home>.hero-card:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 112%,rgba(2,75,61,.65),transparent 43%),radial-gradient(circle at 83% 118%,rgba(0,67,54,.55),transparent 42%);pointer-events:none}
+html[data-month-theme="septiembre"] #view-home>.hero-card:after{content:"";position:absolute;left:-3%;right:-3%;bottom:72px;height:86px;background:#075d4e;opacity:.24;clip-path:polygon(0 100%,0 84%,7% 84%,7% 52%,10% 52%,11% 18%,13% 52%,19% 52%,19% 78%,25% 78%,25% 60%,29% 60%,29% 34%,31% 34%,33% 4%,35% 34%,39% 34%,39% 80%,46% 80%,46% 48%,49% 48%,51% 20%,53% 48%,58% 48%,58% 79%,100% 79%,100% 100%)}
+html[data-month-theme="septiembre"] .hero-topline,html[data-month-theme="septiembre"] .hero-message{position:relative;z-index:7}
+html[data-month-theme="septiembre"] .hero-card .eyebrow{color:#f1fff9!important;font-size:12px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
+html[data-month-theme="septiembre"] .hero-card h1{color:#fff;font-size:clamp(34px,6vw,52px);line-height:1.02;max-width:450px;text-shadow:0 2px 8px rgba(0,0,0,.13)}
+html[data-month-theme="septiembre"] .hero-card .hero-message{color:#fff;font-size:16px;line-height:1.42;max-width:370px}
+html[data-month-theme="septiembre"] .shift-badge{position:absolute;right:17px;top:21px;z-index:12;background:#f8fffc;color:#075e48;border:1px solid #d6eee6;border-radius:999px;padding:10px 17px;font-weight:850;box-shadow:0 3px 10px rgba(0,0,0,.08)}
+html[data-month-theme="septiembre"] .sep-papel{position:absolute;z-index:10;left:18px;top:0;display:flex;pointer-events:none}
+html[data-month-theme="septiembre"] .sep-papel span{display:block;width:57px;height:40px;margin-right:-2px;background:#fff;clip-path:polygon(0 0,100% 0,100% 74%,82% 90%,66% 76%,50% 94%,33% 76%,17% 90%,0 74%);filter:drop-shadow(0 2px 1px rgba(0,0,0,.08))}
+html[data-month-theme="septiembre"] .sep-papel span:nth-child(1),html[data-month-theme="septiembre"] .sep-papel span:nth-child(4){background:#008f68}html[data-month-theme="septiembre"] .sep-papel span:nth-child(3){background:#ce1126}
+html[data-month-theme="septiembre"] .sep-character{position:absolute;z-index:6;right:-2px;top:47px;height:290px;width:47%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 10px 9px rgba(0,0,0,.17));pointer-events:none}
+html[data-month-theme="septiembre"] .sep-character.is-reference-fallback{height:280px;object-fit:cover;object-position:72% 27%;border-radius:28px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 100%);mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 100%)}
+html[data-month-theme="septiembre"] .sep-theme-label{position:absolute;z-index:11;left:27px;bottom:106px;padding:10px 14px 10px 41px;border:2px dashed #d2b16b;border-radius:12px;background:#fff8e7;color:#006847;font-size:14px;font-weight:900;box-shadow:0 3px 10px rgba(0,0,0,.12)}
+html[data-month-theme="septiembre"] .sep-theme-label:before{content:"❧";position:absolute;left:13px;top:5px;color:#ce1126;font-size:24px;transform:rotate(-18deg)}
+html[data-month-theme="septiembre"] .sep-confetti{position:absolute;inset:0;z-index:5;pointer-events:none}
+html[data-month-theme="septiembre"] .sep-confetti-piece{position:absolute;width:9px;height:18px;border-radius:2px;background:var(--sep-red);transform:rotate(24deg)}
+html[data-month-theme="septiembre"] .sep-confetti-piece:nth-child(2n){background:#fff}html[data-month-theme="septiembre"] .sep-confetti-piece:nth-child(3n){background:#00966e}
+html[data-month-theme="septiembre"] .sep-confetti-piece:nth-child(1){left:54%;top:18%}.sep-confetti-piece:nth-child(2){left:65%;top:12%}.sep-confetti-piece:nth-child(3){left:77%;top:19%}.sep-confetti-piece:nth-child(4){right:5%;top:29%}.sep-confetti-piece:nth-child(5){left:57%;top:44%}.sep-confetti-piece:nth-child(6){right:3%;top:49%}.sep-confetti-piece:nth-child(7){left:73%;top:57%}.sep-confetti-piece:nth-child(8){left:50%;top:31%}.sep-confetti-piece:nth-child(9){right:14%;top:9%}.sep-confetti-piece:nth-child(10){left:61%;top:66%}.sep-confetti-piece:nth-child(11){right:8%;top:66%}.sep-confetti-piece:nth-child(12){left:51%;top:60%}
+html[data-month-theme="septiembre"] .sep-architecture{position:absolute;z-index:2;left:28%;bottom:73px;width:30%;height:73px;background:#065849;opacity:.28;clip-path:polygon(0 100%,0 75%,9% 75%,9% 52%,13% 52%,14% 18%,16% 52%,22% 52%,22% 72%,30% 72%,30% 45%,36% 45%,38% 0,40% 45%,48% 45%,48% 71%,58% 71%,58% 55%,65% 55%,67% 19%,69% 55%,77% 55%,77% 76%,100% 76%,100% 100%)}
+html[data-month-theme="septiembre"] .quick-actions{position:absolute;z-index:13;left:27px;right:27px;bottom:19px;display:grid;grid-template-columns:1fr 1fr;gap:13px}
+html[data-month-theme="septiembre"] .quick-actions .button{min-height:70px;border-radius:19px;font-size:17px;font-weight:900}
+html[data-month-theme="septiembre"] .quick-actions .button-light{background:#fff;color:#006847;box-shadow:0 5px 14px rgba(0,0,0,.11)}
+html[data-month-theme="septiembre"] .quick-actions .button-ghost-light{background:rgba(0,111,80,.93);color:#fff;border:2px solid rgba(255,255,255,.4)}
+html[data-month-theme="septiembre"] #view-home>.period-card,html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card,html[data-month-theme="septiembre"] #view-home>.progress-card,html[data-month-theme="septiembre"] #view-home>.upcoming-card{position:relative;overflow:hidden;border:1px solid rgba(0,104,71,.11);border-radius:22px;background:#fff;box-shadow:0 8px 20px rgba(0,83,59,.075)}
+html[data-month-theme="septiembre"] #view-home>.period-card{margin-top:17px;padding:24px 27px 22px}
+html[data-month-theme="septiembre"] .sep-ribbon{position:absolute;right:-15px;top:-2px;width:175px;height:41px;border-top:9px solid #006847;border-radius:50%;box-shadow:0 -7px 0 #fff,0 -14px 0 #ce1126;transform:rotate(7deg);pointer-events:none}
+html[data-month-theme="septiembre"] .date-range input{background:#eef9f6;border-color:#cfe8e1;border-radius:14px;font-weight:700}
+html[data-month-theme="septiembre"] #view-home>.stats-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:15px}
+html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{min-height:126px;padding:16px 12px 14px}
+html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card strong{font-size:34px;line-height:1}
+html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card>span:last-child{font-size:13px;color:#576a66}
+html[data-month-theme="septiembre"] .sep-stat-flower{position:absolute;right:-3px;bottom:-4px;width:43px;height:43px;border:8px dotted rgba(0,143,104,.16);border-radius:50%}
+html[data-month-theme="septiembre"] .stat-card:nth-child(even) .sep-stat-flower{border-color:rgba(206,17,38,.14)}
+html[data-month-theme="septiembre"] #view-home>.progress-card{margin-top:15px;padding:22px}
+html[data-month-theme="septiembre"] .progress-track>span{background:linear-gradient(90deg,#00a87c,#39c9a4 72%,#ce1126)}
+html[data-month-theme="septiembre"] .progress-value{color:#00906b;font-size:34px}
+html[data-month-theme="septiembre"] .sep-progress-firework{position:absolute;right:20px;top:43px;width:38px;height:38px;border-radius:50%;background:repeating-conic-gradient(var(--sep-red) 0 5deg,transparent 5deg 19deg,#008f68 19deg 24deg,transparent 24deg 40deg);opacity:.6}
+html[data-month-theme="septiembre"] .sep-progress-eagle{position:absolute;right:71px;bottom:17px;color:rgba(0,104,71,.18);font-size:58px;transform:rotate(45deg)}
+html[data-month-theme="septiembre"] #view-home>.upcoming-card{margin-top:15px}
+html[data-month-theme="septiembre"] .bottom-nav{position:relative;background:rgba(255,255,255,.98);border-top:1px solid #dcebe6;padding-bottom:22px;box-shadow:0 -6px 22px rgba(0,70,50,.06)}
+html[data-month-theme="septiembre"] .bottom-nav:after{content:"ORGULLOSAMENTE IMSS";position:absolute;left:50%;bottom:4px;transform:translateX(-50%);font-size:8px;font-weight:850;letter-spacing:.18em;color:#6c7774;white-space:nowrap}
+html[data-month-theme="septiembre"] .nav-item.is-active{color:#006847;background:#e5f8f1;border-radius:16px}
+@media(max-width:600px){html[data-month-theme="septiembre"] .topbar{min-height:108px;padding:20px 14px}html[data-month-theme="septiembre"] .brand strong{font-size:19px}html[data-month-theme="septiembre"] .brand small{font-size:8px}html[data-month-theme="septiembre"] .sep-viva{font-size:16px;right:15%;top:18px}html[data-month-theme="septiembre"] .sep-month{font-size:6px;right:10%;top:57px}html[data-month-theme="septiembre"] #view-home>.hero-card{min-height:420px;padding:58px 43% 112px 18px}html[data-month-theme="septiembre"] .hero-card h1{font-size:34px}html[data-month-theme="septiembre"] .hero-card .hero-message{font-size:14px;max-width:64%}html[data-month-theme="septiembre"] .sep-character{right:-12px;top:54px;height:276px;width:48%}html[data-month-theme="septiembre"] .sep-theme-label{left:18px;bottom:106px;font-size:11px;padding:8px 9px 8px 34px}html[data-month-theme="septiembre"] .quick-actions{left:15px;right:15px;bottom:16px;gap:9px}html[data-month-theme="septiembre"] .quick-actions .button{min-height:64px;font-size:15px}html[data-month-theme="septiembre"] #view-home>.stats-grid{gap:8px}html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{min-height:112px;padding:13px 8px}html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card strong{font-size:29px}html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card>span:last-child{font-size:10px}}
+@media(max-width:390px){html[data-month-theme="septiembre"] .brand{max-width:58%}html[data-month-theme="septiembre"] .sep-viva{font-size:14px}html[data-month-theme="septiembre"] #view-home>.hero-card{padding-right:42%}html[data-month-theme="septiembre"] .hero-card .hero-message{max-width:60%}}
+@media print{html[data-month-theme="septiembre"] .sep-header-art,html[data-month-theme="septiembre"] .sep-papel,html[data-month-theme="septiembre"] .sep-confetti,html[data-month-theme="septiembre"] .sep-theme-label,html[data-month-theme="septiembre"] .sep-architecture,html[data-month-theme="septiembre"] .sep-character{display:none!important}}
+
+
+/* Ajuste de fidelidad móvil · referencia maestra · v5.8 */
+html[data-month-theme="septiembre"] .sep-viva{
+  width:132px;
+  white-space:normal;
+  text-wrap:balance;
+  line-height:.76;
+}
+
+html[data-month-theme="septiembre"] #view-home>.hero-card{
+  min-height:456px;
+  background:
+    radial-gradient(circle at 16% 108%,rgba(0,57,46,.78),transparent 42%),
+    radial-gradient(circle at 86% 110%,rgba(0,54,43,.62),transparent 43%),
+    linear-gradient(112deg,#079477 0%,#07846b 48%,#056653 100%);
+}
+
+/* CIERRE VISUAL MÓVIL · v6.9
+   Conserva en iPhone la composición aprobada de cuatro indicadores en una fila. */
+@media(max-width:600px) and (orientation:portrait){
+  html[data-month-theme="septiembre"] #view-home>.stats-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:6px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{
+    min-width:0;
+    min-height:104px;
+    padding:11px 6px 10px;
+    border-radius:17px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card strong{font-size:28px}
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card>span:last-child{
+    font-size:9px;
+    line-height:1.1;
+    white-space:normal;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-icon{width:38px;height:38px}
+  html[data-month-theme="septiembre"] .sep-character{width:49%;height:296px}
+}
+
+@media(max-width:375px) and (orientation:portrait){
+  html[data-month-theme="septiembre"] #view-home>.stats-grid{gap:5px}
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{padding-inline:4px}
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card strong{font-size:26px}
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card>span:last-child{font-size:8px}
+}
+html[data-month-theme="septiembre"] .sep-papel{
+  left:24px;
+  gap:0;
+}
+html[data-month-theme="septiembre"] .sep-papel span{
+  width:62px;
+  height:44px;
+  margin-right:-3px;
+  background-color:#fff;
+  background-image:
+    radial-gradient(circle at 18% 30%,transparent 0 3px,rgba(0,90,66,.18) 3.5px 5px,transparent 5.5px),
+    radial-gradient(circle at 50% 30%,transparent 0 3px,rgba(0,90,66,.18) 3.5px 5px,transparent 5.5px),
+    radial-gradient(circle at 82% 30%,transparent 0 3px,rgba(0,90,66,.18) 3.5px 5px,transparent 5.5px);
+  clip-path:polygon(0 0,100% 0,100% 72%,86% 89%,72% 76%,57% 94%,43% 77%,28% 94%,14% 78%,0 91%);
+}
+html[data-month-theme="septiembre"] .sep-character{
+  right:-8px;
+  top:39px;
+  width:52%;
+  height:338px;
+  object-position:right bottom;
+  filter:drop-shadow(0 12px 10px rgba(0,0,0,.2));
+}
+html[data-month-theme="septiembre"] .hero-card h1{
+  max-width:60%;
+  letter-spacing:-.025em;
+}
+html[data-month-theme="septiembre"] .hero-card .hero-message{
+  max-width:48%;
+}
+html[data-month-theme="septiembre"] .sep-theme-label{
+  min-width:300px;
+  border-color:#cfae64;
+  background:linear-gradient(90deg,#fffdf5,#fff7dc);
+  font-family:Georgia,"Times New Roman",serif;
+  font-style:italic;
+}
+html[data-month-theme="septiembre"] #view-home>.period-card{
+  background-color:#fff;
+  background-image:
+    radial-gradient(circle at 5% 92%,transparent 0 15px,rgba(0,143,104,.10) 16px 18px,transparent 19px),
+    radial-gradient(circle at 94% 78%,transparent 0 18px,rgba(206,17,38,.09) 19px 21px,transparent 22px);
+}
+html[data-month-theme="septiembre"] #view-home>.period-card:after{
+  content:"";
+  position:absolute;
+  right:13%;
+  bottom:12px;
+  width:86px;
+  height:34px;
+  border:7px double rgba(0,104,71,.14);
+  border-bottom:0;
+  border-radius:90px 90px 0 0;
+  transform:rotate(9deg);
+  pointer-events:none;
+}
+html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{
+  background-color:#fff;
+  background-image:
+    radial-gradient(circle at 100% 100%,transparent 0 20px,rgba(0,143,104,.10) 21px 23px,transparent 24px),
+    radial-gradient(circle at 0 0,transparent 0 13px,rgba(206,17,38,.07) 14px 16px,transparent 17px);
+}
+html[data-month-theme="septiembre"] #view-home>.progress-card{
+  background:
+    radial-gradient(circle at 96% 84%,transparent 0 21px,rgba(0,104,71,.10) 22px 25px,transparent 26px),
+    #fff;
+}
+html[data-month-theme="septiembre"] .bottom-nav{
+  overflow:visible;
+  padding-bottom:34px;
+  background:
+    linear-gradient(8deg,transparent 0 78%,rgba(0,104,71,.06) 79% 81%,transparent 82%),
+    rgba(255,255,255,.985);
+}
+html[data-month-theme="septiembre"] .bottom-nav:before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-1px;
+  height:18px;
+  background:
+    linear-gradient(7deg,transparent 0 27%,#00865f 28% 39%,#fff 40% 52%,#ce1126 53% 65%,transparent 66%);
+  opacity:.95;
+  pointer-events:none;
+}
+html[data-month-theme="septiembre"] .bottom-nav:after{
+  bottom:17px;
+  z-index:2;
+}
+
+@media(max-width:600px){
+  html[data-month-theme="septiembre"] .topbar{
+    min-height:116px;
+    padding:20px 15px;
+  }
+  html[data-month-theme="septiembre"] .brand-mark{
+    width:54px;
+    height:54px;
+  }
+  html[data-month-theme="septiembre"] .brand strong{font-size:21px}
+  html[data-month-theme="septiembre"] .brand small{font-size:8.5px}
+  html[data-month-theme="septiembre"] .sep-header-art{
+    width:47%;
+    height:108px;
+    right:2%;
+    top:4px;
+  }
+  html[data-month-theme="septiembre"] .sep-viva{
+    width:95px;
+    right:16%;
+    top:17px;
+    font-size:22px;
+    line-height:.76;
+  }
+  html[data-month-theme="septiembre"] .sep-month{
+    right:11%;
+    top:70px;
+    font-size:6px;
+  }
+  html[data-month-theme="septiembre"] .sep-flag{font-size:23px}
+  html[data-month-theme="septiembre"] #view-home{
+    padding-top:26px;
+    padding-left:14px;
+    padding-right:14px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.hero-card{
+    min-height:452px;
+    padding:63px 45% 114px 20px;
+    border-radius:26px;
+  }
+  html[data-month-theme="septiembre"] .hero-card h1{
+    max-width:100%;
+    font-size:36px;
+    line-height:1.02;
+  }
+  html[data-month-theme="septiembre"] .hero-card .hero-message{
+    max-width:100%;
+    font-size:14px;
+    line-height:1.4;
+  }
+  html[data-month-theme="septiembre"] .shift-badge{
+    right:14px;
+    top:19px;
+    padding:9px 15px;
+  }
+  html[data-month-theme="septiembre"] .sep-papel{
+    left:20px;
+  }
+  html[data-month-theme="septiembre"] .sep-papel span{
+    width:43px;
+    height:37px;
+  }
+  html[data-month-theme="septiembre"] .sep-character{
+    right:-9px;
+    top:50px;
+    width:52%;
+    height:324px;
+  }
+  html[data-month-theme="septiembre"] .sep-theme-label{
+    left:18px;
+    bottom:107px;
+    min-width:0;
+    max-width:55%;
+    padding:9px 10px 9px 34px;
+    font-size:11px;
+  }
+  html[data-month-theme="septiembre"] .quick-actions{
+    left:15px;
+    right:15px;
+    bottom:17px;
+    gap:10px;
+  }
+  html[data-month-theme="septiembre"] .quick-actions .button{
+    min-height:72px;
+    border-radius:18px;
+    font-size:16px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.period-card{
+    padding:23px 22px 21px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{
+    min-height:116px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card>span:last-child{
+    font-size:11px;
+  }
+}
+
+
+/* ==========================================================
+   SEPTIEMBRE · MAESTRO MÓVIL VERTICAL 9:16 · v6.1
+   El móvil vertical manda; horizontal/tablet/PC son adaptaciones.
+   ========================================================== */
+@media (max-width:600px) and (orientation:portrait){
+  html[data-month-theme="septiembre"] body{background:#dcefeb}
+  html[data-month-theme="septiembre"] .app-shell{max-width:430px;margin:0 auto;background:linear-gradient(180deg,#d8ede8 0,#f8fbfa 50%,#edf7f4 100%)}
+
+  html[data-month-theme="septiembre"] .topbar{
+    min-height:112px;
+    padding:18px 14px 20px;
+    border-radius:0 0 22px 22px;
+  }
+  html[data-month-theme="septiembre"] .brand{max-width:58%}
+  html[data-month-theme="septiembre"] .brand-mark{width:50px;height:50px;border-radius:16px}
+  html[data-month-theme="septiembre"] .brand strong{font-size:19px;line-height:1.05}
+  html[data-month-theme="septiembre"] .brand small{font-size:7px;letter-spacing:.17em}
+  html[data-month-theme="septiembre"] .sep-header-art{right:2%;top:3px;width:45%;height:100px}
+  html[data-month-theme="septiembre"] .sep-viva{right:14%;top:15px;width:92px;font-size:21px;line-height:.78}
+  html[data-month-theme="septiembre"] .sep-month{right:8%;top:66px;font-size:5.5px;letter-spacing:.24em}
+  html[data-month-theme="septiembre"] .sep-flag{right:0;top:1px;font-size:21px}
+
+  html[data-month-theme="septiembre"] #view-home{
+    padding:24px 12px 110px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.hero-card{
+    min-height:470px;
+    padding:56px 18px 118px;
+    border-radius:24px;
+    background:
+      radial-gradient(circle at 14% 108%,rgba(0,57,46,.78),transparent 43%),
+      radial-gradient(circle at 89% 110%,rgba(0,54,43,.60),transparent 44%),
+      linear-gradient(112deg,#079477 0%,#07846b 48%,#056653 100%);
+  }
+  html[data-month-theme="septiembre"] .hero-topline{
+    width:57%;
+    min-height:106px;
+  }
+  html[data-month-theme="septiembre"] .hero-card .eyebrow{font-size:10px;letter-spacing:.11em}
+  html[data-month-theme="septiembre"] .hero-card h1{
+    max-width:100%;
+    margin-top:4px;
+    font-size:30px;
+    line-height:1.02;
+  }
+  html[data-month-theme="septiembre"] .hero-card .hero-message{
+    position:relative;
+    z-index:8;
+    width:55%;
+    max-width:55%;
+    margin-top:8px;
+    font-size:13px;
+    line-height:1.35;
+  }
+  html[data-month-theme="septiembre"] .shift-badge{
+    right:12px;
+    top:16px;
+    padding:8px 12px;
+    font-size:11px;
+  }
+
+  html[data-month-theme="septiembre"] .sep-papel{left:16px;top:0}
+  html[data-month-theme="septiembre"] .sep-papel span{width:39px;height:34px}
+
+  html[data-month-theme="septiembre"] .sep-character{
+    right:-9px;
+    top:44px;
+    width:48%;
+    height:315px;
+    object-fit:contain;
+    object-position:right bottom;
+  }
+  html[data-month-theme="septiembre"] .sep-theme-label{
+    left:16px;
+    bottom:103px;
+    max-width:58%;
+    padding:8px 9px 8px 31px;
+    font-size:10.5px;
+    line-height:1.15;
+  }
+  html[data-month-theme="septiembre"] .sep-theme-label:before{left:10px;top:4px;font-size:20px}
+
+  html[data-month-theme="septiembre"] .quick-actions{
+    left:14px;
+    right:14px;
+    bottom:15px;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+  }
+  html[data-month-theme="septiembre"] .quick-actions .button{
+    min-height:66px;
+    padding:10px 8px;
+    border-radius:17px;
+    font-size:14px;
+    line-height:1.15;
+  }
+
+  html[data-month-theme="septiembre"] #view-home>.period-card{
+    margin-top:14px;
+    padding:20px 17px;
+    border-radius:20px;
+  }
+  html[data-month-theme="septiembre"] .date-range{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+
+  html[data-month-theme="septiembre"] #view-home>.stats-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px;
+    margin-top:12px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{
+    min-height:108px;
+    padding:14px 12px;
+    border-radius:18px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card strong{font-size:30px}
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card>span:last-child{font-size:11px}
+
+  html[data-month-theme="septiembre"] #view-home>.progress-card{
+    margin-top:12px;
+    padding:18px;
+    border-radius:20px;
+  }
+  html[data-month-theme="septiembre"] .progress-value{font-size:30px}
+  html[data-month-theme="septiembre"] #view-home>.upcoming-card{margin-top:12px;border-radius:20px}
+
+  html[data-month-theme="septiembre"] .bottom-nav{
+    padding-bottom:max(30px,env(safe-area-inset-bottom));
+  }
+}
+
+/* Adaptación secundaria: móvil horizontal */
+@media (max-width:950px) and (orientation:landscape){
+  html[data-month-theme="septiembre"] #view-home{padding-top:18px}
+  html[data-month-theme="septiembre"] #view-home>.hero-card{
+    min-height:360px;
+    padding:52px 43% 92px 24px;
+  }
+  html[data-month-theme="septiembre"] .sep-character{height:265px;width:43%;top:39px}
+  html[data-month-theme="septiembre"] .quick-actions .button{min-height:58px}
+  html[data-month-theme="septiembre"] #view-home>.stats-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+
+/* Adaptación secundaria: tablet y escritorio */
+@media (min-width:601px){
+  html[data-month-theme="septiembre"] .app-shell{max-width:1180px;margin:0 auto}
+}
+
+
+/* ==========================================================
+   SEPTIEMBRE · MÓVIL VERTICAL MODERNO · v6.2
+   Base 390x844 / validación 360x800. Scroll natural.
+   ========================================================== */
+@media (max-width:600px) and (orientation:portrait){
+  html[data-month-theme="septiembre"],
+  html[data-month-theme="septiembre"] body{
+    min-height:100%;
+    height:auto;
+    overflow-x:hidden;
+    overflow-y:auto;
+  }
+
+  html[data-month-theme="septiembre"] .app-shell{
+    width:100%;
+    max-width:430px;
+    min-height:100dvh;
+    margin:0 auto;
+    overflow:visible;
+  }
+
+  html[data-month-theme="septiembre"] #view-home{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    padding:22px 12px calc(104px + env(safe-area-inset-bottom));
+  }
+
+  html[data-month-theme="septiembre"] #view-home>.hero-card,
+  html[data-month-theme="septiembre"] #view-home>.period-card,
+  html[data-month-theme="septiembre"] #view-home>.stats-grid,
+  html[data-month-theme="septiembre"] #view-home>.progress-card,
+  html[data-month-theme="septiembre"] #view-home>.upcoming-card{
+    margin-top:0!important;
+    width:100%;
+  }
+
+  html[data-month-theme="septiembre"] #view-home>.hero-card{
+    min-height:430px;
+    height:auto;
+    padding:54px 16px 108px;
+  }
+
+  html[data-month-theme="septiembre"] .hero-topline{
+    width:58%;
+    min-height:96px;
+  }
+
+  html[data-month-theme="septiembre"] .hero-card h1{
+    font-size:clamp(28px,8vw,34px);
+  }
+
+  html[data-month-theme="septiembre"] .hero-card .hero-message{
+    width:54%;
+    max-width:54%;
+    margin-bottom:6px;
+  }
+
+  html[data-month-theme="septiembre"] .sep-character{
+    top:42px;
+    right:-10px;
+    width:49%;
+    height:294px;
+  }
+
+  html[data-month-theme="septiembre"] .sep-theme-label{
+    bottom:96px;
+    max-width:60%;
+  }
+
+  html[data-month-theme="septiembre"] .quick-actions{
+    bottom:14px;
+  }
+
+  html[data-month-theme="septiembre"] .quick-actions .button{
+    min-height:60px;
+  }
+
+  html[data-month-theme="septiembre"] #view-home>.period-card{
+    order:2;
+  }
+
+  html[data-month-theme="septiembre"] #view-home>.stats-grid{
+    order:3;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px;
+  }
+
+  html[data-month-theme="septiembre"] #view-home>.progress-card{
+    order:4;
+  }
+
+  html[data-month-theme="septiembre"] #view-home>.upcoming-card{
+    order:5;
+  }
+
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{
+    min-height:102px;
+  }
+
+  html[data-month-theme="septiembre"] .bottom-nav{
+    position:fixed;
+    left:50%;
+    bottom:0;
+    width:min(100%,430px);
+    transform:translateX(-50%);
+    z-index:50;
+    padding-bottom:max(28px,env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width:375px) and (orientation:portrait){
+  html[data-month-theme="septiembre"] #view-home{
+    padding-left:9px;
+    padding-right:9px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.hero-card{
+    min-height:420px;
+    padding-left:14px;
+    padding-right:14px;
+  }
+  html[data-month-theme="septiembre"] .hero-card h1{font-size:28px}
+  html[data-month-theme="septiembre"] .hero-card .hero-message{
+    width:53%;
+    max-width:53%;
+    font-size:12px;
+  }
+  html[data-month-theme="septiembre"] .sep-character{
+    width:50%;
+    height:284px;
+  }
+  html[data-month-theme="septiembre"] .quick-actions .button{
+    min-height:58px;
+    font-size:13px;
+  }
+}
+
+
+/* SEPTIEMBRE · ajuste automático final · v6.6 */
+html[data-month-theme="septiembre"] .app-shell{
+  width:100%;
+  max-width:1180px;
+  margin:0 auto;
+}
+html[data-month-theme="septiembre"] main{
+  width:100%;
+  max-width:760px;
+}
+html[data-month-theme="septiembre"] .bottom-nav{
+  position:fixed;
+  left:50%;
+  right:auto;
+  bottom:0;
+  width:min(100%,760px);
+  transform:translateX(-50%);
+}
+@media(max-width:600px){
+  html[data-month-theme="septiembre"] .app-shell{max-width:430px}
+  html[data-month-theme="septiembre"] main{max-width:430px}
+  html[data-month-theme="septiembre"] #view-home:not(.is-active){display:none!important}
+  html[data-month-theme="septiembre"] #view-home.is-active{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.hero-card{
+    width:100%;
+    min-height:clamp(408px,108vw,454px);
+  }
+  html[data-month-theme="septiembre"] .sep-character{
+    width:clamp(43%,48vw,50%);
+    height:clamp(270px,77vw,315px);
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media(max-width:380px){
+  html[data-month-theme="septiembre"] #view-home>.hero-card{
+    min-height:410px;
+    padding-left:13px;
+    padding-right:13px;
+  }
+  html[data-month-theme="septiembre"] .hero-card h1{font-size:27px}
+  html[data-month-theme="septiembre"] .hero-card .hero-message{
+    font-size:12px;
+    line-height:1.32;
+  }
+  html[data-month-theme="septiembre"] .sep-character{
+    right:-12px;
+    width:49%;
+    height:276px;
+  }
+}
+
+
+/* ==========================================================
+   SEPTIEMBRE · PULIDO VISUAL FINAL · v6.7
+   ========================================================== */
+@media(max-width:600px) and (orientation:portrait){
+  html[data-month-theme="septiembre"] #view-home>.hero-card{
+    min-height:422px;
+    padding:54px 16px 106px;
+    border-radius:26px;
+    box-shadow:0 15px 34px rgba(0,75,55,.17);
+  }
+  html[data-month-theme="septiembre"] .hero-topline{
+    width:56%;
+    min-height:94px;
+  }
+  html[data-month-theme="septiembre"] .hero-card h1{
+    font-size:clamp(28px,8vw,33px);
+    line-height:1.01;
+  }
+  html[data-month-theme="septiembre"] .hero-card .hero-message{
+    width:52%;
+    max-width:52%;
+    margin-top:7px;
+    font-size:12.5px;
+    line-height:1.34;
+  }
+  html[data-month-theme="septiembre"] .sep-character{
+    top:47px;
+    right:-3px;
+    width:46%;
+    height:282px;
+    object-position:center bottom;
+  }
+  html[data-month-theme="septiembre"] .sep-theme-label{
+    left:16px;
+    bottom:94px;
+    max-width:62%;
+    border-radius:11px;
+    box-shadow:0 3px 9px rgba(0,0,0,.10);
+  }
+  html[data-month-theme="septiembre"] .quick-actions{
+    left:14px;
+    right:14px;
+    bottom:14px;
+  }
+  html[data-month-theme="septiembre"] .quick-actions .button{
+    min-height:60px;
+    border-radius:18px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.period-card{
+    padding:21px 18px;
+    border-radius:22px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.period-card:after{
+    right:11%;
+    bottom:9px;
+    opacity:.65;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{
+    min-height:104px;
+    border-radius:19px;
+  }
+  html[data-month-theme="septiembre"] .bottom-nav{
+    height:calc(78px + var(--safe-bottom));
+    padding-top:7px;
+    padding-bottom:max(30px,env(safe-area-inset-bottom));
+  }
+  html[data-month-theme="septiembre"] .bottom-nav:after{
+    bottom:13px;
+    font-size:7px;
+    letter-spacing:.17em;
+  }
+  html[data-month-theme="septiembre"] .bottom-nav:before{
+    height:13px;
+    opacity:.86;
+  }
+}
+
+/* v6.9 · Regla final: cuatro indicadores como en la referencia maestra. */
+@media(max-width:600px) and (orientation:portrait){
+  html[data-month-theme="septiembre"] #view-home>.stats-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:6px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{
+    min-width:0;
+    min-height:104px;
+    padding:11px 6px 10px;
+    border-radius:17px;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card strong{font-size:28px}
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card>span:last-child{
+    font-size:9px;
+    line-height:1.1;
+    white-space:normal;
+  }
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-icon{width:38px;height:38px}
+  html[data-month-theme="septiembre"] .sep-character{width:49%;height:296px}
+}
+@media(max-width:375px) and (orientation:portrait){
+  html[data-month-theme="septiembre"] #view-home>.stats-grid{gap:5px}
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card{padding-inline:4px}
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card strong{font-size:26px}
+  html[data-month-theme="septiembre"] #view-home>.stats-grid .stat-card>span:last-child{font-size:8px}
+}
