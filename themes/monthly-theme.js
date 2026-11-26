@@ -1,7 +1,7 @@
 (function initializeMonthlyTheme() {
   "use strict";
 
-  const THEME_VERSION = "7.4.0-navidad";
+  const THEME_VERSION = "7.5.0-navidad";
   const SEPTEMBER_CHARACTER = "assets/biometrimss-charro-septiembre-v1.png";
   const themes = [
     ["enero", "Año Nuevo", "✦"],
@@ -150,6 +150,13 @@
     hero.append(make("div", "q4-theme-label", `Tema del mes: ${copy.theme}`));
     hero.append(make("div", "q4-scene"));
 
+    if (id === "diciembre") {
+      hero.classList.add("q4-december-hero");
+      const home = document.getElementById("view-home");
+      if (home) home.classList.add("q4-december-home");
+      decorateDecemberScreens(copy);
+    }
+
     const period = home.querySelector(":scope > .period-card");
     if (period) period.append(make("span", "q4-period-art"));
     home.querySelectorAll(":scope > .stats-grid .stat-card").forEach((card) => card.append(make("span", "q4-card-art")));
@@ -167,6 +174,37 @@
     if (reportHeading && !reportHeading.querySelector(".q4-report-icons")) {
       const icons = id === "octubre" ? "👻  🎃  👻" : id === "noviembre" ? "✿  🕯️  ✿" : "❄️  🎄  🎁";
       reportHeading.append(make("span", "q4-report-icons", icons));
+    }
+  }
+
+  function decorateDecemberScreens(copy) {
+    const calendar = document.getElementById("view-calendar");
+    const history = document.getElementById("view-history");
+    if (calendar) {
+      calendar.classList.add("q4-december-view", "q4-december-calendar");
+      const heading = calendar.querySelector(".page-heading");
+      if (heading && !heading.querySelector(".q4-december-heading-art")) {
+        heading.append(make("span", "q4-december-heading-art", "❄  🎄  ❄"));
+      }
+      const toolbar = calendar.querySelector(".calendar-toolbar");
+      if (toolbar && !toolbar.querySelector(".q4-december-calendar-gift")) {
+        toolbar.append(make("span", "q4-december-calendar-gift", "🎁"));
+      }
+      const legend = calendar.querySelector(".legend");
+      if (legend && !legend.querySelector(".q4-december-calendar-note")) {
+        const note = document.createElement("span");
+        note.className = "q4-december-calendar-note";
+        note.textContent = "Los adornos festivos no cambian la clasificación de guardias.";
+        legend.append(note);
+      }
+    }
+
+    if (history) {
+      history.classList.add("q4-december-view", "q4-december-history");
+      const heading = history.querySelector(".page-heading");
+      if (heading && !heading.querySelector(".q4-december-heading-art")) {
+        heading.append(make("span", "q4-december-heading-art", "✦  📋  ✦"));
+      }
     }
   }
 
