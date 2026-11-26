@@ -17,13 +17,14 @@ test("el informe muestra únicamente las dos descargas aprobadas", () => {
 });
 
 test("la versión visible y la caché cargan los scripts corregidos", () => {
-  for (const file of ["app.js", "animated-report.js", "logic.js", "report-image.js", "themes/monthly-theme.js"]) {
-    assert.match(html, new RegExp(file.replace(".", "\\.") + "\\?v=7\\.2\\.0"));
+  for (const file of ["app.js", "animated-report.js", "logic.js", "report-image.js"]) {
+    assert.match(html, new RegExp(file.replace(".", "\\\\.") + "\\\\?v=7\\\\.2\\\\.0"));
   }
-  assert.match(html, /style\.css\?v=7\.2\.0/);
-  assert.match(worker, /biometrimss-v7\.2\.0/);
-  assert.match(worker, /.\/app\.js\?v=7\.2\.0/);
-  assert.match(worker, /.\/animated-report\.js\?v=7\.2\.0/);
+  assert.match(html, /themes\\/monthly-theme\\.js\\?v=7\\.5\\.1-navidad/);
+  assert.match(html, /style\\.css\\?v=7\\.3\\.0/);
+  assert.match(worker, /biometrimss-v7\\.5\\.2-navidad/);
+  assert.match(worker, /.\\/app\\.js\\?v=7\\.2\\.0/);
+  assert.match(worker, /.\\/animated-report\\.js\\?v=7\\.2\\.0/);
 });
 
 test("la portada abre directamente y carga la capa navideña sin intro bloqueante", () => {
