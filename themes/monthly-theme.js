@@ -1,7 +1,7 @@
 (function initializeMonthlyTheme() {
   "use strict";
 
-  const THEME_VERSION = "7.3.0";
+  const THEME_VERSION = "7.4.0-navidad";
   const SEPTEMBER_CHARACTER = "assets/biometrimss-charro-septiembre-v1.png";
   const themes = [
     ["enero", "Año Nuevo", "✦"],
