@@ -36,53 +36,6 @@
 </head>
 
 <body>
-  <div id="brandIntro" class="brand-intro" aria-hidden="true">
-    <div class="brand-intro-stage">
-      <div class="brand-intro-orbit"></div>
-      <video id="brandIntroLogo" class="brand-intro-logo" muted playsinline preload="auto">
-        <source src="assets/biometrimss-intro-circle-v1.mp4?v=7.2.0" type="video/mp4">
-      </video>
-      <span class="brand-intro-scan"></span>
-    </div>
-  </div>
-  <script>
-    (() => {
-      const intro = document.getElementById("brandIntro");
-      const video = document.getElementById("brandIntroLogo");
-      const root = document.documentElement;
-      let started = false;
-      let finished = false;
-      root.classList.add("intro-active");
-
-      const finishIntro = () => {
-        if (finished) return;
-        finished = true;
-        intro.classList.add("is-complete");
-        root.classList.add("intro-complete");
-        window.setTimeout(() => {
-          intro.remove();
-          root.classList.remove("intro-active", "intro-complete");
-        }, 1100);
-      };
-
-      const startIntro = () => {
-        if (started) return;
-        started = true;
-        requestAnimationFrame(() => {
-          intro.classList.add("is-ready");
-          const playback = video.play();
-          if (playback && typeof playback.catch === "function") playback.catch(() => window.setTimeout(finishIntro, 2600));
-        });
-      };
-
-      video.addEventListener("canplay", startIntro, { once: true });
-      video.addEventListener("ended", finishIntro, { once: true });
-      video.addEventListener("error", finishIntro, { once: true });
-      if (video.readyState >= 3) startIntro();
-      window.setTimeout(startIntro, 1400);
-      window.setTimeout(finishIntro, 11000);
-    })();
-  </script>
   <div class="app-shell">
     <header class="topbar">
       <button class="brand" type="button" data-go="home" aria-label="Ir al inicio">
