@@ -34,10 +34,10 @@ test("la portada abre directamente y carga la capa navideña sin intro bloqueant
   assert.ok(worker.includes("christmas-reference.css?v=1.0.0"));
 });
 
-test("octubre usa el avatar zombi oficial y nueve fantasmas", () => {
+test("octubre usa el avatar zombi oficial y catorce fantasmas", () => {
   const theme = fs.readFileSync(path.join(root, "themes/monthly-theme.js"), "utf8");
   const q4 = fs.readFileSync(path.join(root, "themes/q4-seasonal.css"), "utf8");
-  assert.match(theme, /i < 9/);
+  assert.match(theme, /i < 14/);
   assert.match(theme, /q4-ghost/);
   assert.match(q4, /biometrimss-zombie-octubre-v2\.png/);
   assert.match(worker, /biometrimss-zombie-octubre-v2\.png\?v=7\.2\.0/);
