@@ -20,7 +20,7 @@ test("la versión visible y la caché cargan los scripts corregidos", () => {
   for (const file of ["app.js", "animated-report.js", "logic.js", "report-image.js"]) {
     assert.ok(html.includes(file + "?v=7.2.0"), file);
   }
-  assert.ok(html.includes("themes/monthly-theme.js?v=7.5.1-navidad"));
+  assert.ok(html.includes("themes/monthly-theme.js?v=7.5.2-navidad"));
   assert.ok(html.includes("style.css?v=7.3.0"));
   assert.ok(worker.includes("biometrimss-v7.5.2-navidad"));
   assert.ok(worker.includes("./app.js?v=7.2.0"));
