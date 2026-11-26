@@ -26,11 +26,11 @@ test("la versión visible y la caché cargan los scripts corregidos", () => {
   assert.match(worker, /.\/animated-report\.js\?v=7\.2\.0/);
 });
 
-test("el intro usa el video circular completo y abre el portal al terminar", () => {
-  assert.match(html, /<video id="brandIntroLogo"[^>]*muted[^>]*playsinline/);
-  assert.match(html, /biometrimss-intro-circle-v1\.mp4\?v=7\.2\.0/);
-  assert.match(html, /video\.addEventListener\("ended", finishIntro/);
-  assert.match(worker, /biometrimss-intro-circle-v1\.mp4\?v=7\.2\.0/);
+test("la portada abre directamente y carga la capa navideña sin intro bloqueante", () => {
+  assert.doesNotMatch(html, /brandIntro|biometrimss-intro-circle-v1/);
+  assert.match(html, /themes\\/christmas-reference\\.css\\?v=1\\.0\\.0/);
+  assert.doesNotMatch(worker, /biometrimss-intro-circle-v1/);
+  assert.match(worker, /christmas-reference\\.css\\?v=1\\.0\\.0/);
 });
 
 test("octubre usa el avatar zombi oficial y nueve fantasmas", () => {
