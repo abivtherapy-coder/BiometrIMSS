@@ -58,10 +58,10 @@ html[data-month-theme="diciembre"] .bottom-nav:after{color:#8b6c2e}
 @media(prefers-reduced-motion:reduce){html[data-month-theme="diciembre"] .q4-scene,html[data-month-theme="diciembre"] .q4-character{animation:none!important;transition:none!important}}
 /* Escena navidena generada para BiometrIMSS */
 html[data-month-theme="diciembre"] #view-home{position:relative;padding-top:186px}
-html[data-month-theme="diciembre"] .topbar{background:#083653 url("../assets/biometrimss-navidad-2026.png?v=7.5.1-navidad") center 7%/cover no-repeat}
+html[data-month-theme="diciembre"] .topbar{background:#083653 url("../assets/biometrimss-navidad-2026.png?v=7.5.2-navidad") center 7%/cover no-repeat}
 html[data-month-theme="diciembre"] #view-home:before{display:none}
 html[data-month-theme="diciembre"] #view-home{padding-top:18px}
-html[data-month-theme="diciembre"] #view-home>.hero-card.q4-december-hero{min-height:426px;padding:34px 43% 104px 20px;border:2px solid rgba(255,234,190,.9);border-radius:28px;background:linear-gradient(180deg,rgba(150,8,18,.08),rgba(115,7,13,.11)),url("../assets/biometrimss-navidad-2026.png?v=7.5.1-navidad") center 72%/cover no-repeat;box-shadow:0 14px 30px rgba(110,0,11,.3)}
+html[data-month-theme="diciembre"] #view-home>.hero-card.q4-december-hero{min-height:426px;padding:34px 43% 104px 20px;border:2px solid rgba(255,234,190,.9);border-radius:28px;background:linear-gradient(180deg,rgba(150,8,18,.08),rgba(115,7,13,.11)),url("../assets/biometrimss-navidad-2026.png?v=7.5.2-navidad") center 42%/cover no-repeat;box-shadow:0 14px 30px rgba(110,0,11,.3)}
 html[data-month-theme="diciembre"] .q4-december-hero .hero-topline,html[data-month-theme="diciembre"] .q4-december-hero .hero-message{position:relative;z-index:6}
 html[data-month-theme="diciembre"] .q4-december-hero .hero-topline{display:block;width:100%;max-width:100%}
 html[data-month-theme="diciembre"] .q4-december-hero .hero-topline>div{max-width:66%}
@@ -72,7 +72,7 @@ html[data-month-theme="diciembre"] #view-home>.period-card,html[data-month-theme
 html[data-month-theme="diciembre"] #view-home>.period-card:after,html[data-month-theme="diciembre"] #view-home>.progress-card:after{color:#a6121d}
 html[data-month-theme="diciembre"] .q4-december-hero .quick-actions .button-light{color:#ab131c;background:#fff;border-color:rgba(255,232,214,.85)}
 html[data-month-theme="diciembre"] .q4-december-hero .quick-actions .button-ghost-light{color:#fff;background:linear-gradient(145deg,#df1725,#a80010)!important;border-color:#ffb2aa!important;box-shadow:0 5px 12px rgba(95,0,9,.28)}
-html[data-month-theme="diciembre"] .q4-december-view:before{height:142px;background:#083b5c url("../assets/biometrimss-navidad-2026.png?v=7.5.1-navidad") center 8%/cover no-repeat}
+html[data-month-theme="diciembre"] .q4-december-view:before{height:142px;background:#083b5c url("../assets/biometrimss-navidad-2026.png?v=7.5.2-navidad") center 8%/cover no-repeat}
 html[data-month-theme="diciembre"] .q4-december-view .page-heading{min-height:142px;padding-top:51px}
 html[data-month-theme="diciembre"] .q4-december-view .page-heading h1,html[data-month-theme="diciembre"] .q4-december-view .page-heading p{ text-shadow:0 2px 5px rgba(0,0,0,.38)}
 html[data-month-theme="diciembre"] .q4-december-calendar .page-heading{min-height:128px;padding-top:36px}
