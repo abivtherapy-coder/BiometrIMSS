@@ -1,34 +1,40 @@
-/* BIOMETRIMSS · Capa visual navideña 2026 · solo presentación */
-:root{--xmas-pine:#07513f;--xmas-pine-deep:#063b31;--xmas-red:#b92d36;--xmas-gold:#c9a45a;--xmas-cream:#fffaf1}
-html[data-month-theme="diciembre"] body{color:#173b31;background:linear-gradient(180deg,#eef5ef 0%,#fbfcf8 42%,#f2f6f1 100%)}
+/* BIOMETRIMSS · Navidad nocturna 2026
+   Capa de presentación aislada: no altera registros ni reglas de guardias. */
+:root{--xmas-night:#102d54;--xmas-sky:#235d91;--xmas-red:#b82032;--xmas-gold:#d7b96f;--xmas-ice:#f2f7fc}
+html[data-month-theme="diciembre"] body{color:#20354c;background:linear-gradient(180deg,#eaf2fa 0%,#f8fafc 55%,#eef3f8 100%)}
 html[data-month-theme="diciembre"] .app-shell{background:transparent}
-html[data-month-theme="diciembre"] .topbar{min-height:82px;padding:calc(12px + var(--safe-top)) 18px 12px;border:0;border-radius:0 0 22px 22px;background:linear-gradient(115deg,#063e32,#075641 62%,#0a674b);box-shadow:0 7px 20px rgba(4,49,38,.16)}
-html[data-month-theme="diciembre"] .topbar::after{border-color:rgba(231,210,159,.10)}
-html[data-month-theme="diciembre"] .brand-mark{border:1px solid rgba(229,207,153,.7);border-radius:14px;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.13)}
-html[data-month-theme="diciembre"] .brand strong{font-size:1.12rem}
-html[data-month-theme="diciembre"] .brand small{color:#e8dfc8;letter-spacing:.08em}
+html[data-month-theme="diciembre"] .topbar{min-height:82px;padding:calc(12px + var(--safe-top)) 18px 12px;border:0;border-radius:0 0 22px 22px;background:linear-gradient(115deg,#102d54 0%,#174a78 58%,#286a9b 100%);box-shadow:0 7px 20px rgba(10,36,67,.2)}
+html[data-month-theme="diciembre"] .topbar::after{border-color:rgba(235,218,171,.12)}
+html[data-month-theme="diciembre"] .brand-mark{position:relative;overflow:visible;border:1px solid rgba(236,218,174,.85);border-radius:14px;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.18)}
+html[data-month-theme="diciembre"] .brand-mark img{filter:sepia(1) saturate(5) hue-rotate(315deg) contrast(1.08)}
+html[data-month-theme="diciembre"] .brand-mark::after{position:absolute;z-index:5;top:-10px;right:-5px;width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:23px solid #bd2637;transform:rotate(34deg);content:""}
+html[data-month-theme="diciembre"] .brand-mark::before{position:absolute;z-index:6;top:5px;right:-8px;width:13px;height:6px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);content:""}
+html[data-month-theme="diciembre"] .brand strong{font-size:1.12rem;color:#fff}
+html[data-month-theme="diciembre"] .brand small{color:#dbe8f6;letter-spacing:.08em}
 html[data-month-theme="diciembre"] main{padding-top:16px}
-html[data-month-theme="diciembre"] #view-home>.hero-card{min-height:0;padding:22px 19px 20px;border:1px solid rgba(210,185,123,.42);border-radius:23px;color:#fff;background:linear-gradient(135deg,#07513f,#08644a 62%,#064334);box-shadow:0 10px 24px rgba(5,67,49,.16)}
-html[data-month-theme="diciembre"] #view-home>.hero-card::after{width:138px;height:138px;border:18px solid rgba(237,218,171,.07)}
+html[data-month-theme="diciembre"] #view-home>.hero-card{min-height:270px;padding:22px 19px 20px;border:1px solid rgba(220,199,150,.48);border-radius:23px;color:#fff;background:radial-gradient(ellipse at 78% 18%,rgba(91,151,202,.42),transparent 42%),linear-gradient(155deg,#173b67 0%,#102d54 56%,#091d39 100%);box-shadow:0 10px 24px rgba(11,39,71,.2)}
+html[data-month-theme="diciembre"] #view-home>.hero-card::after{width:138px;height:138px;border:18px solid rgba(237,218,171,.08)}
 html[data-month-theme="diciembre"] #view-home>.hero-card .hero-topline,html[data-month-theme="diciembre"] #view-home>.hero-card .hero-message,html[data-month-theme="diciembre"] #view-home>.hero-card .quick-actions{position:relative;z-index:8}
-html[data-month-theme="diciembre"] #view-home>.hero-card .hero-message{max-width:34rem;margin:14px 0;color:rgba(255,255,255,.9)}
-html[data-month-theme="diciembre"] .q4-header-art{top:7px;right:14px;width:36%;height:76px;opacity:.9}
-html[data-month-theme="diciembre"] .q4-header-title{top:8px;font-family:inherit;font-size:17px;font-style:normal;letter-spacing:.01em;text-shadow:0 2px 5px rgba(0,0,0,.22)}
-html[data-month-theme="diciembre"] .q4-header-detail{opacity:.65}
-html[data-month-theme="diciembre"] .q4-character--diciembre{top:82px;right:4px;width:37%;max-height:205px;background-size:417.7% 557%;background-position:66.3% 13.8%;filter:drop-shadow(0 5px 7px rgba(0,0,0,.16));opacity:.96}
-html[data-month-theme="diciembre"] .q4-scene{opacity:.12;background:radial-gradient(circle,rgba(255,255,255,.9) 0 1px,transparent 2px);background-size:38px 38px}
-html[data-month-theme="diciembre"] .q4-theme-label{display:none!important}
-html[data-month-theme="diciembre"] .q4-period-art,html[data-month-theme="diciembre"] .q4-card-art,html[data-month-theme="diciembre"] .q4-progress-art{opacity:.38}
-html[data-month-theme="diciembre"] .period-card,html[data-month-theme="diciembre"] .stat-card,html[data-month-theme="diciembre"] .progress-card,html[data-month-theme="diciembre"] .upcoming-card,html[data-month-theme="diciembre"] .card{border-color:#e5e8df;box-shadow:0 4px 13px rgba(31,65,48,.06)}
-html[data-month-theme="diciembre"] .button-primary{color:#fff;background:linear-gradient(135deg,#b72e37,#9d202c);box-shadow:0 4px 10px rgba(142,31,42,.16)}
-html[data-month-theme="diciembre"] .button-light{color:#07513f;background:#fffaf1}
-html[data-month-theme="diciembre"] .button-ghost-light{color:#fff;background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.38)}
-html[data-month-theme="diciembre"] .text-button,html[data-month-theme="diciembre"] .eyebrow{color:#17684e}
-html[data-month-theme="diciembre"] .hero-card .eyebrow{color:#e8dfc8}
-html[data-month-theme="diciembre"] .progress-track>span{background:linear-gradient(90deg,#0b7754,#4b9a70)}
-html[data-month-theme="diciembre"] .bottom-nav{border-top:1px solid #e7e9e2;background:rgba(255,255,255,.97);box-shadow:0 -5px 18px rgba(20,54,39,.08)}
-html[data-month-theme="diciembre"] .nav-item.is-active{color:#a92330;background:#fff0ed}
-html[data-month-theme="diciembre"] .calendar-card,html[data-month-theme="diciembre"] .selected-day-card{border-color:#e5e8df}
-html[data-month-theme="diciembre"] .calendar-day.is-selected{outline-color:#b72e37}
+html[data-month-theme="diciembre"] #view-home>.hero-card .hero-message{max-width:34rem;margin:14px 0;color:rgba(255,255,255,.92)}
+html[data-month-theme="diciembre"] .hero-card .eyebrow{color:#dceafa}
+html[data-month-theme="diciembre"] .q4-header-art{top:7px;right:14px;width:36%;height:76px;opacity:.96}
+html[data-month-theme="diciembre"] .q4-header-title{top:8px;font-family:Georgia,serif;font-size:17px;font-style:italic;color:#fff;text-shadow:0 2px 5px rgba(0,0,0,.3)}
+html[data-month-theme="diciembre"] .q4-header-detail{opacity:.8}
+html[data-month-theme="diciembre"] .q4-character--diciembre{display:none}
+html[data-month-theme="diciembre"] .q4-scene{z-index:2;opacity:1;pointer-events:none;background:radial-gradient(circle at 15% 20%,#fff8d8 0 1px,transparent 2px),radial-gradient(circle at 38% 12%,#fff 0 1px,transparent 2px),radial-gradient(circle at 66% 25%,#fff3cc 0 1.5px,transparent 2.5px),radial-gradient(circle at 88% 16%,#fff 0 1px,transparent 2px);background-size:100% 100%}
+html[data-month-theme="diciembre"] .q4-scene::before{position:absolute;right:23px;bottom:24px;content:"✦";font-size:39px;color:#f8e7a9;text-shadow:0 0 15px rgba(255,239,183,.7)}
+html[data-month-theme="diciembre"] .q4-scene::after{position:absolute;right:14px;bottom:13px;content:"🛖  👼  🐑";font-size:clamp(25px,7vw,38px);letter-spacing:-5px;filter:drop-shadow(0 4px 4px rgba(0,0,0,.4))}
+html[data-month-theme="diciembre"] .q4-theme-label{left:18px;bottom:104px;max-width:54%;color:#183b62;background:#fff8e7;border:1px solid rgba(226,199,133,.8);box-shadow:0 4px 12px rgba(0,0,0,.18)}
+html[data-month-theme="diciembre"] .q4-period-art,html[data-month-theme="diciembre"] .q4-card-art,html[data-month-theme="diciembre"] .q4-progress-art{opacity:.24}
+html[data-month-theme="diciembre"] .period-card,html[data-month-theme="diciembre"] .stat-card,html[data-month-theme="diciembre"] .progress-card,html[data-month-theme="diciembre"] .upcoming-card,html[data-month-theme="diciembre"] .card{border-color:#e1e8ef;box-shadow:0 4px 13px rgba(31,55,78,.07)}
+html[data-month-theme="diciembre"] .button-primary{color:#fff;background:linear-gradient(135deg,#c42a3c,#941c2d);box-shadow:0 4px 10px rgba(142,31,42,.2)}
+html[data-month-theme="diciembre"] .button-light{color:#173b67;background:#fffaf1}
+html[data-month-theme="diciembre"] .button-ghost-light{color:#fff;background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.4)}
+html[data-month-theme="diciembre"] .text-button,html[data-month-theme="diciembre"] .eyebrow{color:#285e8e}
+html[data-month-theme="diciembre"] .progress-track>span{background:linear-gradient(90deg,#4e8dbb,#1d4e7c)}
+html[data-month-theme="diciembre"] .bottom-nav{border-top:1px solid #e1e7ee;background:rgba(255,255,255,.97);box-shadow:0 -5px 18px rgba(20,44,70,.08)}
+html[data-month-theme="diciembre"] .nav-item.is-active{color:#b82032;background:#fff0f1}
+html[data-month-theme="diciembre"] .calendar-card,html[data-month-theme="diciembre"] .selected-day-card{border-color:#e1e7ee}
+html[data-month-theme="diciembre"] .calendar-day.is-selected{outline-color:#b82032}
 html[data-month-theme="diciembre"] .calendar-day.is-today{box-shadow:inset 0 0 0 1px #c6a45e}
 @media(prefers-reduced-motion:reduce){html[data-month-theme="diciembre"] *,html[data-month-theme="diciembre"] *::before,html[data-month-theme="diciembre"] *::after{animation:none!important;transition:none!important}}
