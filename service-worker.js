@@ -1,4 +1,4 @@
-const CACHE_NAME = "biometrimss-v7.5.1-navidad";
+const CACHE_NAME = "biometrimss-v7.5.2-navidad";
 const APP_SHELL = [
   "./usage.js?v=usage1",
   "./",
@@ -7,12 +7,12 @@ const APP_SHELL = [
   "./themes/monthly-theme.css?v=7.5.1-navidad",
   "./themes/september-viva.css?v=7.2.0",
   "./themes/q4-seasonal.css?v=7.5.1-navidad",
+  "./themes/christmas-reference.css?v=1.0.0",
   "./themes/monthly-theme.js?v=7.5.1-navidad",
   "./logic.js?v=7.2.0",
   "./report-image.js?v=7.2.0",
   "./animated-report.js?v=7.2.0",
   "./app.js?v=7.2.0",
-  "./assets/biometrimss-intro-circle-v1.mp4?v=7.2.0",
   "./assets/biometrimss-navidad-2026.png?v=7.5.1-navidad",
   "./assets/biometrimss-zombie-octubre-v2.png?v=7.2.0",
   "./manifest.webmanifest?v=4.9.0",
@@ -72,6 +72,7 @@ self.addEventListener("fetch", (event) => {
     "/themes/monthly-theme.js",
     "/themes/september-viva.css",
     "/themes/q4-seasonal.css",
+    "/themes/christmas-reference.css",
     "/assets/7AA47CC3-1646-484E-A630-9E70E523A486.png",
     "/assets/881D4859-FEF3-45D9-AEE1-892678FEEAA2.png",
     "/assets/A5BD8F79-366E-46CA-AAC1-43AD5E48DC52.png",
